@@ -1,5 +1,5 @@
-from __init__ import db
-from flask_login import UserMixin
+from flask_sqlalchemy import SQLAlchemy
+db = SQLAlchemy()
 from datetime import datetime, date
 
 # class User(UserMixin, db.Model):
@@ -22,14 +22,19 @@ class Conversation(db.Model):
     __tablename__ = 'conversations'
 
     id = db.Column(db.Integer, primary_key=True)
-    room_number = db.Column(db.String)
+    room = db.Column(db.String)
 
+    messages =db.relationship('Messages')
 
-    invites = db.relationship('Invites')
 
 class Messages(db.Model):
     __tablename__ = 'messages'
-    id= db.Column
+    id= db.Column(db.Integer, primary_key=True)
+    room=db.Column(db.String, db.ForeignKey('conversations.id'))
+    sender_username = db.Column(db.String)
+    time_sent = db.Column(db.Time)
+    date_sent = db.Column(db.Date)
+    message = db.Column(db.String)
 
 # class Location (db.Model): #Invitation System
 #     __tablename__ = 'location'

@@ -64,6 +64,10 @@
 
 from flask import Flask, render_template
 from flask_socketio import SocketIO, join_room
+from flask_sqlalchemy import SQLAlchemy
+from models import Conversation, Messages, db
+from datetime import datetime, date
+
 # from flask import Flask
 # from flask_bootstrap import Bootstrap
 # from flask_sqlalchemy import SQLAlchemy
@@ -90,9 +94,14 @@ from flask_socketio import SocketIO, join_room
 #     login_manager.init_app(app)
 #     jsglue.init_app(app)
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='../templates')
 app.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+db.init_app(app)
 socketio = SocketIO(app)
+
+with app.app_context():
+    db.create_all()
 
 
 @app.route('/')
@@ -100,24 +109,35 @@ def sessions():
     return render_template('index.html')
 
 
-def messageReceived(methods=['GET', 'POST']):
+def messageReceived():
     print('message was received!!!')
 
 
 @socketio.on('my event')
-def handle_my_custom_event(json, methods=['GET', 'POST']):
+def handle_my_custom_event(json):
     print('received my event: ' + str(json))
+    room = 'test_room'
+    message = Messages(room=room,
+                       sender_username=json['user_name'],
+                       time_sent=datetime.now().time(),
+                       date_sent=datetime.today().date(),
+                       message=json['message'])
+    db.session.add(message)
+    db.session.commit()
     socketio.emit('my response', json, callback=messageReceived)
 
 @socketio.on('join')
-def on_join(data):
+def on_join():
     # username = session['user'].get('username')
     # room = username + data['other']
-    username = data['username']
+    # username = data['username']
     room = 'test_room'
     join_room(room)
-
-
+    exists = (Conversation.query.filter_by(room=room).first())
+    if exists is None:
+        conversation = Conversation(room=room)
+        db.session.add(conversation)
+        db.session.commit()
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)
