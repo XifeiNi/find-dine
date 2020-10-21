@@ -63,7 +63,7 @@
 #     socketio.run(app)
 
 from flask import Flask, render_template
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, join_room
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
@@ -83,6 +83,15 @@ def messageReceived(methods=['GET', 'POST']):
 def handle_my_custom_event(json, methods=['GET', 'POST']):
     print('received my event: ' + str(json))
     socketio.emit('my response', json, callback=messageReceived)
+
+@socketio.on('join')
+def on_join(data):
+    # username = session['user'].get('username')
+    # room = username + data['other']
+    username = data['username']
+    room = 'test_room'
+    join_room(room)
+
 
 
 if __name__ == '__main__':

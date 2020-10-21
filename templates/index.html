@@ -70,6 +70,8 @@
         socket.emit( 'my event', {
           data: 'User Connected'
         } )
+        socket.emit('join')
+
         var form = $( 'form' ).on( 'submit', function( e ) {
           e.preventDefault()
           let user_name = $( 'input.username' ).val()
