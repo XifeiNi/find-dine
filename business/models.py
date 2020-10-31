@@ -17,6 +17,33 @@ class Business_Profile(db.Model):
 
     messages =db.relationship('Deal')
 
+class Business_Category(enum.Enum):
+    1 = "Fine Dining"
+    2 = "Casual Dining"
+
+'''class Business_Profile(db.Model):
+    __tablename__ = 'businegss_profile'
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    name = db.Column(db.String)
+    email_address = db.Column(db.String)
+    #main_profile_pic= not too sure how to link this to image in the db
+    description = db.Column(db.String)
+    address = db.Column(db.String)
+    #menu = Not sure how to add an image 
+    price_guide=db.Column(db.Integer)
+    category=db.Column(db.Enum(Business_Category))'''
+
+class Business_Offer(db.Model):
+    __tablename__ = 'business_offer'
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    name = db.Column(db.String)
+    description = db.Column(db.String)
+    original_price = db.Column(db.Numeric(10,2))
+    n_upcoming = db.Column(db.Integer)
+    date_created = db.Column(db.Date)
+    date_expiry = db.Column(db.Date)
+    business=db.Column(db.Integer, db.ForeignKey('business_profile.id')) # not sure if this is accurate 
+
 
 # class Deal(db.Model):
 #     __tablename__ = 'messages'
