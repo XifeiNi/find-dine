@@ -44,6 +44,14 @@ class Business_Offer(db.Model):
     date_expiry = db.Column(db.Date)
     business=db.Column(db.Integer, db.ForeignKey('business_profile.id')) # not sure if this is accurate 
 
+class Offer_Time(db.Model):
+    __tablename__ = 'offer_time'
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    time_start = db.Column(db.Time)
+    time_end = db.Column(db.Time)
+    offer=db.Column(db.Integer, db.ForeignKey('business_offer.id')) # not sure if this is accurate 
+
+
 
 # class Deal(db.Model):
 #     __tablename__ = 'messages'
