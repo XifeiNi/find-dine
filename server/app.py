@@ -94,7 +94,7 @@ from datetime import datetime, date
 #     login_manager.init_app(app)
 #     jsglue.init_app(app)
 
-app = Flask(__name__, template_folder='../templates')
+app = Flask(__name__, template_folder='../business')
 app.config['SECRET_KEY'] = 'user_side#'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
 db.init_app(app)

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Signup</title>
+</head>
+<body>
+<!--    id-->
+<!--    name-->
+<!--    email address-->
+<!--    password-->
+<!--    description-->
+<!--    address-->
+<!--    menu-->
+<!--    price guide-->
+<!--    category-->
+    <form id="signup_form" onSubmit="return add_valid_info()" method="POST" action="/">
+        Business Name: <input type="text" id="business_name" onchange="nameCheck(this.value)" placeholder="Enter Business Name">
+        <p id="name_error"></p>
+        Email: <input type="text" id="email" onchange="emailCheck(this.value)" placeholder="Enter Email Address">
+        <p id="email_error"></p>
+        Password: <input type="password" placeholder="Enter Password" id="password" onchange="passwordCheck(this.value)">
+        <p id="password_error"></p>
+        Confirm Password: <input type="password" placeholder="Confirm Password" id="confirm_password" onchange="confirmPassword()">
+        <p id="confirm_error"></p>
+        Description: <input type="text" placeholder="A description of who you are..." id="description">
+        Address: <input type="text" placeholder="Enter address here" id="address" onchange="addressCheck(this.value)">
+        <p id="address_error"></p>
+        <label for="price_guide" >Price Range:</label>
+           <select name="price_guide" id="price_guide" form="signup_form">
+            <option value="low">$0-$75</option>
+            <option value="medium">$75-$150</option>
+            <option value="high">$150-$300</option>
+          </select>
+        <label for="category" >Casual Dining or Fine Dining:</label>
+           <select name="category" id="category" form="signup_form">
+            <option value="casual">Casual Dining</option>
+            <option value="fine">Fine Dining</option>
+          </select>
+        <button type="button" id="reset_add"><a href="signup.html">Reset</a></button>
+        <input type="submit" id="submit" value="Register now!">
+    </form>
+</body>
+<script>
+    function add_valid_info(){
+        return true
+    }
+</script>
+</html>
