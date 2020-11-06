@@ -14,17 +14,23 @@
 <!--    menu-->
 <!--    price guide-->
 <!--    category-->
-    <form id="signup_form" onSubmit="return add_valid_info()" method="POST" action="/">
-        Business Name: <input type="text" id="business_name" onchange="nameCheck(this.value)" placeholder="Enter Business Name">
+    <form id="signup_form" method="POST" action="/">
+        Business Name:
+        <label for="business_name"></label><input name="business_name" type="text" id="business_name" placeholder="Enter Business Name" onchange="nameCheck(this.value)" required>
         <p id="name_error"></p>
-        Email: <input type="text" id="email" onchange="emailCheck(this.value)" placeholder="Enter Email Address">
+        Email:
+        <label for="email"></label><input type="email" name="email" id="email" placeholder="Enter Email Address" required>
         <p id="email_error"></p>
-        Password: <input type="password" placeholder="Enter Password" id="password" onchange="passwordCheck(this.value)">
+        Password:
+        <label for="password"></label><input pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$" type="password" placeholder="Enter Password" name="password" id="password" required>
         <p id="password_error"></p>
-        Confirm Password: <input type="password" placeholder="Confirm Password" id="confirm_password" onchange="confirmPassword()">
+        Confirm Password:
+        <label for="confirm_password"></label><input type="password" placeholder="Confirm Password" name="confirm_password" id="confirm_password" required>
         <p id="confirm_error"></p>
-        Description: <input type="text" placeholder="A description of who you are..." id="description">
-        Address: <input type="text" placeholder="Enter address here" id="address" onchange="addressCheck(this.value)">
+        Description:
+        <label for="description"></label><input type="text" placeholder="A description of who you are..." name="description" id="description" required>
+        Address:
+        <label for="address"></label><input type="text" placeholder="Enter address here" name="address" id="address" required>
         <p id="address_error"></p>
         <label for="price_guide" >Price Range:</label>
            <select name="price_guide" id="price_guide" form="signup_form">
@@ -42,8 +48,18 @@
     </form>
 </body>
 <script>
-    function add_valid_info(){
-        return true
+        var password = document.getElementById("password")
+      , confirm_password = document.getElementById("confirm_password");
+
+    function validatePassword(){
+        if(password.value != confirm_password.value) {
+            confirm_password.setCustomValidity("Passwords Don't Match");
+          } else {
+            confirm_password.setCustomValidity('');
+          }
     }
+password.onchange = validatePassword;
+confirm_password.onkeyup = validatePassword;
+    // pattern="/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/"
 </script>
 </html>

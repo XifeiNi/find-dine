@@ -15,8 +15,6 @@ class Business_Profile(db.Model):
     price_guide = db.Column(db.String)
     category = db.Column(db.String)
 
-    messages =db.relationship('Deal')
-
 
 # class Deal(db.Model):
 #     __tablename__ = 'messages'

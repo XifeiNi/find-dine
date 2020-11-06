@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from models import Business_Profile, db
 from datetime import datetime, date
 
-app = Flask(__name__, template_folder='/business')
+app = Flask(__name__, template_folder='../templates/business')
 app.config['SECRET_KEY'] = 'business_side'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
 db.init_app(app)
@@ -17,7 +17,10 @@ with app.app_context():
 @app.route('/', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        data = request.form['signup_form']
+        print("I am in here")
+        data = request.form
+        print ("I got data")
+        print (data)
         name = data['business_name']
         email_address = data['email']
         password = data['password']
@@ -33,10 +36,15 @@ def signup():
                                     price_guide=price_guide,
                                     category=category)
         db.session.add(business)
-        db.commit()
-        return render_template('business/signup.html')
+        db.session.commit()
+        return render_template('login.html')
 
-    return render_template('business/signup.html')
+    return render_template('signup.html')
+
+@app.route('/deal', methods=['GET', 'POST'])
+def create_deal():
+    if request.method == 'POST':
+        data = request.form
 
 
 if __name__ == '__main__':
