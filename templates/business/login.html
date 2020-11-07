@@ -14,6 +14,8 @@
          <input type="password" placeholder="Password" name="password" id="password" required>
         <input class="btn btn-default" type="submit" value="Login">
       </form>
+      <input class="btn btn-default" type="button" value="Forgot Your Password" onclick="reset_password()">
+      <input class="btn btn-default" type="button" value="Don't have an account! Sign up" value="{{url_for('signup')}}">
       {% if error %}
         <p class="error"><strong>Error:</strong> {{ error }}
       {% endif %}

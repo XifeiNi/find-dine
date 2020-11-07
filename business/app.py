@@ -15,7 +15,7 @@ with app.app_context():
     db.create_all()
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
         print("I am in here")
@@ -38,25 +38,28 @@ def signup():
                                     category=category)
         db.session.add(business)
         db.session.commit()
-        return redirect(url_for('login'))
+        return redirect(url_for('/'))
     return render_template('signup.html')
 
-# @app.route('/login', methods=['GET', 'POST'])
-# def login():
-#     if request.method == 'POST':
-#         data = request.form
-#         user_email = data['username']
-#         password = data['password']
-#         user = Business_Profile.query.filter_by(email=user_email).first()
-#         if user is not None and user.password == password:
-#             login_user(user, login_form.remember_me.data)
-#             return redirect(url_for('main.dashboard'))
-#     return render_template('login.html')
+@app.route('/', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        data = request.form
+        user_email = data['username']
+        password = data['password']
+        user = Business_Profile.query.filter_by(email=user_email).first()
+        if user is not None and user.password == password:
+            login_user(user)
+            return redirect(url_for('home'))
+    return render_template('login.html')
+
 @app.route('/home')
+@login_required
 def home():
     return render_template('homepage.html')
 
 @app.route('/deal', methods=['GET', 'POST'])
+@login_required
 def create_deal():
     if request.method == 'POST':
         data = request.form
