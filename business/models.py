@@ -15,12 +15,14 @@ class Business_Profile(db.Model):
     price_guide = db.Column(db.String)
     category = db.Column(db.String)
 
+class Deal(db.Model):
+    __tablename__ = 'deal'
 
-# class Deal(db.Model):
-#     __tablename__ = 'messages'
-#     id= db.Column(db.Integer, primary_key=True)
-#     room=db.Column(db.String, db.ForeignKey('conversations.id'))
-#     sender_username = db.Column(db.String)
-#     time_sent = db.Column(db.Time)
-#     date_sent = db.Column(db.Date)
-#     message = db.Column(db.String)
+    id = db.Column(db.Integer, primary_key=True)
+    deal_name = db.Column(db.String)
+    description = db.Column(db.String)
+    # deal_image = db.Column(db.)
+    # original_price = db.Column(db.Integer)
+    discount_percentage = db.Column(db.Integer)
+    date_expiry = db.Column(db.Date)
+    date_created = db.Column(db.Date)

@@ -17,33 +17,21 @@
     <form id="signup_form"  method="POST" action="/">
         Deal Name:
         <label for="deal_name"></label><input name="deal_name" type="text" id="deal_name" placeholder="Enter Deal Name" required>
+        <p id="deal_name_error"></p>
         Description:
         <label for="description"></label><input type="text" name="description" id="description" placeholder="A description of the deal..." required>
-<!--        Password:-->
-<!--        <label for="password"></label><input type="password" placeholder="Enter Password" name="password" id="password" >-->
-<!--        <p id="password_error"></p>-->
-<!--        Confirm Password:-->
-<!--        <label for="confirm_password"></label><input type="password" placeholder="Confirm Password" name="confirm_password" id="confirm_password">-->
-<!--        <p id="confirm_error"></p>-->
-        Percentage off
-        Deal:
-        <label for="description"></label><input type="text" placeholder="A description of who you are..." name="description" id="description">
-        Address:
-        <label for="address"></label><input type="text" placeholder="Enter address here" name="address" id="address" >
-        <p id="address_error"></p>
-        <label for="price_guide" >Price Range:</label>
-           <select name="price_guide" id="price_guide" form="signup_form">
-            <option value="low">$0-$75</option>
-            <option value="medium">$75-$150</option>
-            <option value="high">$150-$300</option>
-          </select>
-        <label for="category" >Casual Dining or Fine Dining:</label>
-           <select name="category" id="category" form="signup_form">
-            <option value="casual">Casual Dining</option>
-            <option value="fine">Fine Dining</option>
-          </select>
-        <button type="button" id="reset_add"><a href="signup.html">Reset</a></button>
-        <input type="submit" id="submit" value="Register now!">
+        <p id="description_error"></p>
+        Discount Percentage:
+        <label for="percentage"></label><input type="number" placeholder="What is your discount...?" name="percentage" id="percentage" required>
+        <p id="discount_error"></p>
+        Expiry Date:
+        <label for="expiry"></label><input type="date" placeholder="When does it expire" name="expiry" id="expiry" required >
+        <p id="expiry_error"></p>
+        Date Created:
+        <label for="created_date"></label><input type="date" name="created_date" id="created_date" required >
+        <p id="created_error"></p>
+        <button type="button" id="reset_add"><a href="new_deal.html">Reset</a></button>
+        <input type="submit" id="submit" value="Add Deal">
     </form>
 </body>
 <script>
