@@ -50,6 +50,8 @@ def signup():
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     if request.method == 'POST':
         data = request.form
         user_email = data['username']
@@ -91,14 +93,22 @@ def create_deal():
 def forgot_password():
     if request.method == 'POST':
         data = request.form
-        user_email = data['username']
+        user_email = data['email']
         password = data['password']
         user = Business_Profile.query.filter_by(email=user_email).first()
         if user is not None:
             user.password = password
             db.session.commit()
             return redirect(url_for('login'))
-        return render_template('forgot_password.html', error="Username does not exist! Please signup!")
+        else:
+            return render_template('forgot_password.html', error="Username does not exist! Please signup!")
+    return render_template('forgot_password.html')
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)

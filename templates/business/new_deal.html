@@ -33,10 +33,19 @@
         <button type="button" id="reset_add"><a href="new_deal.html">Reset</a></button>
         <input type="submit" id="submit" value="Add Deal">
     </form>
+    <button class="btn btn-default" type="button" id = "logout" onclick="redirect_logout()">Logout</button>
+    <button class="btn btn-default" type="button" id = "home" onclick="redirect_home()">Home</button>
+
 </body>
 <script>
     function add_valid_info(){
         return true
+    }
+    function redirect_logout(){
+        window.location.href="{{ url_for('logout') }}"
+    }
+    function redirect_home(){
+        window.location.href="{{ url_for('home') }}"
     }
 </script>
 </html>

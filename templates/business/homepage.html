@@ -1,10 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <title>Homepage</title>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
 </head>
 <body>
     <h1>WELCOME!</h1>
+    <button class="btn btn-default" type="button" id = "add_deal" onclick="redirect_adddeal()">Add New Deal</button>
+    <button class="btn btn-default" type="button" id = "logout" onclick="redirect_logout()">Logout</button>
+
+
 </body>
+<script>
+    function redirect_adddeal(){
+        window.location.href="{{ url_for('create_deal') }}"
+    }
+    function redirect_logout(){
+        window.location.href="{{ url_for('logout') }}"
+    }
+</script>
 </html>

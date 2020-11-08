@@ -16,6 +16,7 @@ class Business_Profile(UserMixin,db.Model):
     price_guide = db.Column(db.String)
     category = db.Column(db.String)
 
+    deals = db.relationship('Deal')
 
 
 
@@ -23,6 +24,7 @@ class Deal(db.Model):
     __tablename__ = 'deal'
 
     id = db.Column(db.Integer, primary_key=True)
+    business_id = db.Column(db.Integer, db.ForeignKey('business_profile.id'))
     deal_name = db.Column(db.String)
     description = db.Column(db.String)
     # deal_image = db.Column(db.)
