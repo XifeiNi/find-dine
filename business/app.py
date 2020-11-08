@@ -38,7 +38,7 @@ def signup():
                                     category=category)
         db.session.add(business)
         db.session.commit()
-        return redirect(url_for('/'))
+        return redirect(url_for('login'))
     return render_template('signup.html')
 
 @app.route('/', methods=['GET', 'POST'])

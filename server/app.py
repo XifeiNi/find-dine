@@ -62,7 +62,7 @@
 # if __name__ == '__main__':
 #     socketio.run(app)
 
-from flask import Flask, render_template
+from flask import Flask, render_template, session
 from flask_socketio import SocketIO, join_room
 from flask_sqlalchemy import SQLAlchemy
 from models import Conversation, Messages, db

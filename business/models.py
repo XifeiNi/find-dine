@@ -6,7 +6,7 @@ class Business_Profile(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
-    email = db.Column(db.String)
+    email = db.Column(db.String, unique=True)
     password = db.Column(db.String)
     # main_profile = db.Column(db)
     description = db.Column(db.String)
@@ -14,6 +14,9 @@ class Business_Profile(db.Model):
     # menu = db.Column
     price_guide = db.Column(db.String)
     category = db.Column(db.String)
+
+    scheduling = db.relationship('Scheduling_Invites')
+
 
 class Deal(db.Model):
     __tablename__ = 'deal'
