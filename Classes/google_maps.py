@@ -5,7 +5,7 @@ import requests
 import re
 class Google_Maps(API):
 
-    def get_travel_time(self, origin, dest, mode):
+    def get_distance(self, origin, dest, mode):
         """
         Returns the number minutes between `origin` and `dest` when travelling by `mode`
         """
@@ -22,31 +22,22 @@ class Google_Maps(API):
         # GET Request
         json_response = requests.get(distance_api_url, params=payload).json()
         print("GOOGLE MAPS: ", json_response)
-        duration = 0
         # Try to Parse String, otherwise return Error
         try:
-            dur_str = json_response['rows'][0]['elements'][0]['duration']['text']
-            print(dur_str)
+            dis_str = json_response['rows'][0]['elements'][0]['distance']['text']
+            print(dis_str)
 
-            # Get mins
-            m = re.search(r'(\d*) mins?', dur_str)
+            # Get kms
+            m = re.search(r'(\d*) mi?', dis_str)
             if(m != None):
-                duration += int((m.group(1)))
+                distance = 1.609344*int((m.group(1)))
 
-            # Get hours
-            h = re.search(r'(\d*) hours?', dur_str)
-            if(h != None):
-                duration += int((h.group(1)))
 
-            # Get Days
-            d = re.search(r'(\d*) days?', dur_str)
-            if(d != None):
-                duration += int((d.group(1)))
 
         except:
             return -1
 
-        return duration
+        return distance
 
     def get_geocode(self, address):
         """

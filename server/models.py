@@ -1,15 +1,16 @@
-from flask_sqlalchemy import SQLAlchemy
 import db, flask_loginmanager
-from __init__ import db
-from __main__ import app
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime, date
 from passlib.apps import custom_app_context as pwd_context
 from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
+from app import app
+import enum
 from flask import current_app
 from flask_login import UserMixin
 from datetime import datetime, date
 
-db = SQLAlchemy()
+db = SQLAlchemy(app)
 from datetime import datetime, date
 
 # class User(UserMixin, db.Model):
@@ -53,13 +54,34 @@ class Messages(db.Model):
 #     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 #     default_location = db.Column(db.String(128), default="")
 
+class Gender(enum.Enum):
+    male = 1
+    female = 2
+    other = 3
 
-class User(db.Model):
-    __tablename__ = 'users'
+
+class Gender_Preference(enum.Enum):
+    male = 1
+    female = 2
+    everyone = 3
+
+
+class User_Profile(db.Model):
+    __tablename__ = "user_profiles"
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(32), index=True, unique=True)
+    f_name = db.Column(db.String(20))
+    l_name = db.Column(db.String(20))
+    email_address = db.Colomn(db.String(50), unique=True)
+    username = db.Column(db.String(20), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    email = db.Column(db.String(128), unique=True)
+    gender = db.Column(db.Enum(Gender))
+    gender_preference = db.Column(db.Enum(Gender_Preference))
+    max_match_distance = db.Column(db.Integer)
+    min_match_age = db.Column(db.Integer)
+    max_match_age = db.Column(db.Integer)
+    bio = db.Column(db.String(150))
+    # main_profile_pic = db.Image()??
+    dob = db.Column(db.Date)  # change this later
 
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
@@ -77,8 +99,8 @@ class User(db.Model):
         try:
             data = s.loads(token)
         except SignatureExpired:
-            return None    # valid token, but expired
+            return None  # valid token, but expired
         except BadSignature:
-            return None    # invalid token
-        user = User.query.get(data['id'])
+            return None  # invalid token
+        user = User_Profile.query.get(data['id'])
         return user
