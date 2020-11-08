@@ -1,16 +1,15 @@
-import db, flask_loginmanager
+import flask_loginmanager
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, date
 from passlib.apps import custom_app_context as pwd_context
 from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
-from app import app
 import enum
 from flask import current_app
 from flask_login import UserMixin
 from datetime import datetime, date
 
-db = SQLAlchemy(app)
+db = SQLAlchemy()
 from datetime import datetime, date
 
 # class User(UserMixin, db.Model):
@@ -71,7 +70,7 @@ class User_Profile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     f_name = db.Column(db.String(20))
     l_name = db.Column(db.String(20))
-    email_address = db.Colomn(db.String(50), unique=True)
+    email_address = db.Column(db.String(50), unique=True)
     username = db.Column(db.String(20), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     gender = db.Column(db.Enum(Gender))
@@ -80,6 +79,7 @@ class User_Profile(db.Model):
     min_match_age = db.Column(db.Integer)
     max_match_age = db.Column(db.Integer)
     bio = db.Column(db.String(150))
+    location = db.Column(db.String)
     # main_profile_pic = db.Image()??
     dob = db.Column(db.Date)  # change this later
 

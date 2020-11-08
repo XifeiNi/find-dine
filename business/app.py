@@ -1,11 +1,18 @@
-from flask import Flask, render_template, request, url_for, redirect, current_app
+from flask import Flask, render_template, request, url_for, redirect
 from flask_socketio import SocketIO, join_room
 from flask_sqlalchemy import SQLAlchemy
 from models import Business_Profile, Deal, db
-from flask_login import current_user, login_user, login_required, logout_user
+from flask_login import current_user, login_user, login_required, logout_user, LoginManager
 from datetime import datetime, date
 
 app = Flask(__name__, template_folder='../templates/business')
+login = LoginManager(app)
+
+@login.user_loader
+def load_user(id):
+    return Business_Profile.query.get(int(id))
+
+
 app.config['SECRET_KEY'] = 'business_side'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
 db.init_app(app)

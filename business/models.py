@@ -1,7 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 db = SQLAlchemy()
 
-class Business_Profile(db.Model):
+class Business_Profile(UserMixin,db.Model):
     __tablename__ = 'business_profile'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -15,7 +16,7 @@ class Business_Profile(db.Model):
     price_guide = db.Column(db.String)
     category = db.Column(db.String)
 
-    scheduling = db.relationship('Scheduling_Invites')
+
 
 
 class Deal(db.Model):
