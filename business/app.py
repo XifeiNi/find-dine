@@ -49,8 +49,10 @@ def login():
         password = data['password']
         user = Business_Profile.query.filter_by(email=user_email).first()
         if user is not None and user.password == password:
-            login_user(user)
+            login_user(user, remember=True)
             return redirect(url_for('home'))
+        else:
+            return render_template('login.html', error="Incorrect username/password")
     return render_template('login.html')
 
 @app.route('/home')
@@ -78,6 +80,18 @@ def create_deal():
         return redirect(url_for('home'))
     return render_template('new_deal.html')
 
+@app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        data = request.form
+        user_email = data['username']
+        password = data['password']
+        user = Business_Profile.query.filter_by(email=user_email).first()
+        if user is not None:
+            user.password = password
+            db.session.commit()
+            return redirect(url_for('login'))
+        return render_template('forgot_password.html', error="Username does not exist! Please signup!")
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)

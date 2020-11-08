@@ -9,17 +9,25 @@
     <div class="container">
       <h1>Please login</h1>
       <br>
-      <form action="/login" method="POST">
+      <form action="/" method="POST">
         <input type="text" placeholder="Username" name="username" id="username" required>
          <input type="password" placeholder="Password" name="password" id="password" required>
         <input class="btn btn-default" type="submit" value="Login">
       </form>
-      <input class="btn btn-default" type="button" value="Forgot Your Password">
-
+      <button class="btn btn-default" type="button" id="password_forget" onclick="forget_password()">Forgot Your Password</button>
+      <button class="btn btn-default" type="button" id = "login_signup" onclick="redirect_signup()">Don't have an account! Sign up </button>
 <!--      <input class="btn btn-default" type="button" value="Don't have an account! Sign up" value="{{url_for('signup')}}">-->
       {% if error %}
-        <p class="error"><strong>Error:</strong> {{ error }}
+        <p class="error"><strong> {{ error }} </strong>
       {% endif %}
     </div>
   </body>
+  <script>
+    function redirect_signup(){
+      window.location.href="{{ url_for('signup') }}";
+    }
+    function forget_password(){
+      window.location.href="{{ url_for('forgot_password') }}";
+    }
+  </script>
 </html>
