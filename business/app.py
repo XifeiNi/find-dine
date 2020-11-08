@@ -32,6 +32,7 @@ def signup():
         name = data['business_name']
         email_address = data['email']
         password = data['password']
+        contact = data['contact_number']
         description = data['description']
         address = data['address']
         price_guide = data['price_guide']
@@ -42,6 +43,7 @@ def signup():
                                     description=description,
                                     address=address,
                                     price_guide=price_guide,
+                                    phone_number=contact,
                                     category=category)
         db.session.add(business)
         db.session.commit()
@@ -67,7 +69,19 @@ def login():
 @app.route('/home')
 @login_required
 def home():
-    return render_template('homepage.html')
+    business_deals = Deal.query.filter_by(business_id=current_user.id).all()
+    business = Business_Profile(id=current_user.id).first()
+    deals_frontend = []
+    for deal in business_deals:
+        business_deal = {"business_name":business.name,
+                        "deal_name": deal.name,
+                        "description": deal.description,
+                        "discount":deal.discount_percentage,
+                        "expiry":deal.date_expiry,
+                        "created":deal.date_created}
+        deals_frontend.append(business_deal)
+
+    return render_template('homepage.html', deals=deals_frontend)
 
 @app.route('/deal', methods=['GET', 'POST'])
 @login_required

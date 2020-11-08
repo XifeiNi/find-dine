@@ -14,6 +14,7 @@ class Business_Profile(UserMixin,db.Model):
     address = db.Column(db.String)
     # menu = db.Column
     price_guide = db.Column(db.String)
+    phone_number = db.Column(db.String)
     category = db.Column(db.String)
 
     deals = db.relationship('Deal')
