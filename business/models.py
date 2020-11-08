@@ -15,7 +15,8 @@ class Business_Profile(db.Model):
     price_guide = db.Column(db.String)
     category = db.Column(db.String)
 
-    messages =db.relationship('Deal')
+class Deal(db.Model):
+    __tablename__ = 'deal'
 
 class Business_Category(enum.Enum):
     1 = "Fine Dining"
@@ -61,3 +62,11 @@ class Offer_Time(db.Model):
 #     time_sent = db.Column(db.Time)
 #     date_sent = db.Column(db.Date)
 #     message = db.Column(db.String)
+'''    id = db.Column(db.Integer, primary_key=True)
+    deal_name = db.Column(db.String)
+    description = db.Column(db.String)
+    # deal_image = db.Column(db.)
+    # original_price = db.Column(db.Integer)
+    discount_percentage = db.Column(db.Integer)
+    date_expiry = db.Column(db.Date)
+    date_created = db.Column(db.Date)'''

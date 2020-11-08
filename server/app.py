@@ -96,7 +96,7 @@ from datetime import datetime, date
 
 app = Flask(__name__, template_folder='../templates')
 app.config['SECRET_KEY'] = 'user_side#'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test1.db'
 db.init_app(app)
 socketio = SocketIO(app)
 
