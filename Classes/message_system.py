@@ -48,7 +48,7 @@ class Message_System:
         username_two_rooms = Conversation.query.filter_by(username_two=current_user_id).all()
         for username_one_room in username_one_rooms:
 
-            
+
 
         return right_swipes+profile_matches
 
