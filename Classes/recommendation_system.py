@@ -1,6 +1,11 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.getcwd() + '/../../'))
+
 from flask_login import current_user
 from .google_maps import Google_Maps
-from ..server.models import User_Profile
+from find_dine.server.models import User_Profile
+# from ..server.models import User_Profile
 from flask import Flask, render_template, session
 import datetime
 from datetime import date
@@ -12,16 +17,27 @@ class Recommendation_System:
     def __init__(self):
         self.Google_Maps_Api = Google_Maps(GOOGLE_MAPS_API_KEY)
     def getRecommendations(self, user_location):
-        current_username = session['current_username']
+        #current_user_id = current_user.id
+        current_user_id = 1
+        user = User_Profile()
         all_users = User_Profile.query.all()
-        cur_user = User_Profile.query.filter_by(username=current_username).first()
-        cur_user_sexuality = cur_user.gender_preference
+        cur_user = User_Profile.query.filter_by(id=current_user_id).first()
+        cur_user_sexuality = cur_user.gender_preference.name
         cur_user_min_age = cur_user.min_match_age
         cur_user_max_age = cur_user.max_match_age
         distances = []
         for user in all_users:
             user_age = self.calculateAge(user.dob)
-            if user.username == current_username or user.gender != cur_user_sexuality or user_age >= cur_user_min_age or user_age > cur_user_max_age:
+            if user.username == cur_user.username:
+                continue
+            elif user.gender.name != cur_user_sexuality:
+                print (user.gender)
+                continue
+            elif user.gender_preference.name != cur_user.gender.name:
+                continue
+            elif user_age < cur_user_min_age:
+                continue
+            elif user_age > cur_user_max_age:
                 continue
             distance = self.Google_Maps_Api.get_distance(user_location, user.location, 'driving')
             if distance <= cur_user.max_match_distance:
@@ -31,7 +47,7 @@ class Recommendation_System:
         sorted_distances = sorted(distances, key=lambda dict: dict['distance'])
         return sorted_distances
 
-    def calculateAge(born):
+    def calculateAge(self, born):
         today = date.today()
         try:
             birthday = born.replace(year=today.year)

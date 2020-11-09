@@ -65,7 +65,7 @@
 from flask import Flask, render_template, session
 from flask_socketio import SocketIO, join_room
 from flask_sqlalchemy import SQLAlchemy
-from models import Conversation, Messages, db
+from .models import Conversation, Messages, db
 from datetime import datetime, date
 
 # from flask import Flask
