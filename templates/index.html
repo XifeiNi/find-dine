@@ -67,13 +67,17 @@
       var socket = io.connect('http://' + document.domain + ':' + location.port);
 
       socket.on( 'connect', function() {
-        socket.emit('join')
+        // socket.emit('join')
+        socket.emit('join', {
+          match_user_username: "Test1",
+          distance: 25
+        })
 
         var form = $( 'form' ).on( 'submit', function( e ) {
           e.preventDefault()
           let user_name = $( 'input.username' ).val()
           let user_input = $( 'input.message' ).val()
-          socket.emit( 'my event', {
+          socket.emit( 'send_message', {
             user_name : user_name,
             message : user_input
           } )

@@ -65,6 +65,7 @@
 from flask import Flask, render_template, session
 from flask_socketio import SocketIO, join_room
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import current_user
 from models import Conversation, Messages, User_Profile, Match, Right_Swipe, db
 from Classes.recommendation_system import Recommendation_System, Right_Swipes
 from datetime import datetime, date
@@ -107,8 +108,15 @@ with app.app_context():
 
 @app.route('/')
 def sessions():
+# def sessions(origin):
+
     origin = "Main Library, University of New South Wales, Sydney, Australia"
     recs_sys = Recommendation_System()
+    # current_user_id = current_user.id
+    current_user_id = 1
+    user = User_Profile.query.filter_by(id=current_user_id).first()
+    user.location = origin
+    db.session.commit()
     recommendations = recs_sys.getRecommendations(origin)
     print(len(recommendations))
     # To print during pytest, uncomment False Assertion
@@ -129,8 +137,8 @@ def messageReceived():
     print('message was received!!!')
 
 
-@socketio.on('my event')
-def handle_my_custom_event(json):
+@socketio.on('send_message')
+def handle_send_message(json):
     print('received my event: ' + str(json))
     room = 'test_room'
     message = Messages(room=room,
@@ -187,7 +195,7 @@ def on_join(match_dict):
                                         target_id=target_id)
         db.session.add(first_right_swipe)
         db.session.commit()
-        first_right_swipe = {"succesful_error_message": "Request has been included into our system",
+        first_right_swipe = {"successful_error_message": "Request has been included into our system",
                        "successful_error_code": 1}
         socketio.emit("join_response", first_right_swipe)
     else:
