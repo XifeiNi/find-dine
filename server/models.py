@@ -36,7 +36,7 @@ class Match(db.Model):
     created = db.Column(db.Date)
     first_swiper = db.Column(db.Integer, db.ForeignKey("user_profiles.id"))
     second_swiper = db.Column(db.Integer)
-    conversation_id = db.Column(db.Integer, db.ForeignKey("conversations.id"))
+    conversation_id = db.Column(db.String, db.ForeignKey("conversations.room"))
 
 class Right_Swipe(db.Model):
     __tablename__ = 'right_swipe'
@@ -52,9 +52,9 @@ class Conversation(db.Model):
     __tablename__ = 'conversations'
 
     id = db.Column(db.Integer, primary_key=True)
-    room = db.Column(db.String)
-    username_one=db.Column(db.String, db.ForeignKey("user_profiles.id"))
-    username_two=db.Column(db.String)
+    room = db.Column(db.String, unique=True)
+    username_one=db.Column(db.Integer, db.ForeignKey("user_profiles.id"))
+    username_two=db.Column(db.Integer)
 
     messages =db.relationship('Messages')
     matches = db.relationship('Match')
@@ -63,8 +63,8 @@ class Conversation(db.Model):
 class Messages(db.Model):
     __tablename__ = 'messages'
     id= db.Column(db.Integer, primary_key=True)
-    room=db.Column(db.String, db.ForeignKey('conversations.id'))
-    sender_username = db.Column(db.String, db.ForeignKey("user_profiles.id"))
+    room=db.Column(db.String, db.ForeignKey('conversations.room'))
+    sender_username = db.Column(db.Integer, db.ForeignKey("user_profiles.id"))
     time_sent = db.Column(db.Time)
     date_sent = db.Column(db.Date)
     message = db.Column(db.String)

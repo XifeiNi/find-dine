@@ -10,7 +10,11 @@ from flask import Flask, render_template, session
 import datetime
 from datetime import date
 from datetime import datetime as dt
-GOOGLE_MAPS_API_KEY = "AIzaSyCqVpb4IWMDpYg2mGo-zv6l6XKIp_sESwo"
+# good API key
+# GOOGLE_MAPS_API_KEY = "AIzaSyCqVpb4IWMDpYg2mGo-zv6l6XKIp_sESwo"
+# shitty API key
+GOOGLE_MAPS_API_KEY = "AIzaSyDNSQlkoM44anY1fYWt-c84gFf_2S40lbg"
+
 
 class Recommendation_System:
 
@@ -18,7 +22,7 @@ class Recommendation_System:
         self.Google_Maps_Api = Google_Maps(GOOGLE_MAPS_API_KEY)
     def getRecommendations(self, user_location):
         #current_user_id = current_user.id
-        current_user_id = 1
+        current_user_id = 3
         # user = User_Profile()
         # all_users = User_Profile.query.all()
         # cur_user = User_Profile.query.filter_by(id=current_user_id).first()
@@ -47,6 +51,12 @@ class Recommendation_System:
         # sorted_distances = sorted(distances, key=lambda dict: dict['distance'])
         right_swipes = self.right_swipe_matches(user_location, current_user_id)
         profile_matches = self.profile_recommendations(user_location, current_user_id)
+
+        print ("***************************")
+        print (right_swipes)
+        print ("***************************")
+        print(profile_matches)
+        print ("***************************")
 
         return right_swipes+profile_matches
 
@@ -108,6 +118,8 @@ class Recommendation_System:
             user_age = self.calculateAge(potential_right.dob)
             if potential_right.username == cur_user.username:
                 continue
+            elif right_swipe.became_match == True:
+                continue
             elif potential_right.gender.name != cur_user_sexuality:
                 print (potential_right.gender)
                 continue
@@ -133,7 +145,7 @@ class Right_Swipes:
     def right_swipes(self, match_dict, current_user_id, target_id):
         # current_user_id = 1
         # target_id=User_Profile.query.filter_by(username=match_dict['match_user_username']).first().id
-        first_right_swipe = Right_Swipe.query.filter_by(swiper_id=target_id).filter_by(target_id=current_user_id)
+        first_right_swipe = Right_Swipe.query.filter_by(swiper_id=target_id).filter_by(target_id=current_user_id).first()
         if first_right_swipe is not None:
             first_right_swipe.became_match = True
             db.session.commit()

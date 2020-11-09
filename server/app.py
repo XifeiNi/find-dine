@@ -163,17 +163,17 @@ def on_join(match_dict):
     #     db.session.add(conversation)
     #     db.session.commit()
     right_swipes = Right_Swipes()
-    current_user_id = 1
+    current_user_id = 3
     target_id = User_Profile.query.filter_by(username=match_dict['match_user_username']).first().id
     previous_swipe = right_swipes.right_swipes(match_dict, current_user_id, target_id)
     if previous_swipe == 1:
-        second_right_swipe = Right_Swipe(time = datetime.now(),
-                                        swiper_id = current_user_id,
+        second_right_swipe = Right_Swipe(time=datetime.now(),
+                                         swiper_id=current_user_id,
                                          target_id=target_id,
                                          became_match=True)
         db.session.add(second_right_swipe)
         db.session.commit()
-        room_id = target_id + "+" + current_user_id
+        room_id = str(target_id) + "+" + str(current_user_id)
         conversation = Conversation(room=room_id,
                                     username_one=target_id,
                                     username_two=current_user_id)
@@ -188,20 +188,24 @@ def on_join(match_dict):
         db.session.commit()
         found_match = {"succesful_error_message": "Found a match",
                        "successful_error_code": 0}
-        socketio.emit("join_response", found_match)
+        code = found_match
+        # socketio.emit("join_response", found_match)
     elif previous_swipe == -1:
-        first_right_swipe = Right_Swipe(time = datetime.now(),
-                                        swiper_id = current_user_id,
+        first_right_swipe = Right_Swipe(time=datetime.now(),
+                                        swiper_id=current_user_id,
                                         target_id=target_id)
         db.session.add(first_right_swipe)
         db.session.commit()
         first_right_swipe = {"successful_error_message": "Request has been included into our system",
-                       "successful_error_code": 1}
-        socketio.emit("join_response", first_right_swipe)
+                             "successful_error_code": 1}
+        code = first_right_swipe
+        # socketio.emit("join_response", first_right_swipe)
     else:
         error_code = {"successful_error_message": "Something went wrong",
                       "successful_error_code": -1}
-        socketio.emit("join_response", error_code)
+        code = error_code
+    return code
+    # socketio.emit("join_response", error_code)
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)

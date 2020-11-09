@@ -28,10 +28,13 @@ class Google_Maps(API):
             print(dis_str)
 
             # Get kms
-            m = re.search(r'(\d*) ?', dis_str)
+            m = re.search(r'(\d*)\.(\d*) km', dis_str)
             if(m != None):
                 # distance = 1.609344*int((m.group(1)))
-                distance = int((m.group(1)))
+                string_distance = m.group(1)+"."+ m.group(2)
+                # distance = float((m.group(1)))
+                # print(float(m.group(2)))
+                distance = float(string_distance)
 
 
         except:
