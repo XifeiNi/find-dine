@@ -66,7 +66,7 @@ from flask import Flask, render_template, session
 from flask_socketio import SocketIO, join_room
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import current_user
-from models import Conversation, Messages, User_Profile, Match, Right_Swipe, db
+from .models import Conversation, Messages, User_Profile, Match, Right_Swipe, db
 from Classes.recommendation_system import Recommendation_System, Right_Swipes
 from datetime import datetime, date
 

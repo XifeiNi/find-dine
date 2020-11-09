@@ -10,7 +10,7 @@ from flask import Flask, render_template, session
 import datetime
 from datetime import date
 from datetime import datetime as dt
-GOOGLE_MAPS_API_KEY = "AIzaSyDNSQlkoM44anY1fYWt-c84gFf_2S40lbg"
+GOOGLE_MAPS_API_KEY = "AIzaSyCqVpb4IWMDpYg2mGo-zv6l6XKIp_sESwo"
 
 class Recommendation_System:
 
@@ -75,7 +75,7 @@ class Recommendation_System:
             user_age = self.calculateAge(user.dob)
             if user.username == cur_user.username:
                 continue
-            elif (Right_Swipe.query.filter_by(target_id=current_user_id).filter_by(swiper_id=user.id)) is not None:
+            elif (Right_Swipe.query.filter_by(target_id=current_user_id).filter_by(swiper_id=user.id).first()) is not None:
                 continue
             elif user.gender.name != cur_user_sexuality:
                 print (user.gender)
