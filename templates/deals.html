@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% for item in list %}
+        <h2>Deal Name:{{ item.name }}</h2>
+        <h3>Description:{{ item.description }}</h3>
+        <h3>Deal validity</h3>
+    <br></br>
+    {% endfor %}
+    <!--{{list}} -->
+</body>
+</html>
