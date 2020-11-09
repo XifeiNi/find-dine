@@ -13,10 +13,10 @@ import datetime
 from datetime import date, datetime
 
 
-class SettingUp(unittest.TestCase):
+class TestSettingUp(unittest.TestCase):
 
-    def settingup(self):
-        rec_sys = Recommendation_System()
+    def test_setting_up(self):
+
 
 
         origin = "Main Library, University of New South Wales, Sydney, Australia"
@@ -26,7 +26,6 @@ class SettingUp(unittest.TestCase):
         loc5 = "Law Building, Union Rd, Kensington NSW 2035"
         loc6 = "7 Water St, Lidcombe NSW 2141"
         loc7 = "12 Smallwood Ave, Homebush NSW 2140"
-
         with app.app_context():
         # radius = 500
         # day_of_week = 2
@@ -47,9 +46,9 @@ class SettingUp(unittest.TestCase):
                                  max_match_age=25,
                                  bio="I am horny",
                                  location="aaaa",
-                                 dob=date(2000,1, 1))
+                                 dob=date(2000, 1, 1))
 
-            test2=User_Profile(f_name="Test",
+            test2 = User_Profile(f_name="Test",
                                  l_name="two",
                                  email_address="test2@gmail.com",
                                  username="Test2",
@@ -61,12 +60,12 @@ class SettingUp(unittest.TestCase):
                                  max_match_age=25,
                                  bio="I am horny",
                                  location=loc2,
-                               dob=date(2000,6,10))
+                                 dob=date(2000, 6, 10))
             test3 = User_Profile(f_name="Test",
                                  l_name="three",
                                  email_address="test3@gmail.com",
                                  username="Test3",
-                                 passwordtest1@gmail.com_hash="Test3",
+                                 password_hash="Test3",
                                  gender="female",
                                  gender_preference="male",
                                  max_match_distance=30,
@@ -74,8 +73,8 @@ class SettingUp(unittest.TestCase):
                                  max_match_age=25,
                                  bio="I am horny",
                                  location=loc3,
-                               dob=date(2005,4,13))
-            test4= User_Profile(f_name="Test",
+                                 dob=date(2005, 4, 13))
+            test4 = User_Profile(f_name="Test",
                                  l_name="four",
                                  email_address="test4@gmail.com",
                                  username="Test4",
@@ -87,7 +86,7 @@ class SettingUp(unittest.TestCase):
                                  max_match_age=25,
                                  bio="I am horny",
                                  location=loc4,
-                                dob=date(2003,12,1))
+                                 dob=date(2003, 12, 1))
             test5 = User_Profile(f_name="Test",
                                  l_name="five",
                                  email_address="test5@gmail.com",
@@ -136,15 +135,12 @@ class SettingUp(unittest.TestCase):
             db.session.add(test7)
             db.session.commit()
 
-            swipe1=Right_Swipe(time=datetime.now(),
-                               swiper_id=4,
-                               target_id=3)
-            swipe2=Right_Swipe(time=datetime.now(),
-                               swiper_id=5,
-                               target_id=3)
+            swipe1 = Right_Swipe(time=datetime.now(),
+                                 swiper_id=4,
+                                 target_id=3)
+            swipe2 = Right_Swipe(time=datetime.now(),
+                                 swiper_id=5,
+                                 target_id=3)
             db.session.add(swipe1)
             db.session.add(swipe2)
             db.session.commit()
-
-
-        #assert False
