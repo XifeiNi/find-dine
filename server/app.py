@@ -62,10 +62,10 @@
 # if __name__ == '__main__':
 #     socketio.run(app)
 
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify, request, abort
 from flask_socketio import SocketIO, join_room
 from flask_sqlalchemy import SQLAlchemy
-from models import Conversation, Messages, db
+from models import * #Conversation, Messages, db
 from datetime import datetime, date
 
 # from flask import Flask
@@ -93,10 +93,12 @@ from datetime import datetime, date
 #     db.init_app(app)
 #     login_manager.init_app(app)
 #     jsglue.init_app(app)
+from server.models import all_businesses_list
 
 app = Flask(__name__, template_folder='../templates')
 app.config['SECRET_KEY'] = 'user_side#'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test1.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test2.db'
+app.config['JSON_SORT_KEYS'] = False
 db.init_app(app)
 socketio = SocketIO(app)
 
@@ -138,6 +140,28 @@ def on_join():
         conversation = Conversation(room=room)
         db.session.add(conversation)
         db.session.commit()
+@app.route('/businesses', methods=['GET'])
+def business_list():
+    if request.method == 'GET':
+        result = all_businesses_list()
+        for item in result:
+            #instance = db.session.query(Business_Profile).filter_by(id=item["id"]).first() is not None
+            instance = db.session.query(Business_Profile).filter_by(id=item["id"]).first()
+            if not instance:
+                print(item["id"], item["name"])
+                business = Business_Profile(id=int(item["id"]),
+                                            name=item["name"],
+                                            email=item["email"],
+                                            description=item["description"],
+                                            address=item["address"],
+                                            price_guide=item["price_guide"],
+                                            category=item["category"])
+                db.session.add(business)
+                db.session.commit()
+        results = db.session.query(Business_Profile).all()
+
+    #return jsonify(all_businesses_list())
+    return render_template('business_list.html', list=results)
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
+    socketio.run(app, debug=False)

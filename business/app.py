@@ -94,4 +94,4 @@ def forgot_password():
         return render_template('forgot_password.html', error="Username does not exist! Please signup!")
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
+    socketio.run(app, debug=False)

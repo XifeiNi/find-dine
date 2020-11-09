@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Businesses Available</title>
+</head>
+<body>
+    {% for item in list %}
+        <h2>Business Name:{{ item.name }}</h2>
+        <h3>Description:{{ item.description }}</h3>
+        <h3>Address:{{ item.address }}</h3>
+        <h3>Price Range:{{ item.price_guide }}</h3>
+        <h3>Contact Details</h3>
+        <h3>Email:{{ item.email }}</h3>
+        <h3>Category:{{ item.category }}</h3>
+    <br></br>
+    {% endfor %}
+    <!--{{list}} -->
+</body>
+</html>

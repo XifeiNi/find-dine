@@ -1,5 +1,10 @@
 from flask_sqlalchemy import SQLAlchemy
+import enum
 db = SQLAlchemy()
+
+class Business_Category(enum.Enum):
+    one = "Fine Dining"
+    two = "Casual Dining"
 
 class Business_Profile(db.Model):
     __tablename__ = 'business_profile'
@@ -13,14 +18,19 @@ class Business_Profile(db.Model):
     address = db.Column(db.String)
     # menu = db.Column
     price_guide = db.Column(db.String)
-    category = db.Column(db.String)
+    category=db.Column(db.Enum(Business_Category))
 
 class Deal(db.Model):
     __tablename__ = 'deal'
+    id = db.Column(db.Integer, primary_key=True)
+    deal_name = db.Column(db.String)
+    description = db.Column(db.String)
+    # deal_image = db.Column(db.)
+    # original_price = db.Column(db.Integer)
+    discount_percentage = db.Column(db.Integer)
+    date_expiry = db.Column(db.Date)
+    date_created = db.Column(db.Date)
 
-class Business_Category(enum.Enum):
-    1 = "Fine Dining"
-    2 = "Casual Dining"
 
 '''class Business_Profile(db.Model):
     __tablename__ = 'businegss_profile'
@@ -32,7 +42,7 @@ class Business_Category(enum.Enum):
     address = db.Column(db.String)
     #menu = Not sure how to add an image 
     price_guide=db.Column(db.Integer)
-    category=db.Column(db.Enum(Business_Category))'''
+    category=db.Column(db.Enum(Business_Category))
 
 class Business_Offer(db.Model):
     __tablename__ = 'business_offer'
@@ -50,7 +60,7 @@ class Offer_Time(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     time_start = db.Column(db.Time)
     time_end = db.Column(db.Time)
-    offer=db.Column(db.Integer, db.ForeignKey('business_offer.id')) # not sure if this is accurate 
+    offer=db.Column(db.Integer, db.ForeignKey('business_offer.id')) # not sure if this is accurate '''
 
 
 
@@ -62,11 +72,4 @@ class Offer_Time(db.Model):
 #     time_sent = db.Column(db.Time)
 #     date_sent = db.Column(db.Date)
 #     message = db.Column(db.String)
-'''    id = db.Column(db.Integer, primary_key=True)
-    deal_name = db.Column(db.String)
-    description = db.Column(db.String)
-    # deal_image = db.Column(db.)
-    # original_price = db.Column(db.Integer)
-    discount_percentage = db.Column(db.Integer)
-    date_expiry = db.Column(db.Date)
-    date_created = db.Column(db.Date)'''
+
