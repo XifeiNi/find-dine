@@ -28,20 +28,43 @@ from datetime import datetime, date
 #     def load_user(user_id):
 #         return User.query.get(int(user_id))
 
+class Match(db.Model):
+    __tablename__ = 'match'
+
+    id=db.Column(db.Integer, primary_key=True)
+    distance = db.Column(db.Integer)
+    created = db.Column(db.Date)
+    first_swiper = db.Column(db.Integer, db.ForeignKey("user_profiles.id"))
+    second_swiper = db.Column(db.Integer, db.ForeignKey("user_profiles.id"))
+    conversation_id = db.Column(db.Integer, db.ForeignKey("conversations.id"))
+
+class Right_Swipe(db.Model):
+    __tablename__ = 'right_swipe'
+
+    id = db.Column(db.Integer, primary_key=True)
+    time = db.Column(db.DateTime)
+    swiper_id = db.Column(db.Integer, db.ForeignKey("user_profiles.id"))
+    target_id = db.Column(db.Integer, db.ForeignKey("user_profiles.id"))
+    became_match = db.Column(db.Boolean, default=False)
+
+
 class Conversation(db.Model):
     __tablename__ = 'conversations'
 
     id = db.Column(db.Integer, primary_key=True)
     room = db.Column(db.String)
+    username_one=db.Column(db.String, db.ForeignKey("user_profiles.id"))
+    username_two=db.Column(db.String, db.ForeignKey("user_profiles.id"))
 
     messages =db.relationship('Messages')
+    matches = db.relationship('Match')
 
 
 class Messages(db.Model):
     __tablename__ = 'messages'
     id= db.Column(db.Integer, primary_key=True)
     room=db.Column(db.String, db.ForeignKey('conversations.id'))
-    sender_username = db.Column(db.String)
+    sender_username = db.Column(db.String, db.ForeignKey("user_profiles.id"))
     time_sent = db.Column(db.Time)
     date_sent = db.Column(db.Date)
     message = db.Column(db.String)
@@ -64,7 +87,6 @@ class Gender_Preference(enum.Enum):
     female = 2
     everyone = 3
 
-
 class User_Profile(db.Model):
     __tablename__ = "user_profiles"
     id = db.Column(db.Integer, primary_key=True)
@@ -82,6 +104,12 @@ class User_Profile(db.Model):
     location = db.Column(db.String)
     # main_profile_pic = db.Image()??
     dob = db.Column(db.Date)  # change this later
+
+    right_swipes = db.relationship('Right_Swipe')
+    conversations = db.relationship('Conversation')
+    messages = db.relationship("Messages")
+    users = db.relationship("Match")
+
 
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)

@@ -65,7 +65,8 @@
 from flask import Flask, render_template, session
 from flask_socketio import SocketIO, join_room
 from flask_sqlalchemy import SQLAlchemy
-from .models import Conversation, Messages, db
+from models import Conversation, Messages, User_Profile, Match, Right_Swipe, db
+from Classes.recommendation_system import Recommendation_System, Right_Swipes
 from datetime import datetime, date
 
 # from flask import Flask
@@ -106,7 +107,22 @@ with app.app_context():
 
 @app.route('/')
 def sessions():
-    return render_template('index.html')
+    origin = "Main Library, University of New South Wales, Sydney, Australia"
+    recs_sys = Recommendation_System()
+    recommendations = recs_sys.getRecommendations(origin)
+    print(len(recommendations))
+    # To print during pytest, uncomment False Assertion
+    for recommendation in recommendations:
+        # event.user_id = owner.id
+        print("########################")
+        # print("First Name: ", recommendation.f_name)
+        # print ("Last Name: ", recommendation.l_name)
+        # print("addr: ", event.addr)
+        # print("start: ", event.start_time)
+        # print("end: ", event.end_time)
+        print("Username: ", recommendation['match_user_username'])
+        print("Distance: ", recommendation['distance'])
+    return render_template('index.html', recommendations=recommendations)
 
 
 def messageReceived():
@@ -127,17 +143,57 @@ def handle_my_custom_event(json):
     socketio.emit('my response', json, callback=messageReceived)
 
 @socketio.on('join')
-def on_join():
+def on_join(match_dict):
     # username = session['user'].get('username')
     # room = username + data['other']
     # username = data['username']
-    room = 'test_room'
-    join_room(room)
-    exists = (Conversation.query.filter_by(room=room).first())
-    if exists is None:
-        conversation = Conversation(room=room)
+    # room = 'test_room'
+    # join_room(room)
+    # exists = (Conversation.query.filter_by(room=room).first())
+    # if exists is None:
+    #     conversation = Conversation(room=room)
+    #     db.session.add(conversation)
+    #     db.session.commit()
+    right_swipes = Right_Swipes()
+    current_user_id = 1
+    target_id = User_Profile.query.filter_by(username=match_dict['match_user_username']).first().id
+    previous_swipe = right_swipes.right_swipes(match_dict, current_user_id, target_id)
+    if previous_swipe == 1:
+        second_right_swipe = Right_Swipe(time = datetime.now(),
+                                        swiper_id = current_user_id,
+                                         target_id=target_id,
+                                         became_match=True)
+        db.session.add(second_right_swipe)
+        db.session.commit()
+        room_id = target_id + "+" + current_user_id
+        conversation = Conversation(room=room_id,
+                                    username_one=target_id,
+                                    username_two=current_user_id)
         db.session.add(conversation)
         db.session.commit()
+        match = Match(distance=match_dict['distance'],
+                      created=date.today(),
+                      first_swiper=target_id,
+                      second_swiper=current_user_id,
+                      conversation_id=room_id)
+        db.session.add(match)
+        db.session.commit()
+        found_match = {"succesful_error_message": "Found a match",
+                       "successful_error_code": 0}
+        socketio.emit("join_response", found_match)
+    elif previous_swipe == -1:
+        first_right_swipe = Right_Swipe(time = datetime.now(),
+                                        swiper_id = current_user_id,
+                                        target_id=target_id)
+        db.session.add(first_right_swipe)
+        db.session.commit()
+        first_right_swipe = {"succesful_error_message": "Request has been included into our system",
+                       "successful_error_code": 1}
+        socketio.emit("join_response", first_right_swipe)
+    else:
+        error_code = {"successful_error_message": "Something went wrong",
+                      "successful_error_code": -1}
+        socketio.emit("join_response", error_code)
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)
