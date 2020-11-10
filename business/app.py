@@ -70,11 +70,12 @@ def login():
 @login_required
 def home():
     business_deals = Deal.query.filter_by(business_id=current_user.id).all()
-    business = Business_Profile(id=current_user.id).first()
+    business = Business_Profile.query.filter_by(id=current_user.id).first()
     deals_frontend = []
     for deal in business_deals:
-        business_deal = {"business_name":business.name,
-                        "deal_name": deal.name,
+        business_deal = {"deal_id": deal.id,
+                        "business_name":business.name,
+                        "deal_name": deal.deal_name,
                         "description": deal.description,
                         "discount":deal.discount_percentage,
                         "expiry":deal.date_expiry,
@@ -93,7 +94,8 @@ def create_deal():
         discount = data['percentage']
         expiry = data['expiry']
         created = data['created_date']
-        deal = Deal(deal_name=deal_name,
+        deal = Deal(business_name=current_user.id,
+                    deal_name=deal_name,
                     description=description,
                     discount_percentage=discount,
                     date_expiry=expiry,
