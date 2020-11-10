@@ -6,10 +6,27 @@
     <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
 </head>
 <body>
-    <h1>WELCOME!</h1>
+    <h1>WELCOME {{business_name}}! Your Deals!</h1>
     <button class="btn btn-default" type="button" id = "add_deal" onclick="redirect_adddeal()">Add New Deal</button>
     <button class="btn btn-default" type="button" id = "logout" onclick="redirect_logout()">Logout</button>
 
+    <div id="deals">
+        {% for item in deals_frontend %}
+            <h2>Deal Name: {{ item.deal_name }}</h2>
+            <h3>Discount: {{ item.discount }}</h3>
+            <h3>Description: {{ item.description }}</h3>
+            <h3>Expiry Date: {{item.expiry}}</h3>
+            <h3>Created Date: {{item.created}}</h3>
+        <br></br>
+        {% endfor %}
+        <!--{{list}} -->
+<!--                business_deal = {"business_name":business.name,-->
+<!--                        "deal_name": deal.name,-->
+<!--                        "description": deal.description,-->
+<!--                        "discount":deal.discount_percentage,-->
+<!--                        "expiry":deal.date_expiry,-->
+<!--                        "created":deal.date_created}-->
+    </div>
 
 </body>
 <script>

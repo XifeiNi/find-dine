@@ -81,7 +81,7 @@ def home():
                         "created":deal.date_created}
         deals_frontend.append(business_deal)
 
-    return render_template('homepage.html', deals=deals_frontend)
+    return render_template('homepage.html', deals_frontend=deals_frontend, business_name=business.name)
 
 @app.route('/deal', methods=['GET', 'POST'])
 @login_required
