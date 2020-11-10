@@ -97,6 +97,9 @@ class Recommendation_System:
             elif user_age > cur_user_max_age:
                 continue
             distance = self.Google_Maps_Api.get_distance(user_location, user.location, 'driving')
+            if distance == -1:
+                print("Google Maps could not return a possible distance. Check the error message from Google")
+                exit(300)
             if distance <= cur_user.max_match_distance:
                 distance_append = {"match_user_username": user.username,
                                    "distance": distance}
