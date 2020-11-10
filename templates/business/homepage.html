@@ -17,7 +17,8 @@
             <h3>Description: {{ item.description }}</h3>
             <h3>Expiry Date: {{item.expiry}}</h3>
             <h3>Created Date: {{item.created}}</h3>
-            <button class="btn btn-default" type="button" id = "{{item.deal_id}}" onclick="edit_button({{item.deal_id}})">Logout</button>
+            <button class="btn btn-default" type="button" id = "{{item.deal_id}}_edit" onclick="edit_button({{item.deal_id}})">Logout</button>
+            <button class="btn btn-default" type="button" id = "{{item.deal_id}}_delete" onclick="delete_button({{item.deal_id}})">Delete</button>
 
         <br></br>
         {% endfor %}
@@ -38,7 +39,9 @@
     function redirect_logout(){
         window.location.href="{{ url_for('logout') }}"
     }
-    function edit_button(item_id){
+    function edit_button(deal_id){
+        const data = {deal_id}
+        const response = await makeRequest
 
     }
 </script>

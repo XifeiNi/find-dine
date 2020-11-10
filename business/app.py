@@ -84,6 +84,17 @@ def home():
 
     return render_template('homepage.html', deals_frontend=deals_frontend, business_name=business.name)
 
+@app.route('/delete/<item_id>', methods=['POST'])
+def delete_shit(item_id):
+    pass
+
+@app.route('/delete', methods=['POST'])
+def delete_shit():
+    item_id = request.get_json()['item_id']
+    pass
+
+
+@app.route('/edit/<item_id>')
 @app.route('/deal', methods=['GET', 'POST'])
 @login_required
 def create_deal():

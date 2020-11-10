@@ -62,11 +62,11 @@
 # if __name__ == '__main__':
 #     socketio.run(app)
 
-from flask import Flask, render_template, session
+from flask import Flask, render_template, session, jsonify
 from flask_socketio import SocketIO, join_room
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import current_user
-from .models import Conversation, Messages, User_Profile, Match, Right_Swipe, db
+from models import Conversation, Messages, User_Profile, Match, Right_Swipe, db
 from Classes.recommendation_system import Recommendation_System, Right_Swipes
 from Classes.message_system import Message_System
 from datetime import datetime, date
@@ -106,9 +106,9 @@ socketio = SocketIO(app)
 with app.app_context():
     db.create_all()
 
-
+# This is the first function, once called, it should return the match recommendations
 @app.route('/')
-def sessions():
+def get_recommendations():
 # def sessions(origin):
 
     origin = "Main Library, University of New South Wales, Sydney, Australia"
@@ -124,16 +124,12 @@ def sessions():
     for recommendation in recommendations:
         # event.user_id = owner.id
         print("########################")
-        # print("First Name: ", recommendation.f_name)
-        # print ("Last Name: ", recommendation.l_name)
-        # print("addr: ", event.addr)
-        # print("start: ", event.start_time)
-        # print("end: ", event.end_time)
         print("Username: ", recommendation['match_user_username'])
         print("Distance: ", recommendation['distance'])
-    return render_template('index.html', recommendations=recommendations)
+    return jsonify(recommendations)
+    # return render_template('index.html', recommendations=recommendations)
 
-@app.route("/get_coversations")
+@app.route("/get_conversations")
 def get_conversations():
 
     message_sys = Message_System()
@@ -148,7 +144,8 @@ def get_conversations():
         print("Username: ", conversation['username'])
         print("Last_Message: ", conversation['last_message'])
         print("Time: ", conversation['time'])
-    return render_template('conversations.html', conversations=conversations)
+    return jsonify(conversations)
+    # return render_template('conversations.html', conversations=conversations)
 
 @app.route("/get_conversation_messages/<room_id>")
 def get_conversation_messages(room_id):
@@ -158,21 +155,17 @@ def get_conversation_messages(room_id):
     print("Username: ", conversation['conversation_username'])
     print("***********************")
     for message in messages:
-        print("########################")
-        # print("First Name: ", recommendation.f_name)
-        # print ("Last Name: ", recommendation.l_name)
-        # print("addr: ", event.addr)
-        # print("start: ", event.start_time)
-        # print("end: ", event.end_time)
         print("Message Sender: ", message['message_username'])
         print("Message: ", message['message'])
         print("Time: ", message['time_sent'])
-    return render_template('messages.html', conversation=conversation, messages=messages)
+    return jsonify({'conversation': conversation, 'messages': messages})
+    # return render_template('messages.html', conversation=conversation, messages=messages)
 
 def messageReceived():
     print('message was received!!!')
 
-
+# This message should be called when the user is trying to send a message, to an existing
+# conversation
 @socketio.on('send_message')
 def handle_send_message(json):
     print('received my event: ' + str(json))
@@ -197,18 +190,9 @@ def handle_send_message(json):
     db.session.commit()
     socketio.emit('my response', json, callback=messageReceived)
 
+#This function should be called when the user right-swipes on an individual
 @socketio.on('join')
 def on_join(match_dict):
-    # username = session['user'].get('username')
-    # room = username + data['other']
-    # username = data['username']
-    # room = 'test_room'
-    # join_room(room)
-    # exists = (Conversation.query.filter_by(room=room).first())
-    # if exists is None:
-    #     conversation = Conversation(room=room)
-    #     db.session.add(conversation)
-    #     db.session.commit()
     right_swipes = Right_Swipes()
     current_user_id = 3
     target_id = User_Profile.query.filter_by(username=match_dict['match_user_username']).first().id
@@ -248,7 +232,7 @@ def on_join(match_dict):
         code = first_right_swipe
         # socketio.emit("join_response", first_right_swipe)
     else:
-        error_code = {"successfu   l_error_message": "Something went wrong",
+        error_code = {"successful_error_message": "Something went wrong",
                       "successful_error_code": -1}
         code = error_code
     return code

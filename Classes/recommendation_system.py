@@ -11,9 +11,9 @@ import datetime
 from datetime import date
 from datetime import datetime as dt
 # good API key
-# GOOGLE_MAPS_API_KEY = "AIzaSyCqVpb4IWMDpYg2mGo-zv6l6XKIp_sESwo"
+GOOGLE_MAPS_API_KEY = "AIzaSyCqVpb4IWMDpYg2mGo-zv6l6XKIp_sESwo"
 # shitty API key
-GOOGLE_MAPS_API_KEY = "AIzaSyDNSQlkoM44anY1fYWt-c84gFf_2S40lbg"
+# GOOGLE_MAPS_API_KEY = "AIzaSyDNSQlkoM44anY1fYWt-c84gFf_2S40lbg"
 
 
 class Recommendation_System:
