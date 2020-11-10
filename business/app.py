@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, url_for, redirect
+from flask import Flask, render_template, request, url_for, redirect, Response
 from flask_socketio import SocketIO, join_room
+import json
 from flask_sqlalchemy import SQLAlchemy
 from models import Business_Profile, Deal, db
 from flask_login import current_user, login_user, login_required, logout_user, LoginManager
@@ -84,17 +85,28 @@ def home():
 
     return render_template('homepage.html', deals_frontend=deals_frontend, business_name=business.name)
 
-@app.route('/delete/<item_id>', methods=['POST'])
-def delete_shit(item_id):
-    pass
 
-@app.route('/delete', methods=['POST'])
-def delete_shit():
-    item_id = request.get_json()['item_id']
-    pass
+@app.route('/delete_deal', methods=['POST'])
+@login_required
+def delete_deal():
+    content = request.get_json()
+    deal_id = content.get('deal_id')
+    print ("*************************")
+    id = int(deal_id)
+    print (id)
+    deal = Deal.query.filter_by(id=id).first()
+    if deal is None:
+        response_content = {
+            'message': "Deal Not Found! Something is wrong"
+        }
+        return Response(json.dumps(response_content), mimetype='application/json')
+    db.session.delete(deal)
+    db.session.commit()
+    response_content = {
+        'message': "Deal was successfully deleted"
+    }
+    return Response(json.dumps(response_content), mimetype='application/json')
 
-
-@app.route('/edit/<item_id>')
 @app.route('/deal', methods=['GET', 'POST'])
 @login_required
 def create_deal():
