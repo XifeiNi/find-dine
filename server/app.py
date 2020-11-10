@@ -68,6 +68,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import current_user
 from .models import Conversation, Messages, User_Profile, Match, Right_Swipe, db
 from Classes.recommendation_system import Recommendation_System, Right_Swipes
+from Classes.message_system import Message_System
 from datetime import datetime, date
 
 # from flask import Flask
@@ -132,6 +133,41 @@ def sessions():
         print("Distance: ", recommendation['distance'])
     return render_template('index.html', recommendations=recommendations)
 
+@app.route("/get_coversations")
+def get_conversations():
+
+    message_sys = Message_System()
+    conversations = message_sys.getConversations()
+    for conversation in conversations:
+        print("########################")
+        # print("First Name: ", recommendation.f_name)
+        # print ("Last Name: ", recommendation.l_name)
+        # print("addr: ", event.addr)
+        # print("start: ", event.start_time)
+        # print("end: ", event.end_time)
+        print("Username: ", conversation['username'])
+        print("Last_Message: ", conversation['last_message'])
+        print("Time: ", conversation['time'])
+    return render_template('conversations.html', conversations=conversations)
+
+@app.route("/get_conversation_messages/<room_id>")
+def get_conversation_messages(room_id):
+    message_sys = Message_System()
+    conversation, messages = message_sys.getMessages(room_id)
+    print("########################")
+    print("Username: ", conversation['conversation_username'])
+    print("***********************")
+    for message in messages:
+        print("########################")
+        # print("First Name: ", recommendation.f_name)
+        # print ("Last Name: ", recommendation.l_name)
+        # print("addr: ", event.addr)
+        # print("start: ", event.start_time)
+        # print("end: ", event.end_time)
+        print("Message Sender: ", message['message_username'])
+        print("Message: ", message['message'])
+        print("Time: ", message['time_sent'])
+    return render_template('messages.html', conversation=conversation, messages=messages)
 
 def messageReceived():
     print('message was received!!!')
@@ -140,11 +176,22 @@ def messageReceived():
 @socketio.on('send_message')
 def handle_send_message(json):
     print('received my event: ' + str(json))
-    room = 'test_room'
+    current_user_id = 3
+    username = User_Profile.query.filter_by(username=json['user_name']).first()
+    if username is None:
+        socketio.emit('my response', json, callback="Something is wrong, Username cannot be found")
+        exit(100)
+
+    conversation = Conversation.query.filter_by(username_one=username.id).filter_by(username_two=current_user_id).first()
+    if conversation is None:
+        conversation = Conversation.query.filter_by(username_two=username.id).filter_by(username_one=current_user_id).first()
+    if conversation is None:
+        socketio.emit('my response', json, callback="Something is wrong, Conversation Room cannot be found")
+        exit(200)
+    room = conversation.room
     message = Messages(room=room,
-                       sender_username=json['user_name'],
-                       time_sent=datetime.now().time(),
-                       date_sent=datetime.today().date(),
+                       sender_username=username.id,
+                       time_sent=datetime.now(),
                        message=json['message'])
     db.session.add(message)
     db.session.commit()
@@ -176,11 +223,11 @@ def on_join(match_dict):
         room_id = str(target_id) + "+" + str(current_user_id)
         conversation = Conversation(room=room_id,
                                     username_one=target_id,
-                                    username_two=current_user_id)
+                                       username_two=current_user_id)
         db.session.add(conversation)
         db.session.commit()
         match = Match(distance=match_dict['distance'],
-                      created=date.today(),
+                      created=datetime.now(),
                       first_swiper=target_id,
                       second_swiper=current_user_id,
                       conversation_id=room_id)
@@ -201,7 +248,7 @@ def on_join(match_dict):
         code = first_right_swipe
         # socketio.emit("join_response", first_right_swipe)
     else:
-        error_code = {"successful_error_message": "Something went wrong",
+        error_code = {"successfu   l_error_message": "Something went wrong",
                       "successful_error_code": -1}
         code = error_code
     return code

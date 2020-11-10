@@ -34,6 +34,14 @@ class TestRightSwipes(unittest.TestCase):
             print ("#################################")
             print (code)
 
+            match_dict3 = {"match_user_username": "Test5",
+                           "distance": 1}
+            code = self.right_swipe_function(match_dict3)
+            print("*********************************")
+            print(match_dict3)
+            print("#################################")
+            print(code)
+
 
     def right_swipe_function(self, match_dict):
         right_swipes = Right_Swipes()
@@ -54,7 +62,7 @@ class TestRightSwipes(unittest.TestCase):
             db.session.add(conversation)
             db.session.commit()
             match = Match(distance=match_dict['distance'],
-                          created=date.today(),
+                          created=datetime.now(),
                           first_swiper=target_id,
                           second_swiper=current_user_id,
                           conversation_id=room_id)

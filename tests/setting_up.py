@@ -3,7 +3,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.getcwd() + '/../../'))
 
 from find_dine.server.app import app
-from find_dine.server.models import User_Profile, Right_Swipe, db
+from find_dine.server.models import User_Profile, Right_Swipe, Messages, db
 from flask import Flask, render_template, session
 
 import unittest
@@ -16,9 +16,6 @@ from datetime import date, datetime
 class TestSettingUp(unittest.TestCase):
 
     def test_setting_up(self):
-
-
-
         origin = "Main Library, University of New South Wales, Sydney, Australia"
         loc2 = "Colombo House, University of New South Wales, Sydney, Australia"
         loc3 = "Keith Burrows Theatre, Univeristy of New South Wales, Sydney, Australia"
@@ -141,6 +138,28 @@ class TestSettingUp(unittest.TestCase):
             swipe2 = Right_Swipe(time=datetime.now(),
                                  swiper_id=5,
                                  target_id=3)
+            swipe3= Right_Swipe(time=datetime.now(),
+                                swiper_id=6,
+                                target_id=3)
             db.session.add(swipe1)
             db.session.add(swipe2)
+            db.session.add(swipe3)
             db.session.commit()
+
+    def test_setting_up_conversations(self):
+
+        with app.app_context():
+            message1= Messages(room="6+3",
+                               sender_username=3,
+                               time_sent=datetime.now(),
+                               message="This is the first message at " + str(datetime.now()))
+            db.session.add(message1)
+            db.session.commit()
+            message2= Messages(room="6+3",
+                               sender_username=6,
+                               time_sent=datetime.now(),
+                               message="This is the second message at " + str(datetime.now()))
+            db.session.add(message2)
+            db.session.commit()
+
+

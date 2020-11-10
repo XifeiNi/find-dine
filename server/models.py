@@ -33,7 +33,7 @@ class Match(db.Model):
 
     id=db.Column(db.Integer, primary_key=True)
     distance = db.Column(db.Integer)
-    created = db.Column(db.Date)
+    created = db.Column(db.DateTime)
     first_swiper = db.Column(db.Integer, db.ForeignKey("user_profiles.id"))
     second_swiper = db.Column(db.Integer)
     conversation_id = db.Column(db.String, db.ForeignKey("conversations.room"))
@@ -65,8 +65,7 @@ class Messages(db.Model):
     id= db.Column(db.Integer, primary_key=True)
     room=db.Column(db.String, db.ForeignKey('conversations.room'))
     sender_username = db.Column(db.Integer, db.ForeignKey("user_profiles.id"))
-    time_sent = db.Column(db.Time)
-    date_sent = db.Column(db.Date)
+    time_sent = db.Column(db.DateTime)
     message = db.Column(db.String)
 
 # class Location (db.Model): #Invitation System
