@@ -97,7 +97,7 @@ from server.models import all_businesses_list, Deals, all_deals_list, get_matche
 
 app = Flask(__name__, template_folder='../templates')
 app.config['SECRET_KEY'] = 'user_side#'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test2.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test1.db'
 app.config['JSON_SORT_KEYS'] = False
 db.init_app(app)
 socketio = SocketIO(app)
@@ -177,7 +177,7 @@ def deals_info(b_id):
     return()
 '''
 
-@app.route('/deals', methods=['GET'])
+@app.route('/deals', methods=['GET', ])
 def deals_list():
 
     if request.method == 'GET':
@@ -209,16 +209,21 @@ def make_reservation(d_id):
     if request.method == 'POST':
         if request.form['submit_button'] == 'reservation':
             deal_info = []
-            current_user_id = 3
+            current_user_id = 6
             matched_users = get_matched_users(current_user_id)
-            deal = Deals.query.filter_by(id=d_id)
-            business = Business_Profile.query.filter_by(id=deal.business_id)
+            deal = Deals.query.filter_by(id=d_id).first()
+            #print(deal.id, deal.deal_name, deal.business_id)
+            business = Business_Profile.query.filter_by(id=deal.business_id).first()
+            #print(business.id, business.name, business.address)
             deal_info.append({
                 "deal_id": deal.id,
+                "deal_name": deal.deal_name,
                 "business_name": business.name,
                 "business_address": business.address
             })
             return render_template('home.html', deal=deal_info, matches=matched_users)
+        if request.form['submit_button'] == 'reservation':
+
         return render_template('home.html', deal=deal_info)
 
 

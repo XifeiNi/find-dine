@@ -1,6 +1,7 @@
 from typing import List
 import flask_loginmanager
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import or_
 from flask import jsonify, request, abort
 
 db = SQLAlchemy()
@@ -205,9 +206,42 @@ def deals_info(business_id):
 
 
 def get_matched_users(user_id):
-    all_matches = Match.query.filter(or_(first_swiper=user_id, second_swiper=user_id)).all
+    all_matches = Match.query.filter(or_(Match.first_swiper==user_id, Match.second_swiper==user_id)).all()
+    #print(all_matches)
     matched_users = []
 
+    ''' right_swipe_1 = Right_Swipe(time=datetime.now(),
+                swiper_id=user_id,
+                target_id=1,
+                became_match=False)
+
+    right_swipe_2 = Right_Swipe(time=datetime.now(),
+                swiper_id=1,
+                target_id=user_id,
+                became_match=True)
+
+    db.session.add(right_swipe_1)
+    db.session.add(right_swipe_2)
+    db.session.commit()
+
+    room_id = str(right_swipe_1.swiper_id) + "+" + str(right_swipe_1.target_id)
+
+    conversation = Conversation(room=room_id,
+                                username_one=right_swipe_1.swiper_id,
+                                username_two=right_swipe_1.target_id)
+    db.session.add(conversation)
+    db.session.commit()
+
+    match = Match(distance=12,
+                  created=datetime.now(),
+                  first_swiper=right_swipe_1.target_id,
+                  second_swiper=right_swipe_1.swiper_id,
+                  conversation_id=room_id)
+    db.session.add(match)
+    db.session.commit()'''
+
+    #print(all_matches)
+    #if (all_matches.len)
     for match in all_matches:
 
         if match.first_swiper == user_id:

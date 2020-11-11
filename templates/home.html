@@ -6,18 +6,28 @@
 </head>
 <body>
     <h1>Reservation</h1>
-
-    <h3> Making reservation for {{ deal.deal_name }} at {{ deal.}}</h3>
-
+    {% for x in deal %}
+    <h3> Making reservation for deal '{{ x.deal_name }}' at '{{ x.business_name }}'</h3>
+    {% endfor %}
     <form id="reservation_form" method="POST" action="/deals">
-
+        <br/>
     <label for="matched_user" >Reservation with Match:</label>
-           <select name="matched_user" id="matched_user" form="reservation_form">
+           <select name="matched_user" id="matched_user" form="reservation_form" required>
            {% for item in matches %}
             <option value=item.match_id>{{ item.user_name }}</option>
             {% endfor %}
           </select>
+    <br/><br/>
+    <label for="start_time">Choose a start time for your reservation:</label>
 
+        <input type="time" id="start_time" name="start_time" min="09:00" max="21:00" required>
+        <small>Business hours are 9am to 9pm</small>
+    <br/><br/>
+    <label for="end_time">Choose an end time for your reservation:</label>
+
+        <input type="time" id="end_time" name="end_time" min="09:00" max="21:00" required>
+        <small>Business hours are 9am to 9pm</small>
+    <br/><br/>
     </form>
     <!--<form id="reservation_form" method="POST" action="/deals">
         Business Name:
