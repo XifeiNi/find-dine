@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservations</title>
+</head>
+<body>
+    <h1>Reservation</h1>
+    {% for x in deal %}
+    <h3> Making reservation for deal '{{ x.deal_name }}' at '{{ x.business_name }}'</h3>
+
+    <form id="reservation_form" action=/reservation/{{ x.deal_id }} method="POST">
+        <br/>
+    <label for="matched_user" >Reservation with Match:</label>
+           <select name="matched_user" id="matched_user" form="reservation_form" required>
+           {% for item in matches %}
+            <option value={{item.match_id}}>{{ item.user_name }}</option>
+            {% endfor %}
+          </select>
+    <br/><br/>
+    <label for="start_time">Choose a start time for your reservation:</label>
+
+        <input type="time" id="start_time" name="start_time" min="09:00" max="21:00" required>
+        <small>Business hours are 9am to 9pm</small>
+    <br/><br/>
+    <label for="end_time">Choose an end time for your reservation:</label>
+
+        <input type="time" id="end_time" name="end_time" min="09:00" max="21:00" required>
+        <small>Business hours are 9am to 9pm</small>
+    <br/><br/>
+        <button name="submit_button" value="finalise_reservation">Make A Reservation!</button>
+    </form>
+    {% endfor %}
+</body>
+</html>

@@ -93,7 +93,7 @@ from datetime import datetime, date
 #     db.init_app(app)
 #     login_manager.init_app(app)
 #     jsglue.init_app(app)
-from server.models import all_businesses_list, Deals, all_deals_list, get_matched_users
+from server.models import all_businesses_list, Deals, all_deals_list, get_matched_users, add_meeting
 
 app = Flask(__name__, template_folder='../templates')
 app.config['SECRET_KEY'] = 'user_side#'
@@ -207,25 +207,35 @@ def deals_list():
 @app.route('/reservation/<d_id>', methods=['POST'])
 def make_reservation(d_id):
     if request.method == 'POST':
+
+        print('Got here- POST request')
+
         if request.form['submit_button'] == 'reservation':
             deal_info = []
             current_user_id = 6
             matched_users = get_matched_users(current_user_id)
+
             deal = Deals.query.filter_by(id=d_id).first()
-            #print(deal.id, deal.deal_name, deal.business_id)
             business = Business_Profile.query.filter_by(id=deal.business_id).first()
-            #print(business.id, business.name, business.address)
             deal_info.append({
                 "deal_id": deal.id,
                 "deal_name": deal.deal_name,
                 "business_name": business.name,
                 "business_address": business.address
             })
-            return render_template('home.html', deal=deal_info, matches=matched_users)
-        if request.form['submit_button'] == 'reservation':
+            return render_template('reservations.html', deal=deal_info, matches=matched_users)
 
-        return render_template('home.html', deal=deal_info)
+        if request.form['submit_button'] == 'finalise_reservation':
+            #print('Got here pt 2')
+            match_id = request.form.get('matched_user')
+            start_time = request.form.get('start_time')
+            end_time = request.form.get('end_time')
+            #print(match_id, start_time, end_time)
+            result = add_meeting(d_id, match_id, start_time, end_time)
+            #return jsonify(result)
+            return render_template('res_done.html')
 
+        return render_template('reservations.html', deal=deal_info)
 
 if __name__ == '__main__':
     socketio.run(app, debug=False)

@@ -1,9 +1,9 @@
+import json
 from typing import List
 import flask_loginmanager
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import or_
 from flask import jsonify, request, abort
-
 db = SQLAlchemy()
 from flask import current_app
 from flask_login import UserMixin
@@ -57,8 +57,8 @@ class Meeting(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     deals_id = db.Column(db.Integer, db.ForeignKey('deals.id'))
     match_id = db.Column(db.Integer, db.ForeignKey('match.id'))
-    time_start = db.Column(db.Date)
-    time_end = db.Column(db.Date)
+    time_start = db.Column(db.String)
+    time_end = db.Column(db.String)
 
 
 class Deals(db.Model):
@@ -206,8 +206,8 @@ def deals_info(business_id):
 
 
 def get_matched_users(user_id):
-    all_matches = Match.query.filter(or_(Match.first_swiper==user_id, Match.second_swiper==user_id)).all()
-    #print(all_matches)
+    all_matches = Match.query.filter(or_(Match.first_swiper == user_id, Match.second_swiper == user_id)).all()
+    # print(all_matches)
     matched_users = []
 
     ''' right_swipe_1 = Right_Swipe(time=datetime.now(),
@@ -240,8 +240,8 @@ def get_matched_users(user_id):
     db.session.add(match)
     db.session.commit()'''
 
-    #print(all_matches)
-    #if (all_matches.len)
+    # print(all_matches)
+    # if (all_matches.len)
     for match in all_matches:
 
         if match.first_swiper == user_id:
@@ -252,6 +252,7 @@ def get_matched_users(user_id):
                 "match_id": match.id,
                 "user_name": name
             })
+
         if match.second_swiper == user_id:
             user = User_Profile.query.filter_by(id=match.first_swiper).first()
             name = user.f_name + " " + user.l_name
@@ -263,47 +264,38 @@ def get_matched_users(user_id):
 
     return matched_users
 
-    '''
-	# get patient info
-	sql = """
-		select p.cancer_type, p.diagnosis
-		from Patient p 
-		where p.patient_id = '{}'
-	""".format(patient_id)
 
-	cursor.execute(sql)
-	patient = cursor.fetchone()
-	if patient is None:
-		return 400
+def generate_meeting_id():
+    num = (Meeting.query.order_by(Meeting.id.desc()).first())
+    if num is None:
+        return 1
+    else:
+        new_id = num.id + 1
 
-	# get patient current treatment
-	sql = """
-		select group_concat(treatment) as treatments
-		from Treatment_start
-		where event_id in 
-			(select event_id
-			from Event 
-			where patient_id = '{}' and type = "Treatment_start")
-		and end_id is null;
-	""".format(patient_id)
-	cursor.execute(sql)
-	current_treatment = cursor.fetchone()
 
-	if current_treatment[0] is None:
-		treatment = []
-	else:
-		treatment = current_treatment[0].split(",")
+def add_meeting(deal_id, match_id, start_t, end_t):
+    meeting_id = generate_meeting_id()
+    result = []
+    meeting = Meeting(
+        id=meeting_id,
+        deals_id=deal_id,
+        match_id=match_id,
+        time_start=str(start_t),
+        time_end=str(end_t)
+    )
+    print(meeting.time_start)
+    db.session.add(meeting)
+    db.session.commit()
+    result.append({
+        "id": meeting_id,
+        "deals_id": deal_id,
+        "match_id": match_id,
+        "time_start": start_t,
+        "time_end": end_t,
+    })
+    #json_result = json.dumps(meeting.to_dict())
+    return result
 
-	result = {
-		"ID": patient_id,
-		"cancer_type": patient[0],
-		"diagnosis": patient[1],
-		"treatments": treatment,
-		"events": get_events(patient_id),
-		"status": 200
-	}
-
-	return result'''
 
 # class Location (db.Model): #Invitation System
 #     __tablename__ = 'location'
