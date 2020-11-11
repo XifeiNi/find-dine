@@ -65,7 +65,7 @@
 from flask import Flask, render_template, session, jsonify, request, redirect, url_for, flash
 from flask_socketio import SocketIO, join_room
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import current_user, LoginManager
+from flask_login import current_user, LoginManager, login_required, login_user, logout_user
 from server.models import Conversation, Messages, User_Profile, Match, Right_Swipe, db
 from Classes.recommendation_system import Recommendation_System, Right_Swipes
 from Classes.message_system import Message_System
@@ -146,7 +146,7 @@ def signup():
         if input_password != input_password_repeat:
             return render_template('auth/signup.html', error="Passwords don't match")
 
-        if min_target < max_target:
+        if min_target > max_target:
             return render_template('auth/signup.html', error="Invalid match age targets")
 
         dob_obj = datetime.strptime(dob, '%Y-%m-%d')
@@ -170,7 +170,7 @@ def signup():
         db.session.commit()
 
         # redirect to home page, user is logged in
-        new_user.is_authenticated = True
+        login_user(new_user)
         return redirect(url_for('get_recommendations'))
 
     return render_template('auth/signup.html')
@@ -195,10 +195,17 @@ def login():
             return render_template('auth/login.html', error="Invalid credentials")
 
         # user is valid
-        user.is_authenticated = True
+        login_user(user)
         return redirect(url_for('get_recommendations'))
 
     return render_template('auth/login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('get_recommendations'))
+
 
 
 # This is the first function, once called, it should return the match recommendations
