@@ -65,7 +65,7 @@
 from flask import Flask, render_template, session, jsonify, request, redirect, url_for, flash
 from flask_socketio import SocketIO, join_room
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import current_user
+from flask_login import current_user, LoginManager
 from server.models import Conversation, Messages, User_Profile, Match, Right_Swipe, db
 from Classes.recommendation_system import Recommendation_System, Right_Swipes
 from Classes.message_system import Message_System
@@ -103,6 +103,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test1.db'
 db.init_app(app)
 socketio = SocketIO(app)
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+# needed for login manager implementation. Gets user object from id
+@login_manager.user_loader
+def load_user(user_id):
+    return User_Profile.query.filter_by(id=user_id).first()
+
 with app.app_context():
     db.create_all()
 
@@ -138,19 +146,12 @@ def signup():
         if input_password != input_password_repeat:
             return render_template('auth/signup.html', error="Passwords don't match")
 
-        print(min_target)
-        print(max_target)
         if min_target < max_target:
             return render_template('auth/signup.html', error="Invalid match age targets")
 
         dob_obj = datetime.strptime(dob, '%Y-%m-%d')
-        print(dob_obj)
-
         if datetime.today().year - dob_obj.year < 18:
             return render_template('auth/signup.html', error="You must be over 18 to register on find&dine")
-
-        # needs datetime object in db
-
 
         # create object and commit to db
         new_user = User_Profile(f_name=f_name,
@@ -169,9 +170,36 @@ def signup():
         db.session.commit()
 
         # redirect to home page, user is logged in
+        new_user.is_authenticated = True
         return redirect(url_for('get_recommendations'))
 
     return render_template('auth/signup.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+
+    if request.method == 'POST':
+
+        req = request.form
+        print(req)
+
+        username = req['username']
+        password = req['password']
+
+        # validation
+        user = User_Profile.query.filter_by(username=username).first()
+        if user is None:
+            return render_template('auth/login.html', error="Invalid credentials")
+
+        if user.password_hash != password:
+            return render_template('auth/login.html', error="Invalid credentials")
+
+        # user is valid
+        user.is_authenticated = True
+        return redirect(url_for('get_recommendations'))
+
+    return render_template('auth/login.html')
+
 
 # This is the first function, once called, it should return the match recommendations
 @app.route('/')

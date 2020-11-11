@@ -109,7 +109,16 @@ class User_Profile(db.Model):
     messages = db.relationship("Messages")
     users = db.relationship("Match")
     # main_profile_pic = db.Image()??
-    dob = db.Column(db.Date) #change this later
+    dob = db.Column(db.Date)
+
+    # flask login manager requirements
+    is_authenticated = False
+    is_active = True
+    is_anonymous = False
+
+    # return unicode id
+    def get_id(self):
+        return str(self.id).encode("utf-8").decode("utf-8")
 
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
