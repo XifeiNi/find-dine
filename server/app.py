@@ -62,7 +62,7 @@
 # if __name__ == '__main__':
 #     socketio.run(app)
 
-from flask import Flask, render_template, session, jsonify, request
+from flask import Flask, render_template, session, jsonify, request, redirect, url_for, flash
 from flask_socketio import SocketIO, join_room
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import current_user
@@ -108,12 +108,13 @@ with app.app_context():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    print("I am in signup 1!")
+
     if request.method == 'POST':
-        print("I am in signup 2!")
 
         req = request.form
         print(req)
+
+        # get data from form
         email = req['email']
         username = req['username']
         f_name = req['f_name']
@@ -127,8 +128,31 @@ def signup():
         gender_preference = req['gender_preference']
         bio = req['bio']
 
-        dob_obj = datetime.strptime(dob, '%Y-%m-%d')
+        # do validation and error checking
+        if User_Profile.query.filter_by(email_address=email).first() is not None:
+            return render_template('auth/signup.html', error="An account with this email already exists")
 
+        if User_Profile.query.filter_by(username=username).first() is not None:
+            return render_template('auth/signup.html', error="Username already taken")
+
+        if input_password != input_password_repeat:
+            return render_template('auth/signup.html', error="Passwords don't match")
+
+        print(min_target)
+        print(max_target)
+        if min_target < max_target:
+            return render_template('auth/signup.html', error="Invalid match age targets")
+
+        dob_obj = datetime.strptime(dob, '%Y-%m-%d')
+        print(dob_obj)
+
+        if datetime.today().year - dob_obj.year < 18:
+            return render_template('auth/signup.html', error="You must be over 18 to register on find&dine")
+
+        # needs datetime object in db
+
+
+        # create object and commit to db
         new_user = User_Profile(f_name=f_name,
                                 l_name=l_name,
                                 email_address=email,
@@ -143,6 +167,9 @@ def signup():
 
         db.session.add(new_user)
         db.session.commit()
+
+        # redirect to home page, user is logged in
+        return redirect(url_for('get_recommendations'))
 
     return render_template('auth/signup.html')
 

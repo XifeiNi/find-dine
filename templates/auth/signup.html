@@ -1,3 +1,16 @@
+{% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+{% endif %}
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
 <form id='signup_form' action="/signup" style="border:1px solid #ccc" method="POST">
     <div class="container">
     <h1>Sign Up</h1>
