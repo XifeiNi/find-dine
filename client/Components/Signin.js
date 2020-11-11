@@ -1,7 +1,7 @@
 const { Component } = require("react");
 
 import React, { Component } from 'react';
-import {  
+import {
     StyleSheet,
     TouchableOpacity,
     Text,
@@ -13,8 +13,12 @@ export default class Signin extends Component {
         return (
             <View>
                 <Text>
-                    Signin
+                    You are logged in
                 </Text>
+                <Button
+                          onPress={this.props.onLogoutPress}
+                          title="Logout"
+                          />
             </View>
         );
     }
