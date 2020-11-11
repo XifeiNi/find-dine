@@ -62,7 +62,7 @@
 # if __name__ == '__main__':
 #     socketio.run(app)
 
-from flask import Flask, render_template, session, jsonify
+from flask import Flask, render_template, session, jsonify, request
 from flask_socketio import SocketIO, join_room
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import current_user
@@ -105,6 +105,46 @@ socketio = SocketIO(app)
 
 with app.app_context():
     db.create_all()
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    print("I am in signup 1!")
+    if request.method == 'POST':
+        print("I am in signup 2!")
+
+        req = request.form
+        print(req)
+        email = req['email']
+        username = req['username']
+        f_name = req['f_name']
+        l_name = req['l_name']
+        input_password = req['password']
+        input_password_repeat = req['password_repeat']
+        dob = req['dob']
+        min_target = req['min_target']
+        max_target = req['max_target']
+        gender = req['gender']
+        gender_preference = req['gender_preference']
+        bio = req['bio']
+
+        dob_obj = datetime.strptime(dob, '%Y-%m-%d')
+
+        new_user = User_Profile(f_name=f_name,
+                                l_name=l_name,
+                                email_address=email,
+                                username=username,
+                                password_hash=input_password,
+                                gender=gender,
+                                gender_preference=gender_preference,
+                                min_match_age=min_target,
+                                max_match_age=max_target,
+                                bio=bio,
+                                dob=dob_obj)
+
+        db.session.add(new_user)
+        db.session.commit()
+
+    return render_template('auth/signup.html')
 
 # This is the first function, once called, it should return the match recommendations
 @app.route('/')
