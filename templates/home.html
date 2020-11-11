@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservations</title>
+</head>
+<body>
+    <h1>Reservation</h1>
+
+    <h3> Making reservation for {{ deal.deal_name }} at {{ deal.}}</h3>
+
+    <form id="reservation_form" method="POST" action="/deals">
+
+    <label for="matched_user" >Reservation with Match:</label>
+           <select name="matched_user" id="matched_user" form="reservation_form">
+           {% for item in matches %}
+            <option value=item.match_id>{{ item.user_name }}</option>
+            {% endfor %}
+          </select>
+
+    </form>
+    <!--<form id="reservation_form" method="POST" action="/deals">
+        Business Name:
+        <label for="business_name"></label><input name="business_name" type="text" id="business_name" placeholder="Enter Business Name" onchange="nameCheck(this.value)" required>
+        <p id="name_error"></p>
+        Email:
+        <label for="email"></label><input type="email" name="email" id="email" placeholder="Enter Email Address" required>
+        <p id="email_error"></p>
+        Password:
+        <label for="password"></label><input pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$" type="password" placeholder="Enter Password" name="password" id="password" required>
+        <p id="password_error"></p>
+        Confirm Password:
+        <label for="confirm_password"></label><input type="password" placeholder="Confirm Password" name="confirm_password" id="confirm_password" required>
+        <p id="confirm_error"></p>
+        Description:
+        <label for="description"></label><input type="text" placeholder="A description of who you are..." name="description" id="description" required>
+        Address:
+        <label for="address"></label><input type="text" placeholder="Enter address here" name="address" id="address" required>
+        <p id="address_error"></p>
+        <label for="price_guide" >Price Range:</label>
+           <select name="price_guide" id="price_guide" form="signup_form">
+            <option value="low">$0-$75</option>
+            <option value="medium">$75-$150</option>
+            <option value="high">$150-$300</option>
+          </select>
+        <label for="category" >Casual Dining or Fine Dining:</label>
+           <select name="category" id="category" form="signup_form">
+            <option value="casual">Casual Dining</option>
+            <option value="fine">Fine Dining</option>
+          </select>
+        <button type="button" id="reset_add"><a href="signup.html">Reset</a></button>
+        <input type="submit" id="submit" value="Register now!">
+    </form> -->
+</body>
+</html>

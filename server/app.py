@@ -61,7 +61,7 @@
 #
 # if __name__ == '__main__':
 #     socketio.run(app)
-
+from flask_login import current_user
 from flask import Flask, render_template, jsonify, request, abort
 from flask_socketio import SocketIO, join_room
 from flask_sqlalchemy import SQLAlchemy
@@ -93,7 +93,7 @@ from datetime import datetime, date
 #     db.init_app(app)
 #     login_manager.init_app(app)
 #     jsglue.init_app(app)
-from server.models import all_businesses_list
+from server.models import all_businesses_list, Deals, all_deals_list, get_matched_users
 
 app = Flask(__name__, template_folder='../templates')
 app.config['SECRET_KEY'] = 'user_side#'
@@ -167,7 +167,7 @@ def business_list():
     return render_template('business_list.html', list=list_of_buinesses)
 
 
-@app.route('/businesses/<b_id>', methods=['GET'])
+'''@app.route('/businesses/<b_id>', methods=['GET'])
 def deals_info(b_id):
     # info = deals_info(str(b_id))
     print(b_id)
@@ -175,10 +175,11 @@ def deals_info(b_id):
     #print(deals_info)
     #return jsonify(deals_info)
     return()
-
+'''
 
 @app.route('/deals', methods=['GET'])
 def deals_list():
+
     if request.method == 'GET':
 
         result = all_deals_list()
@@ -201,7 +202,24 @@ def deals_list():
             # else:
             # print(item["id"], item["description"])
     # return jsonify(all_deals_list())
-    return render_template('deals.html', list=result)
+        return render_template('deals.html', list=result)
+
+@app.route('/reservation/<d_id>', methods=['POST'])
+def make_reservation(d_id):
+    if request.method == 'POST':
+        if request.form['submit_button'] == 'reservation':
+            deal_info = []
+            current_user_id = 3
+            matched_users = get_matched_users(current_user_id)
+            deal = Deals.query.filter_by(id=d_id)
+            business = Business_Profile.query.filter_by(id=deal.business_id)
+            deal_info.append({
+                "deal_id": deal.id,
+                "business_name": business.name,
+                "business_address": business.address
+            })
+            return render_template('home.html', deal=deal_info, matches=matched_users)
+        return render_template('home.html', deal=deal_info)
 
 
 if __name__ == '__main__':
