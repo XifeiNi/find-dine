@@ -1,6 +1,8 @@
-const { Component } = require("react");
 
-import React, { Component } from 'react';
+import React, {Component} from 'react';
+import Profile from "./Profile";
+import Preferences from "./Preferences"
+
 import {
     StyleSheet,
     TouchableOpacity,
@@ -9,12 +11,12 @@ import {
 } from "react-native";
 
 // this should already have all of the profile info
-export default class Preferences extends Component {
+export default class Settings extends Component {
     render() {
         return (
             <View>
-              <Button>Profile</Button>
-              <Button>Preferences</Button>
+              <Profile />
+              <Preferences />
             </View>
         );
     }

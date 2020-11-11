@@ -1,6 +1,6 @@
 const { Component } = require("react");
 
-import React, { Component } from 'react';
+import React from 'react';
 import {
     StyleSheet,
     TouchableOpacity,
@@ -10,19 +10,13 @@ import {
 
 // this should already have all of the profile info
 export default class Preferences extends Component {
-    const {
-      interestedIn,
-      location,
-      maximumDistance,
-      maxAge,
-      minAge
-    } = UserPreferences[5]
     render() {
         return (
             <View>
-              <Text>{name}</Text>
-              <Text>{age}</Text>
-              <Text>{bio}</Text>
+              <Text>I'm interested in</Text>
+              <Text>My location</Text>
+              <Text> Age range </Text>
+              <Text> Maximum distance </Text>
             </View>
         );
     }
