@@ -5,7 +5,7 @@ import { HomeTabNavigation } from './HomeTabNavigation';
 import CameraScreen from 'src/screens/CameraScreen';
 import PeopleScreen from 'src/screens/PeopleScreen';
 import GamesScreen from 'src/screens/GamesScreen';
-import PopularScreen from 'src/screens/PopularScreen';
+import SettingsApp from 'src/screens/SettingsScreen';
 
 import TabIcon from 'src/components/TabIcon';
 import AppStyles from 'src/config/styles';
@@ -60,11 +60,11 @@ export const BottomTabNavigation = createBottomTabNavigator(
                 tabBarIcon: GamesTabIcon
             }
         },
-        PopularScreen: {
-            screen: PopularScreen,
+        SettingsScreen: {
+            screen: SettingsApp,
             navigationOptions: {
                 header: null,
-                tabBarIcon: PopularTabIcon
+                tabBarIcon: null
             }
         }
     },
