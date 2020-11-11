@@ -1,12 +1,82 @@
+
+import flask_loginmanager
+
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, date
 from passlib.apps import custom_app_context as pwd_context
 from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
-from app import app
-import enum
 
-db = SQLAlchemy(app)
+import enum
+from flask import current_app
+from flask_login import UserMixin
+from datetime import datetime, date
+
+db = SQLAlchemy()
+from datetime import datetime, date
+
+# class User(UserMixin, db.Model):
+#     __tablename__ = 'users'
+#
+#     id = db.Column(db.Integer, primary_key=True)
+#     email = db.Column(db.String(64), unique=True, index=True)
+#     username = db.Column(db.String(64), unique=True, index=True)
+#     password = db.Column(db.String(128))
+#     profile_settings = db.Column(db.Boolean, default = False)
+#
+#     events = db.relationship('Event')
+#     # location = db.relationship('Location')
+#
+#     @login_manager.user_loader
+#     def load_user(user_id):
+#         return User.query.get(int(user_id))
+
+class Match(db.Model):
+    __tablename__ = 'match'
+
+    id=db.Column(db.Integer, primary_key=True)
+    distance = db.Column(db.Integer)
+    created = db.Column(db.DateTime)
+    first_swiper = db.Column(db.Integer, db.ForeignKey("user_profiles.id"))
+    second_swiper = db.Column(db.Integer)
+    conversation_id = db.Column(db.String, db.ForeignKey("conversations.room"))
+
+class Right_Swipe(db.Model):
+    __tablename__ = 'right_swipe'
+
+    id = db.Column(db.Integer, primary_key=True)
+    time = db.Column(db.DateTime)
+    swiper_id = db.Column(db.Integer, db.ForeignKey("user_profiles.id"))
+    target_id = db.Column(db.Integer)
+    became_match = db.Column(db.Boolean, default=False)
+
+
+class Conversation(db.Model):
+    __tablename__ = 'conversations'
+
+    id = db.Column(db.Integer, primary_key=True)
+    room = db.Column(db.String, unique=True)
+    username_one=db.Column(db.Integer, db.ForeignKey("user_profiles.id"))
+    username_two=db.Column(db.Integer)
+
+    messages =db.relationship('Messages')
+    matches = db.relationship('Match')
+
+
+class Messages(db.Model):
+    __tablename__ = 'messages'
+    id= db.Column(db.Integer, primary_key=True)
+    room=db.Column(db.String, db.ForeignKey('conversations.room'))
+    sender_username = db.Column(db.Integer, db.ForeignKey("user_profiles.id"))
+    time_sent = db.Column(db.DateTime)
+    message = db.Column(db.String)
+
+# class Location (db.Model): #Invitation System
+#     __tablename__ = 'location'
+#
+#     id = db.Column(db.Integer,primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+#     default_location = db.Column(db.String(128), default="")
 
 class Gender(enum.Enum):
     male = 1
@@ -32,9 +102,14 @@ class User_Profile(db.Model):
     min_match_age = db.Column(db.Integer)
     max_match_age = db.Column(db.Integer)
     bio = db.Column(db.String(150))
+    location = db.Column(db.String)
+    # main_profile_pic = db.Image()??
+    right_swipes = db.relationship('Right_Swipe')
+    conversations = db.relationship('Conversation')
+    messages = db.relationship("Messages")
+    users = db.relationship("Match")
     # main_profile_pic = db.Image()??
     dob = db.Column(db.Date) #change this later
-    
 
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
@@ -55,5 +130,6 @@ class User_Profile(db.Model):
             return None    # valid token, but expired
         except BadSignature:
             return None    # invalid token
+
         user = User_Profile.query.get(data['id'])
         return user

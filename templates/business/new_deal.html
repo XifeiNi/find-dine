@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Signup</title>
+</head>
+<body>
+<!--    id-->
+<!--    name-->
+<!--    description-->
+<!--    image-->
+<!--    original_price-->
+<!--    discount_percent-->
+<!--    n_upcoming-->
+<!--    date_created
+        date-->
+    <form id="signup_form"  method="POST" action="/">
+        Deal Name:
+        <label for="deal_name"></label><input name="deal_name" type="text" id="deal_name" placeholder="Enter Deal Name" required>
+        <p id="deal_name_error"></p>
+        Description:
+        <label for="description"></label><input type="text" name="description" id="description" placeholder="A description of the deal..." required>
+        <p id="description_error"></p>
+        Discount Percentage:
+        <label for="percentage"></label><input type="number" placeholder="What is your discount...?" name="percentage" id="percentage" required>
+        <p id="discount_error"></p>
+        Expiry Date:
+        <label for="expiry"></label><input type="date" placeholder="When does it expire" name="expiry" id="expiry" required >
+        <p id="expiry_error"></p>
+        Date Created:
+        <label for="created_date"></label><input type="date" name="created_date" id="created_date" required >
+        <p id="created_error"></p>
+        <button type="button" id="reset_add"><a href="new_deal.html">Reset</a></button>
+        <input type="submit" id="submit" value="Add Deal">
+    </form>
+    <button class="btn btn-default" type="button" id = "logout" onclick="redirect_logout()">Logout</button>
+    <button class="btn btn-default" type="button" id = "home" onclick="redirect_home()">Home</button>
+
+</body>
+<script>
+    function add_valid_info(){
+        return true
+    }
+    function redirect_logout(){
+        window.location.href="{{ url_for('logout') }}"
+    }
+    function redirect_home(){
+        window.location.href="{{ url_for('home') }}"
+    }
+</script>
+</html>

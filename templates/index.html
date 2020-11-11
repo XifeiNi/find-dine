@@ -1,0 +1,97 @@
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--   <head>-->
+<!--      <title>Hello world</title>-->
+<!--   </head>-->
+<!--   -->
+<!--   <script src = "/socket.io/socket.io.js"></script>-->
+<!--   <script>-->
+<!--      var socket = io();-->
+<!--      function setUsername() {-->
+<!--         socket.emit('setUsername', document.getElementById('name').value);-->
+<!--      };-->
+<!--      var user;-->
+<!--      socket.on('userExists', function(data) {-->
+<!--         document.getElementById('error-container').innerHTML = data;-->
+<!--      });-->
+<!--      socket.on('userSet', function(data) {-->
+<!--         user = data.username;-->
+<!--         document.body.innerHTML = '<input type = "text" id = "message">\-->
+<!--         <button type = "button" name = "button" onclick = "sendMessage()">Send</button>\-->
+<!--         <div id = "message-container"></div>';-->
+<!--      });-->
+<!--      function sendMessage() {-->
+<!--         var msg = document.getElementById('message').value;-->
+<!--         if(msg) {-->
+<!--            socket.emit('msg', {message: msg, user: user});-->
+<!--         }-->
+<!--      }-->
+<!--      socket.on('newmsg', function(data) {-->
+<!--         if(user) {-->
+<!--            document.getElementById('message-container').innerHTML += '<div><b>' + -->
+<!--               data.user + '</b>: ' + data.message + '</div>'-->
+<!--         }-->
+<!--      })-->
+<!--   </script>-->
+<!--   -->
+<!--   <body>-->
+<!--      <div id = "error-container"></div>-->
+<!--      <input id = "name" type = "text" name = "name" value = "" -->
+<!--         placeholder = "Enter your name!">-->
+<!--      <button type = "button" name = "button" onclick = "setUsername()">-->
+<!--         Let me chat!-->
+<!--      </button>-->
+<!--   </body>-->
+<!--</html>-->
+
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <title>Flask_Chat_App</title>
+  </head>
+  <body>
+
+    <h3 style='color: #ccc;font-size: 30px;'>No message yet..</h3>
+    <div class="message_holder"></div>
+
+    <form action="" method="POST">
+      <input type="text" class="username" placeholder="User Name"/>
+      <input type="text" class="message" placeholder="Messages"/>
+      <input type="submit"/>
+    </form>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+    <script type="text/javascript">
+      var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+      socket.on( 'connect', function() {
+        // socket.emit('join')
+        socket.emit('join', {
+          match_user_username: "Test1",
+          distance: 25
+        })
+
+        var form = $( 'form' ).on( 'submit', function( e ) {
+          e.preventDefault()
+          let user_name = $( 'input.username' ).val()
+          let user_input = $( 'input.message' ).val()
+          socket.emit( 'send_message', {
+            user_name : user_name,
+            message : user_input
+          } )
+          $( 'input.message' ).val( '' ).focus()
+        } )
+      } )
+      socket.on( 'my response', function( msg ) {
+        console.log( msg )
+        if( typeof msg.user_name !== 'undefined' ) {
+          $( 'h3' ).remove()
+          $( 'div.message_holder' ).append( '<div><b style="color: #000">'+msg.user_name+'</b> '+msg.message+'</div>' )
+        }
+      })
+    </script>
+
+  </body>
+  </html>
