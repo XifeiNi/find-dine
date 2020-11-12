@@ -128,8 +128,8 @@ def get_recommendations():
         print("########################")
         print("Username: ", recommendation['match_user_username'])
         print("Distance: ", recommendation['distance'])
-    #return jsonify(recommendations)
-    return render_template('index.html', recommendations=recommendations)
+    return jsonify(recommendations)
+    # return render_template('index.html', recommendations=recommendations)
 
 @app.route("/get_conversations")
 def get_conversations():

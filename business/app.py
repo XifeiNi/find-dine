@@ -68,6 +68,11 @@ def login():
 @app.route('/home')
 @login_required
 def home():
+    all_deals = Deal.query.all()
+    for deal in all_deals:
+        if deal.date_expiry < date.today():
+            db.session.delete(deal)
+            db.session.commit()
     business_deals = Deal.query.filter_by(business_id=current_user.id).all()
     business = Business_Profile.query.filter_by(id=current_user.id).first()
     deals_frontend = []
