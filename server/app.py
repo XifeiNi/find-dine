@@ -61,15 +61,23 @@
 #
 # if __name__ == '__main__':
 #     socketio.run(app)
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.getcwd() + '/../../'))
 
 from flask import Flask, render_template, session, jsonify, request, redirect, url_for, flash
 from flask_socketio import SocketIO, join_room
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import current_user, LoginManager, login_required, login_user, logout_user
-from server.models import Conversation, Messages, User_Profile, Match, Right_Swipe, db
-from Classes.recommendation_system import Recommendation_System, Right_Swipes
-from Classes.message_system import Message_System
+from find_dine.server.models import Conversation, Messages, User_Profile, Match, Right_Swipe, db
+from find_dine.Classes.recommendation_system import Recommendation_System, Right_Swipes
+from find_dine.Classes.message_system import Message_System
 from datetime import datetime, date
+
+
+from find_dine.server.models import *
+from find_dine.Classes.deals import Deals_system
+from find_dine.Classes.reservations import Reservation_system
 
 # from flask import Flask
 # from flask_bootstrap import Bootstrap
@@ -339,6 +347,67 @@ def on_join(match_dict):
         code = error_code
     return code
     # socketio.emit("join_response", error_code)
+
+@app.route('/businesses', methods=['GET'])
+def business_list():
+    if request.method == 'GET':
+        deals_sys = Deals_system()
+        result = deals_sys.all_businesses_list()
+
+    # return jsonify(result)
+    return render_template('business_list.html', list=result)
+
+@app.route('/deals', methods=['GET'])
+def deals_list():
+    if request.method == 'GET':
+        deals_sys = Deals_system()
+        result = deals_sys.all_deals_list()
+        # return jsonify(result)
+        return render_template('deals.html', list=result)
+
+
+@app.route('/reservation/<d_id>', methods=['POST'])
+def make_reservation(d_id):
+    if request.method == 'POST':
+
+        reservations_sys = Reservation_system()
+
+        if request.form['submit_button'] == 'reservation':
+            deal_info = []
+            current_user_id = 6
+
+            matched_users = reservations_sys.get_matched_users(current_user_id)
+
+            deal = Deals.query.filter_by(id=d_id).first()
+
+            business = Business_Profile.query.filter_by(id=deal.business_id).first()
+            deal_info.append({
+                "deal_id": deal.id,
+                "deal_name": deal.deal_name,
+                "deal_expiry": deal.date_expiry,
+                "business_name": business.name,
+                "business_address": business.address
+            })
+            return render_template('reservations.html', deal=deal_info, matches=matched_users)
+
+        if request.form['submit_button'] == 'finalise_reservation':
+            match_id = request.form.get('matched_user')
+            date_of_meeting = request.form.get('date_of_meeting')
+            start_time = request.form.get('start_time')
+            end_time = request.form.get('end_time')
+
+            date_time_obj = datetime.strptime(date_of_meeting, '%Y-%m-%d')
+            check = reservations_sys.check_date(d_id, date_time_obj.date())
+
+            if not check:
+                message = "You either tried to book for an expired deal or booked a date before today, please go back an try again. "
+                return message
+            result = reservations_sys.add_meeting(d_id, match_id, date_time_obj.date(), start_time, end_time)
+            #return jsonify(result)
+            return render_template('res_done.html')
+
+        #return render_template('reservations.html')
+
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)
