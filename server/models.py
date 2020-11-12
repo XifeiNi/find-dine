@@ -94,7 +94,7 @@ class User_Profile(db.Model):
     f_name = db.Column(db.String(20))
     l_name = db.Column(db.String(20))
     email_address = db.Column(db.String(50), unique=True)
-    username = db.Column(db.String(20), unique=True)
+    username = db.Column(db.String(20), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     gender = db.Column(db.Enum(Gender))
     gender_preference = db.Column(db.Enum(Gender_Preference))
