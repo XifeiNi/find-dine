@@ -6,8 +6,8 @@ import { StatusBar, View } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import styled from 'styled-components';
 
-import { Alert, TYPES } from '~/components/common/alert';
-import Loading from '~/components/common/Loading';
+import { Alert, TYPES } from '../../alert';
+import Loading from '../../Loading';
 
 import Header from './Header';
 import Card from './card';

@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 import styled from 'styled-components';
-import appStyles from '~/styles';
+import appStyles from '../../styles';
 
 const Container = styled(View)`
   width: 100%;

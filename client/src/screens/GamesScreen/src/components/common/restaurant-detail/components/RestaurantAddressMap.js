@@ -9,10 +9,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MapView, { Marker } from 'react-native-maps';
 import styled from 'styled-components';
 
-import FloatinActionButton from '~/components/common/FloatingActionButton';
+import FloatinActionButton from '../../FloatingActionButton';
 
-import CONSTANTS from '~/utils/CONSTANTS';
-import appStyles from '~/styles';
+import CONSTANTS from '../../../../utils/CONSTANTS';
+import appStyles from '../../../../styles';
 
 const mapHeight = appStyles.metrics.getHeightFromDP('75%');
 

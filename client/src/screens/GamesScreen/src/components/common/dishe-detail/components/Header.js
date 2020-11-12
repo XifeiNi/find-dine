@@ -6,9 +6,9 @@ import { View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import styled from 'styled-components';
 
-import ProgressiveImage from '~/components/common/ProgressiveImage';
-import CONSTANTS from '~/utils/CONSTANTS';
-import appStyles from '~/styles';
+import ProgressiveImage from '../../ProgressiveImage';
+import CONSTANTS from '../../../../utils/CONSTANTS';
+import appStyles from '../../../../styles';
 
 import SeeRestaurantButton from './SeeRestaurantButton';
 

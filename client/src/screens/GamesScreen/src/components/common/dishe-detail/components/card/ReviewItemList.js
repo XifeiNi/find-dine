@@ -6,7 +6,7 @@ import { Text, View, Platform } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import styled from 'styled-components';
 
-import ReviewStars from '~/components/common/ReviewStars';
+import ReviewStars from '../../../ReviewStars';
 
 const Container = styled(View)`
   width: 100%;

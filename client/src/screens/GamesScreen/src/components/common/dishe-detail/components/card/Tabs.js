@@ -5,12 +5,12 @@ import { Animated, FlatList, View } from 'react-native';
 
 import styled from 'styled-components';
 
-import CustomTab from '~/components/common/CustomTab';
+import CustomTab from '../../../CustomTab';
 
 import IngredientsItemList from './IngredientsItemList';
 import ReviewItemList from './ReviewItemList';
 
-import appStyles from '~/styles';
+import appStyles from '../../../../../styles';
 
 const CustomTabWrapper = styled(View)`
   flex: 1;

@@ -9,7 +9,7 @@ import FastImage from 'react-native-fast-image';
 
 import styled from 'styled-components';
 
-import CONSTANTS from '~/utils/CONSTANTS';
+import CONSTANTS from '../../utils/CONSTANTS';
 import ReviewStars from './ReviewStars';
 
 const CardContainer = styled(View)`

@@ -4,13 +4,13 @@ import { Platform } from 'react-native';
 import {
   setHiddenHeaderLayout,
   setDefaultHeaderLayout,
-} from '~/routes/headerUtils';
+} from '../../../routes/headerUtils';
 
-import RestaurantAddressMap from '~/components/common/restaurant-detail/components/RestaurantAddressMap';
-import RestaurantDetail from '~/components/common/restaurant-detail';
-import DishDetail from '~/components/common/dishe-detail';
+import RestaurantAddressMap from '../../common/restaurant-detail/components/RestaurantAddressMap';
+import RestaurantDetail from '../../common/restaurant-detail';
+import DishDetail from '../../common/dishe-detail';
 
-import CONSTANTS from '~/utils/CONSTANTS';
+import CONSTANTS from '../../../utils/CONSTANTS';
 import Search from './index';
 
 export const ROUTE_NAMES = {

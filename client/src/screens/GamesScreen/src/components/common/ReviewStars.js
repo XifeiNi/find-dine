@@ -5,7 +5,7 @@ import { View, Text } from 'react-native';
 import styled from 'styled-components';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import appStyle from '~/styles';
+import appStyle from '../../styles';
 
 const Wrapper = styled(View)`
   flex-direction: row;

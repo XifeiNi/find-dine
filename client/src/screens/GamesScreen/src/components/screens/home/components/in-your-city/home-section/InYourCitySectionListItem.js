@@ -10,8 +10,8 @@ import { withNavigation } from 'react-navigation';
 
 import styled from 'styled-components';
 
-import { ROUTE_NAMES } from '~/components/screens/home/routes';
-import CONSTANTS from '~/utils/CONSTANTS';
+import { ROUTE_NAMES } from '../../../../../screens/home/routes';
+import CONSTANTS from '../../../../../../utils/CONSTANTS';
 
 const Container = styled(View)`
   height: ${({ theme }) => theme.metrics.getHeightFromDP('20%')}px;

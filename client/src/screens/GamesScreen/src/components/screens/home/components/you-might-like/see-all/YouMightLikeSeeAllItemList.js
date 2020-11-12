@@ -11,12 +11,12 @@ import FastImage from 'react-native-fast-image';
 
 import styled from 'styled-components';
 
-import { ROUTE_NAMES } from '~/components/screens/home/routes';
-import ReviewStars from '~/components/common/ReviewStars';
-import FlagPrice from '~/components/common/FlagPrice';
+import { ROUTE_NAMES } from '../../../../../screens/home/routes';
+import ReviewStars from '../../../../../common/ReviewStars';
+import FlagPrice from '../../../../../common/FlagPrice';
 
-import CONSTANTS from '~/utils/CONSTANTS';
-import appStyles from '~/styles';
+import CONSTANTS from '../../../../../../utils/CONSTANTS';
+import appStyles from '../../../../../../styles';
 
 const getTextSize = (type: string): number => {
   const sizes = {

@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import styled from 'styled-components';
-import appStyles from '~/styles';
+import appStyles from '../../../../../styles';
 
 const Container = styled(Animated.View)`
   width: ${({ theme }) => theme.metrics.getWidthFromDP('35%')}px;

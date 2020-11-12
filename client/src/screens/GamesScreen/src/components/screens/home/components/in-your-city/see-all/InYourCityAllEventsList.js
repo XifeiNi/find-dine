@@ -8,8 +8,8 @@ import styled from 'styled-components';
 
 import AllEventsListItem from './AllEventsListItem';
 
-import { Alert, TYPES } from '~/components/common/alert';
-import Loading from '~/components/common/Loading';
+import { Alert, TYPES } from '../../../../../common/alert';//~/components/common/alert
+import Loading from '../../../../../common/Loading';
 
 const Container = styled(View)`
   flex: 1;

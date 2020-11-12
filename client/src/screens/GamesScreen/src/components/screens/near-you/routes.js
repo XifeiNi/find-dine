@@ -7,8 +7,8 @@ import {
 } from '../../../routes/headerUtils'; 
 
 import RestaurantAddressMap from '../../common/restaurant-detail/components/RestaurantAddressMap';
-import RestaurantDetail from '../../components/common/restaurant-detail';
-import DishDetail from '../../components/common/dishe-detail';
+import RestaurantDetail from '../../common/restaurant-detail';
+import DishDetail from '../../common/dishe-detail';
 
 import CONSTANTS from '../../../utils/CONSTANTS';//~/utils/CONSTANTS
 import NearYou from './index';

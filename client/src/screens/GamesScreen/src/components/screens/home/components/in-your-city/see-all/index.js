@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Creators as EventCreators } from '~/store/ducks/events';
+import { Creators as EventCreators } from '../../../../../../store/ducks/events'
 
 import InYourCityAllEventsList from './InYourCityAllEventsList';
 

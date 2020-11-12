@@ -11,12 +11,12 @@ import {
 } from 'react-native';
 
 import styled from 'styled-components';
-import appStyle from '~/styles';
+import appStyle from '../../../styles';
 
 import {
   getItemFromStorage,
   persistItemInStorage,
-} from '~/utils/AsyncStoarageManager';
+} from '../../../utils/AsyncStoarageManager';
 
 import { SWITCH_STATE_REFS, getItemConfig, TYPES } from './ItemConfig';
 

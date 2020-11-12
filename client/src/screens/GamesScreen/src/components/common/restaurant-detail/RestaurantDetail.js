@@ -8,17 +8,17 @@ import {
 import { withNavigation } from 'react-navigation';
 import styled from 'styled-components';
 
-import FloatinActionButton from '~/components/common/FloatingActionButton';
-import { Alert, TYPES } from '~/components/common/alert';
-import CustomTab from '~/components/common/CustomTab';
-import Loading from '~/components/common/Loading';
+import FloatinActionButton from '../../common/FloatingActionButton';//~/components/common/FloatingActionButto
+import { Alert, TYPES } from '../../common/alert';
+import CustomTab from '../../common/CustomTab';
+import Loading from '../../common/Loading';
 
 import AboutRestaurant from './components/AboutRestaurant';
 import MenuListItem from './components/MenuListItem';
 import Header from './components/Header';
 
-import CONSTANTS from '~/utils/CONSTANTS';
-import appStyles from '~/styles';
+import CONSTANTS from '../../../utils/CONSTANTS';
+import appStyles from '../../../styles';
 
 const Container = styled(View)`
   flex: 1;

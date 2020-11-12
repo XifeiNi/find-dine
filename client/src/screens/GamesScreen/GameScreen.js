@@ -6,30 +6,34 @@ import { Provider } from 'react-redux';
 
 import './src/config/ReactotronConfig';
 
-//import ApplicationNavigator from './src/routes';
-//import AppTheme from './src/styles';
-//import store from './src/store';
+import ApplicationNavigator from './src/routes';
+import AppTheme from './src/styles';
+import store from './src/store';
+
+export default class GamesScreen extends Component {  
+  render() {
+    return (
+      <Fragment>
+        <StatusBar
+          backgroundColor={AppTheme.colors.androidToolbarColor}
+          barStyle="light-content"
+          translucent
+          animated
+        />
+       <ThemeProvider
+          theme={AppTheme}>
+           <Provider
+            store={store}
+          >
+           <ApplicationNavigator /> 
+          </Provider> 
+       </ThemeProvider> 
+       
+      </Fragment>
+    );
+  }
+}
 /*
-const GameScreen = (): Object => (
-  <Fragment>
-    <StatusBar
-      backgroundColor={AppTheme.colors.androidToolbarColor}
-      barStyle="light-content"
-      translucent
-      animated
-    />
-    <ThemeProvider
-      theme={AppTheme}
-    >
-      <Provider
-        store={store}
-      >
-        <ApplicationNavigator />
-      </Provider>
-    </ThemeProvider>
-  </Fragment>
-);
-*/
 export default class GamesScreen extends Component {
   render() {
       return (
@@ -39,3 +43,14 @@ export default class GamesScreen extends Component {
       );
   }
 }
+
+ <ThemeProvider
+          theme={AppTheme}
+        >
+          <Provider
+            store={store}
+          >
+            <ApplicationNavigator />
+          </Provider>
+        </ThemeProvider>
+*/

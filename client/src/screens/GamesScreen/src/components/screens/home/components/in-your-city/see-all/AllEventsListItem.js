@@ -9,9 +9,9 @@ import { withNavigation } from 'react-navigation';
 import FastImage from 'react-native-fast-image';
 import styled from 'styled-components';
 
-import { ROUTE_NAMES } from '~/components/screens/home/routes';
-import CONSTANTS from '~/utils/CONSTANTS';
-import appStyles from '~/styles';
+import { ROUTE_NAMES } from '../../../../../screens/home/routes';
+import CONSTANTS from '../../../../../../utils/CONSTANTS';
+import appStyles from '../../../../../../styles';
 
 const Container = styled(View)`
   width: 100%;

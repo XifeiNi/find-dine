@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet, Animated } from 'react-native';
 import styled from 'styled-components';
 
-import appStyles from '~/styles';
+import appStyles from '../../styles';
 
 const ForegroundLayer = styled(View)`
   background-color: ${({ theme }) => theme.colors.progressiveImageForeground};

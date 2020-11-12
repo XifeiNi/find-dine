@@ -6,8 +6,8 @@ import { FlatList, View } from 'react-native';
 import styled from 'styled-components';
 
 import PopularSeeAllItemList from './PopularSeeAllItemList';
-import { Alert, TYPES } from '~/components/common/alert';
-import Loading from '~/components/common/Loading';
+import { Alert, TYPES } from '../../../../../common/alert';
+import Loading from '../../../../../common/Loading';//~/components/common/Loading
 
 const Wrapper = styled(View)`
   flex: 1;

@@ -1,6 +1,6 @@
 import { createStackNavigator } from 'react-navigation';
 
-import { setDefaultHeaderLayout } from '~/routes/headerUtils';
+import { setDefaultHeaderLayout } from '../../../routes/headerUtils';
 
 import Profile from './index';
 

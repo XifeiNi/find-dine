@@ -6,7 +6,7 @@ import { Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components';
 
-import ReviewStars from '~/components/common/ReviewStars';
+import ReviewStars from '../../../common/ReviewStars';
 
 const Container = styled(View)`
   width: 100%;

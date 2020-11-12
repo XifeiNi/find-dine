@@ -3,7 +3,7 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import ProgressiveImage from '~/components/common/ProgressiveImage';
+import ProgressiveImage from '../../ProgressiveImage';
 import styled from 'styled-components';
 
 const Container = styled(View)`

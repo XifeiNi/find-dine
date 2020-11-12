@@ -6,8 +6,8 @@ import { FlatList } from 'react-native';
 import styled from 'styled-components';
 
 import YouMightLikeSeeAllItemList from './YouMightLikeSeeAllItemList';
-import { Alert, TYPES } from '~/components/common/alert';
-import Loading from '~/components/common/Loading';
+import { Alert, TYPES } from '../../../../../common/alert';
+import Loading from '../../../../../common/Loading';
 
 const List = styled(FlatList)`
   flex: 1;

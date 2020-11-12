@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Creators as DishCreators } from '~/store/ducks/dish';
+import { Creators as DishCreators } from '../../../../../../store/ducks/dish';
 
 import SeeAllPopular from './SeeAllPopular';
 

@@ -4,11 +4,11 @@ import React, { Component } from 'react';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Creators as DishCreators } from '~/store/ducks/dish';
+import { Creators as DishCreators } from '../../../store/ducks/dish';//~/store/ducks/dish
 
-import { handleHiddenHeaderStyle } from '~/routes/headerUtils';
+import { handleHiddenHeaderStyle } from '../../../routes/headerUtils';
 import DishDetail from './components/DishDetail';
-import CONSTANTS from '~/utils/CONSTANTS';
+import CONSTANTS from '../../../utils/CONSTANTS';
 
 type Props = {
   requestDishDetail: Function,

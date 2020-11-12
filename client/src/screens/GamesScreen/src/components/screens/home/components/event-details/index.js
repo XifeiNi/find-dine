@@ -4,11 +4,11 @@ import React, { Component } from 'react';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Creators as EventCreators } from '~/store/ducks/events';
+import { Creators as EventCreators } from '../../../../../store/ducks/events';
 
-import { handleHiddenHeaderStyle } from '~/routes/headerUtils';
+import { handleHiddenHeaderStyle } from '../../../../../routes/headerUtils';
 import EventDetails from './EventDetails';
-import CONSTANTS from '~/utils/CONSTANTS';
+import CONSTANTS from '../../../../../utils/CONSTANTS';//~/utils/CONSTANTS
 
 type Props = {
   requestEventDetails: Function,

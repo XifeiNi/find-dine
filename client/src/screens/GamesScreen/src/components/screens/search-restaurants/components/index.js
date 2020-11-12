@@ -5,9 +5,9 @@ import { View } from 'react-native';
 
 import styled from 'styled-components';
 
-import FloatingActionButton from '~/components/common/FloatingActionButton';
-import { Alert, TYPES } from '~/components/common/alert';
-import Loading from '~/components/common/Loading';
+import FloatingActionButton from '../../../common/FloatingActionButton';
+import { Alert, TYPES } from '../../../common/alert';
+import Loading from '../../../common/Loading';
 
 import RestaurantsList from './RestaurantsList';
 import Modal from './modal';

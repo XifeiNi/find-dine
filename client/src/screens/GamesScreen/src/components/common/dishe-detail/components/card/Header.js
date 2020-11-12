@@ -4,8 +4,8 @@ import React from 'react';
 import { Platform, Text, View } from 'react-native';
 import styled from 'styled-components';
 
-import ReviewStars from '~/components/common/ReviewStars';
-import FlagPrice from '~/components/common/FlagPrice';
+import ReviewStars from '../../../ReviewStars';
+import FlagPrice from '../../../FlagPrice';
 
 const ContentWrapper = styled(View)`
   width: 100%;

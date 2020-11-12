@@ -4,11 +4,11 @@ import React, { Component } from 'react';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Creators as RestaurantCreators } from '~/store/ducks/restaurant';
+import { Creators as RestaurantCreators } from '../../../store/ducks/dish';
 
-import { getItemFromStorage } from '~/utils/AsyncStoarageManager';
-import { handleHiddenHeaderStyle } from '~/routes/headerUtils';
-import CONSTANTS from '~/utils/CONSTANTS';
+import { getItemFromStorage } from '../../../utils/AsyncStoarageManager';
+import { handleHiddenHeaderStyle } from '../../../routes/headerUtils';
+import CONSTANTS from '../../../utils/CONSTANTS';
 
 import RestaurantDetail from './RestaurantDetail';
 

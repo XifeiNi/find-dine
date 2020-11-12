@@ -7,7 +7,7 @@ import {
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components';
-import appStyles from '~/styles';
+import appStyles from '../../../../styles';
 
 const getTextSize = (type: string): number => {
   const types = {

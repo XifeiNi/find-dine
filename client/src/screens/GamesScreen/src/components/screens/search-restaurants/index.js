@@ -4,11 +4,11 @@ import React, { Component } from 'react';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Creators as SearchRestaurantsCreators } from '~/store/ducks/search-restaurants';
+import { Creators as SearchRestaurantsCreators } from '../../../store/ducks/search-restaurants';//~/store/ducks/search-restaurants
 
 import SearchRestaurants from './components';
-import { getItemFromStorage } from '~/utils/AsyncStoarageManager';
-import CONSTANTS from '~/utils/CONSTANTS';
+import { getItemFromStorage } from '../../../utils/AsyncStoarageManager';
+import CONSTANTS from '../../../utils/CONSTANTS';
 
 type Props = {
   requestSearchRestaurants: Function,

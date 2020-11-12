@@ -8,7 +8,7 @@ import {
 import { withNavigation } from 'react-navigation';
 import styled from 'styled-components';
 
-import RestaurantListItem from '~/components/common/RestaurantListItem';
+import RestaurantListItem from '../../../common/RestaurantListItem';
 
 const ListWrapper = styled(View)`
   width: 100%;

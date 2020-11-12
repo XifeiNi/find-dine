@@ -10,10 +10,10 @@ import { withNavigation } from 'react-navigation';
 
 import styled from 'styled-components';
 
-import { ROUTE_NAMES } from '~/components/screens/home/routes';
-import ReviewStars from '~/components/common/ReviewStars';
-import FlagPrice from '~/components/common/FlagPrice';
-import CONSTANTS from '~/utils/CONSTANTS';
+import { ROUTE_NAMES } from '../../../../../screens/home/routes';//~/components/screens/home/routes
+import ReviewStars from '../../../../../common/ReviewStars';
+import FlagPrice from '../../../../../common/FlagPrice';
+import CONSTANTS from '../../../../../../utils/CONSTANTS';
 
 const Container = styled(View)`
   width: ${({ theme }) => theme.metrics.getWidthFromDP('28%')};

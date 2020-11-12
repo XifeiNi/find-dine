@@ -7,7 +7,7 @@ import { withNavigation } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components';
 
-import CONSTANTS from '~/utils/CONSTANTS';
+import CONSTANTS from '../../../../utils/CONSTANTS';
 
 const ContentContainer = styled(View)`
   margin-bottom: ${({ theme }) => theme.metrics.largeSize}px;

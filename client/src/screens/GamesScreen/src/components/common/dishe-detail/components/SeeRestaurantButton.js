@@ -8,7 +8,7 @@ import { withNavigation } from 'react-navigation';
 
 import styled from 'styled-components';
 
-import CONSTANTS from '~/utils/CONSTANTS';
+import CONSTANTS from '../../../../utils/CONSTANTS';
 
 const Container = styled(View)`
   width: 100%;

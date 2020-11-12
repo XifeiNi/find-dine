@@ -4,7 +4,7 @@ import React from 'react';
 import { Slider, Text, View } from 'react-native';
 import styled from 'styled-components';
 
-import appStyles from '~/styles';
+import appStyles from '../../../../../styles';
 
 const Container = styled(View)`
   margin-horizontal: ${({ theme }) => theme.metrics.extraLargeSize}px;

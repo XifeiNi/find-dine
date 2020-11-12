@@ -4,18 +4,18 @@ import { Platform } from 'react-native';
 import {
   setHiddenHeaderLayout,
   setDefaultHeaderLayout,
-} from '~/routes/headerUtils';
+} from '../../../routes/headerUtils';//~/routes/headerUtils
 
-import RestaurantAddressMap from '~/components/common/restaurant-detail/components/RestaurantAddressMap';
-import RestaurantDetail from '~/components/common/restaurant-detail';
+import RestaurantAddressMap from '../../common/restaurant-detail/components/RestaurantAddressMap';//~/components/common/restaurant-detail/components/RestaurantAddressMap
+import RestaurantDetail from '../../common/restaurant-detail/';
 import YouMightLikeSeeAll from './components/you-might-like/see-all';
-import DisheDetail from '~/components/common/dishe-detail';
+import DisheDetail from '../../common/dishe-detail';///components/common/dishe-detail
 import AllEvents from './components/in-your-city/see-all';
 import PopularSeeAll from './components/popular/see-all';
 import EventDetails from './components/event-details';
 import Home from './index';
 
-import CONSTANTS from '~/utils/CONSTANTS';
+import CONSTANTS from '../../../utils/CONSTANTS';
 
 export const ROUTE_NAMES = {
   YOU_MIGHT_LIKE_SEE_ALL: 'YOU_MIGHT_LIKE_SEE_ALL',
