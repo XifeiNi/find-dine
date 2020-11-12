@@ -11,6 +11,8 @@
     <h1>WELCOME {{business_name}}! Your Deals!</h1>
     <button class="btn btn-default" type="button" id = "add_deal" onclick="redirect_adddeal()">Add New Deal</button>
     <button class="btn btn-default" type="button" id = "logout" onclick="redirect_logout()">Logout</button>
+    <button class="btn btn-default" type="button" id = "reservations" onclick="redirect_reservations()">Reservations</button>
+
 
     <div id="deals">
         {% for item in deals_frontend %}
@@ -42,6 +44,9 @@
     }
     function redirect_logout(){
         window.location.href="{{ url_for('logout') }}"
+    }
+    function redirect_reservations(){
+        window.location.href={{ url_for('get_reservations' }}
     }
     async function delete_deal(deal_id) {
         const data = {deal_id}

@@ -8,21 +8,16 @@
 
 </head>
 <body>
-    <h1>WELCOME {{business_name}}! Your Deals!</h1>
+    <h1>WELCOME {{business_name}}! Your Reservations!</h1>
     <button class="btn btn-default" type="button" id = "add_deal" onclick="redirect_adddeal()">Add New Deal</button>
     <button class="btn btn-default" type="button" id = "logout" onclick="redirect_logout()">Logout</button>
 
     <div id="deals">
-        {% for item in deals_frontend %}
+        {% for item in all_reservations %}
         <div id="{{item.deal_id}}">
-                <h2>Deal Name: {{ item.deal_name }}</h2>
-                <h3>Discount: {{ item.discount }}</h3>
-                <h3>Description: {{ item.description }}</h3>
-                <h3>Expiry Date: {{item.expiry}}</h3>
-                <h3>Created Date: {{item.created}}</h3>
-                <button class="btn btn-default" type="button" id = "{{item.deal_id}}_edit" onclick="edit_deal({{item.deal_id}})">Edit</button>
-                <button class="btn btn-default" type="button" id = "{{item.id}}_delete" onclick="delete_deal({{item.deal_id}})">Delete</button>
-                <p id="deal_delete_error"></p>
+                <h2>{{ item.username }}</h2>
+                <h3>On {{ item.date }}, between {{ item.start_time }} and {{ item.end_time }}</h3>
+                <h3>Deal used: {{ item.deal }}</h3>
             <br></br>
          </div>
         {% endfor %}
@@ -36,13 +31,13 @@
     </div>
 
 </body>
-{#<script>#}
-{#    function redirect_adddeal(){#}
-{#        window.location.href="{{ url_for('create_deal') }}"#}
-{#    }#}
-{#    function redirect_logout(){#}
-{#        window.location.href="{{ url_for('logout') }}"#}
-{#    }#}
+<script>
+    function redirect_adddeal(){
+        window.location.href="{{ url_for('create_deal') }}"
+    }
+    function redirect_logout(){
+        window.location.href="{{ url_for('logout') }}"
+    }
 {#    async function delete_deal(deal_id) {#}
 {#        const data = {deal_id}#}
 {#        console.log("In delete deal")#}

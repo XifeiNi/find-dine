@@ -205,6 +205,7 @@ def forgot_password():
 @app.route("/get_reservations")
 def get_reservations():
     current_user_id = current_user.id
+    business_name = Business_Profile.query.filter_by(id = current_user_id).first()
     all_deals = Deals.query.filter_by(business_id=current_user_id).all()
     all_reservations = []
     for deal in all_deals:
@@ -226,9 +227,10 @@ def get_reservations():
                             "date": date,
                             "start_time": meeting.time_start,
                             "end_time": meeting.time_end,
-                            "deal": deal.deal_name}
+                            "deal": deal.deal_name,
+                            "deal_id": deal.id}
             all_reservations.append(meeting_info)
-    return render_template("get_reservations.html", all_reservations=all_reservations)
+    return render_template("get_reservations.html", all_reservations=all_reservations, business_name=business_name)
 
 @app.route("/logout")
 @login_required
