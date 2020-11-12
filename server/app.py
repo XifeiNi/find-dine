@@ -175,7 +175,7 @@ def signup():
 
     return render_template('auth/signup.html')
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
 
     if request.method == 'POST':
@@ -209,14 +209,15 @@ def logout():
 
 
 # This is the first function, once called, it should return the match recommendations
-@app.route('/')
+@app.route('/recommendations')
 def get_recommendations():
 # def sessions(origin):
 
     origin = "Main Library, University of New South Wales, Sydney, Australia"
     recs_sys = Recommendation_System()
     # current_user_id = current_user.id
-    current_user_id = 1
+    current_user_id = current_user.id
+    print (current_user_id)
     user = User_Profile.query.filter_by(id=current_user_id).first()
     user.location = origin
     db.session.commit()
