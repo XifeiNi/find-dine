@@ -1,12 +1,4 @@
-import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+// @flow
 
-export default class GamesScreen extends Component {
-    render() {
-        return (
-            <View>
-                <Text> GamesScreen </Text>
-            </View>
-        );
-    }
-}
+import GameScreen from './GameScreen';
+export default GameScreen;

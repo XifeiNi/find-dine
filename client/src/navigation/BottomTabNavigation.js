@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { createBottomTabNavigator } from 'react-navigation';
 
 import { HomeTabNavigation } from './HomeTabNavigation';
@@ -12,7 +12,7 @@ import TabIcon from 'src/components/TabIcon';
 import AppStyles from 'src/config/styles';
 
 const HomeTabIcon = ({ tintColor }) => (
-    <TabIcon name="home" tintColor={tintColor} />
+    <TabIcon name="chat" tintColor={tintColor} />
 );
 const PeopleTabIcon = ({ tintColor }) => (
     <TabIcon name="supervisor-account" tintColor={tintColor} />
@@ -20,11 +20,11 @@ const PeopleTabIcon = ({ tintColor }) => (
 const CameraTabIcon = ({ tintColor }) => (
     <TabIcon name="photo-camera" tintColor={tintColor} type="rounded" />
 );
-const GamesTabIcon = ({ tintColor }) => (
-    <TabIcon name="game-controller" tintColor={tintColor} type="entypo" />
+const ResturantTabIcon = ({ tintColor }) => (
+    <TabIcon name="bowl" tintColor={tintColor} type="entypo" />
 );
-const PopularTabIcon = ({ tintColor }) => (
-    <TabIcon name="toys" tintColor={tintColor} />
+const ProfileTabIcon = ({ tintColor }) => (
+    <TabIcon name="person" tintColor={tintColor} />
 );
 
 export const BottomTabNavigation = createBottomTabNavigator(
@@ -58,14 +58,14 @@ export const BottomTabNavigation = createBottomTabNavigator(
             screen: GamesScreen,
             navigationOptions: {
                 header: null,
-                tabBarIcon: GamesTabIcon
+                tabBarIcon: ResturantTabIcon
             }
         },
         SettingsScreen: {
             screen: SettingsApp,
             navigationOptions: {
                 header: null,
-                tabBarIcon: null
+                tabBarIcon: ProfileTabIcon
             }
         }
     },
