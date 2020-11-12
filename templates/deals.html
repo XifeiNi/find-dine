@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% for item in list %}
+        <h2>Deal Name:{{ item.name }}</h2>
+        <h3>Description:{{ item.description }}</h3>
+        <h3>Deal validity</h3>
+        <h3>Expiry Date:{{ item.date_expiry }}</h3>
+
+        <!--<input type="submit" name="submit_button" value="Make A Reservation!"> -->
+    <form action=/reservation/{{ item.id }} method="POST">
+        <button name="submit_button" value="reservation">Make A Reservation!</button>
+    </form>
+
+    <br></br>
+    {% endfor %}
+    <!--{{list}} -->
+</body>
+</html>

@@ -1,0 +1,167 @@
+import json
+from typing import List
+import flask_loginmanager
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import or_
+from flask import jsonify, request, abort
+db = SQLAlchemy()
+from flask import current_app
+from flask_login import UserMixin
+from datetime import datetime, date
+import enum
+from passlib.apps import custom_app_context as pwd_context
+from itsdangerous import (TimedJSONWebSignatureSerializer
+                          as Serializer, BadSignature, SignatureExpired)
+
+# class User(UserMixin, db.Model):
+#     __tablename__ = 'users'
+#
+#     id = db.Column(db.Integer, primary_key=True)
+#     email = db.Column(db.String(64), unique=True, index=True)
+#     username = db.Column(db.String(64), unique=True, index=True)
+#     password = db.Column(db.String(128))
+#     profile_settings = db.Column(db.Boolean, default = False)
+#
+#     events = db.relationship('Event')
+#     # location = db.relationship('Location')
+#
+#     @login_manager.user_loader
+#     def load_user(user_id):
+#         return User.query.get(int(user_id))
+
+
+'''class Business_Category(enum.Enum):
+    one = "Fine Dining"
+    two = "Casual Dining"'''
+
+
+class Business_Profile(db.Model):
+    __tablename__ = 'business_profile'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    email = db.Column(db.String)
+    # main_profile = db.Column(db)
+    description = db.Column(db.String)
+    address = db.Column(db.String)
+    # menu = db.Column
+    price_guide = db.Column(db.String)
+    category = db.Column(db.String)
+    # category=db.Column(db.Enum(Business_Category))
+    deals = db.relationship('Deals')
+
+
+class Meeting(db.Model):
+    __tablename__ = "meeting"
+
+    id = db.Column(db.Integer, primary_key=True)
+    deals_id = db.Column(db.Integer, db.ForeignKey('deals.id'))
+    match_id = db.Column(db.Integer, db.ForeignKey('match.id'))
+    date_meeting = db.Column(db.Date)
+    time_start = db.Column(db.String)
+    time_end = db.Column(db.String)
+    users = db.relationship("Match")
+    deals = db.relationship('Deals')
+
+class Deals(db.Model):
+    __tablename__ = 'deals'
+
+    id = db.Column(db.Integer, primary_key=True)
+    business_id = db.Column(db.Integer, db.ForeignKey('business_profile.id'))
+    deal_name = db.Column(db.String)
+    description = db.Column(db.String)
+    original_price = db.Column(db.Integer)
+    discount_percentage = db.Column(db.Integer)
+    date_expiry = db.Column(db.Date)
+    date_created = db.Column(db.Date)
+
+class Match(db.Model):
+    __tablename__ = 'match'
+
+    id = db.Column(db.Integer, primary_key=True)
+    distance = db.Column(db.Integer)
+    created = db.Column(db.DateTime)
+    first_swiper = db.Column(db.Integer, db.ForeignKey("user_profiles.id"))
+    second_swiper = db.Column(db.Integer)
+    conversation_id = db.Column(db.String, db.ForeignKey("conversations.room"))
+
+
+class Right_Swipe(db.Model):
+    __tablename__ = 'right_swipe'
+
+    id = db.Column(db.Integer, primary_key=True)
+    time = db.Column(db.DateTime)
+    swiper_id = db.Column(db.Integer, db.ForeignKey("user_profiles.id"))
+    target_id = db.Column(db.Integer)
+    became_match = db.Column(db.Boolean, default=False)
+
+
+class Conversation(db.Model):
+    __tablename__ = 'conversations'
+
+    id = db.Column(db.Integer, primary_key=True)
+    room = db.Column(db.String, unique=True)
+    username_one = db.Column(db.Integer, db.ForeignKey("user_profiles.id"))
+    username_two = db.Column(db.Integer)
+    messages = db.relationship('Messages')
+    matches = db.relationship('Match')
+
+
+class Messages(db.Model):
+    __tablename__ = 'messages'
+    id = db.Column(db.Integer, primary_key=True)
+    room = db.Column(db.String, db.ForeignKey('conversations.room'))
+    sender_username = db.Column(db.Integer, db.ForeignKey("user_profiles.id"))
+    time_sent = db.Column(db.DateTime)
+    message = db.Column(db.String)
+
+
+# class Location (db.Model): #Invitation System
+#     __tablename__ = 'location'
+#
+#     id = db.Column(db.Integer,primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+#     default_location = db.Column(db.String(128), default="")
+
+class Gender(enum.Enum):
+    male = 1
+    female = 2
+    other = 3
+
+
+class Gender_Preference(enum.Enum):
+    male = 1
+    female = 2
+    everyone = 3
+
+
+class User_Profile(db.Model):
+    __tablename__ = "user_profiles"
+    id = db.Column(db.Integer, primary_key=True)
+    f_name = db.Column(db.String(20))
+    l_name = db.Column(db.String(20))
+    email_address = db.Column(db.String(50), unique=True)
+    username = db.Column(db.String(20), index=True, unique=True)
+    password_hash = db.Column(db.String(128))
+    gender = db.Column(db.Enum(Gender))
+    gender_preference = db.Column(db.Enum(Gender_Preference))
+    max_match_distance = db.Column(db.Integer)
+    min_match_age = db.Column(db.Integer)
+    max_match_age = db.Column(db.Integer)
+    bio = db.Column(db.String(150))
+    location = db.Column(db.String)
+    # main_profile_pic = db.Image()??
+    dob = db.Column(db.Date)  # change this later
+
+    right_swipes = db.relationship('Right_Swipe')
+    conversations = db.relationship('Conversation')
+    messages = db.relationship("Messages")
+    users = db.relationship("Match")
+
+
+# class Location (db.Model): #Invitation System
+#     __tablename__ = 'location'
+#
+#     id = db.Column(db.Integer,primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+#     default_location = db.Column(db.String(128), default="")
