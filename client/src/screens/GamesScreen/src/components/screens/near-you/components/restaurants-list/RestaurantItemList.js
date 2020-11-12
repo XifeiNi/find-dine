@@ -56,7 +56,7 @@ const DistanceText = styled(Text)`
     const percentage = Platform.OS === 'ios' ? '4%' : '4.3%';
     return theme.metrics.getWidthFromDP(percentage);
   }}px;
-  font-family: CircularStd-Medium;
+  font-family: Roboto-Regular;
   padding-left: ${({ theme }) => theme.metrics.extraSmallSize}px;
 `;
 
@@ -66,7 +66,7 @@ const RestaurantDescriptionText = styled(Text)`
     const percentage = Platform.OS === 'ios' ? '4%' : '4.3%';
     return theme.metrics.getWidthFromDP(percentage);
   }}px;
-  font-family: CircularStd-Medium;
+  font-family: Roboto-Regular;
   padding-left: ${({ theme }) => theme.metrics.extraSmallSize}px;
 `;
 
@@ -81,7 +81,7 @@ const RestaurantStatus = styled(Text)`
     const percentage = Platform.OS === 'ios' ? '4%' : '4.3%';
     return theme.metrics.getWidthFromDP(percentage);
   }}px;
-  font-family: CircularStd-Medium;
+  font-family: Roboto-Medium;
 `;
 
 const Icon = styled(Icons).attrs(({

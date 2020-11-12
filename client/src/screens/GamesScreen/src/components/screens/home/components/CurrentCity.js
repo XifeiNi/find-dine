@@ -37,13 +37,13 @@ const Content = styled(View)`
 
 const CurrentLocationText = styled(Text)`
   color: ${({ theme }) => theme.colors.subText};
-  font-family: CircularStd-Medium;
+  font-family: Roboto-Medium;
   font-size: ${() => getTextSize('currentCity')}px;
 `;
 
 const CityText = styled(Text)`
   color: ${({ theme }) => theme.colors.darkText};
-  font-family: CircularStd-Black;
+  font-family: Roboto-Regular;
   font-size: ${() => getTextSize('city')}px;
 `;
 
@@ -60,7 +60,7 @@ const ChangeButton = styled(TouchableOpacity)`
 
 const ChangeButtonText = styled(Text)`
   color: ${({ theme }) => theme.colors.subText};
-  font-family: CircularStd-Bold;
+  font-family: Roboto-Regular;
   font-size: ${() => getTextSize('buttonText')}px;
 `;
 

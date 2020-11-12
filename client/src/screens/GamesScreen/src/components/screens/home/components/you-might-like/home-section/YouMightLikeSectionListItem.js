@@ -67,7 +67,7 @@ const DisheTitle = styled(Text).attrs({
 })`
   color: ${({ theme }) => theme.colors.defaultWhite};
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4.5%')}px;
-  font-family: CircularStd-Black;
+  font-family: Roboto-Regular;
 `;
 
 const DistanceWrapper = styled(View)`
@@ -82,7 +82,7 @@ const DistanceText = styled(Text)`
   padding-left: ${({ theme }) => theme.metrics.extraSmallSize}px;
   color: ${({ theme }) => theme.colors.defaultWhite};
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4%')};
-  font-family: CircularStd-Bold;
+  font-family: Roboto-Regular;
 `;
 
 const DistanceIcon = styled(Icon).attrs(({ theme }) => ({

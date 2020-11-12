@@ -49,14 +49,14 @@ const StatusText = styled(Text).attrs({
     const percentage = Platform.OS === 'android' ? '5%' : '4.5%';
     return theme.metrics.getWidthFromDP(percentage);
   }}px;
-  font-family: CircularStd-Black;
+  font-family: Roboto-Regular;
 `;
 
 const EstablishmentStatus = styled(Text)`
   color: ${({ theme }) => theme.colors.darkLayer};
   padding-top: ${({ theme }) => theme.metrics.extraSmallSize}px;
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4%')}px;
-  font-family: CircularStd-Medium;
+  font-family: Roboto-Medium;
 `;
 
 const MarkerIcon = styled(Icon).attrs(({ name }) => ({

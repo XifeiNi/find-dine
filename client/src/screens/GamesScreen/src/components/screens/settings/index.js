@@ -27,7 +27,7 @@ const Container = styled(View)`
 
 const SectionTitleText = styled(Text)`
   color: ${({ theme }) => theme.colors.darkText};
-  font-family: CircularStd-Bold;
+  font-family: Roboto-Regular;
   font-size: ${({ theme }) => {
     const percentage = Platform.OS === 'ios' ? '4.2%' : '4.8%';
     return theme.metrics.getWidthFromDP(percentage);
@@ -52,7 +52,7 @@ const LanguageSectionWrapper = styled(View)`
 
 const SelectedLanguageText = styled(Text)`
   color: ${({ theme }) => theme.colors.red};
-  font-family: CircularStd-Medium;
+  font-family: Roboto-Regular;
   font-size: ${({ theme }) => {
     const percentage = Platform.OS === 'ios' ? '4%' : '4.8%';
     return theme.metrics.getWidthFromDP(percentage);
@@ -62,7 +62,7 @@ const SelectedLanguageText = styled(Text)`
 const SmallText = styled(Text)`
   color: ${({ theme }) => theme.colors.subText};
   margin: ${({ theme }) => `${theme.metrics.extraSmallSize}px 0`};
-  font-family: CircularStd-Book;
+  font-family: Roboto-Regular;
   font-size: ${({ theme }) => {
     const percentage = Platform.OS === 'ios' ? '3.8%' : '4%';
     return theme.metrics.getWidthFromDP(percentage);
@@ -82,7 +82,7 @@ const OptionTextWrapper = styled(View)`
 const MediumText = styled(Text)`
   color: ${({ theme }) => theme.colors.subText};
   margin-top: ${({ theme }) => theme.metrics.extraSmallSize};
-  font-family: CircularStd-Bold;
+  font-family: Roboto-Regular;
   font-size: ${({ theme }) => {
     const percentage = Platform.OS === 'ios' ? '4%' : '4.5%';
     return theme.metrics.getWidthFromDP(percentage);

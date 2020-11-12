@@ -62,7 +62,7 @@ const EventTitle = styled(Text).attrs({
 })`
   color: ${({ theme }) => theme.colors.defaultWhite};
   font-size: ${() => getTextSize('title')}px;
-  font-family: CircularStd-Black;
+  font-family: Roboto-Regular;
 `;
 
 const EventDescription = styled(Text).attrs({
@@ -73,12 +73,12 @@ const EventDescription = styled(Text).attrs({
   margin-bottom: ${({ theme }) => theme.metrics.smallSize}px;
   color: ${({ theme }) => theme.colors.defaultWhite};
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4.3%')}px;
-  font-family: CircularStd-Medium;
+  font-family: Roboto-Regular;
 `;
 
 const RestaurantParticipatingText = styled(Text)`
   font-size: ${() => getTextSize('restaurantsParticipating')}px;
-  font-family: CircularStd-Black;
+  font-family: Roboto-Regular;
   color: ${({ theme }) => theme.colors.defaultWhite};
 `;
 

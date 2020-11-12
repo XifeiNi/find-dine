@@ -57,7 +57,7 @@ const DisheTypeText = styled(Animated.Text)`
   color: ${({ theme }) => theme.colors.defaultWhite};
   text-align: center;
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4.8%')}px;
-  font-family: CircularStd-Bold;
+  font-family: Roboto-Regular;
 `;
 
 type Props = {

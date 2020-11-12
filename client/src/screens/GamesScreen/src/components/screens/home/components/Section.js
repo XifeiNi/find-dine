@@ -30,14 +30,14 @@ const SeeAllButtonWrapper = styled(TouchableOpacity)`
 
 const SectionText = styled(Text)`
   color: ${({ theme }) => theme.colors.darkText};
-  font-family: CircularStd-Black;
+  font-family: Roboto-Regular;
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('5%')};
 `;
 
 const SeeAllText = styled(Text)`
   color: ${({ theme }) => theme.colors.primaryColor};
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4.5%')};
-  font-family: CircularStd-Bold;
+  font-family: Roboto-Regular;
 `;
 
 const ArrowIcon = styled(Icon).attrs({

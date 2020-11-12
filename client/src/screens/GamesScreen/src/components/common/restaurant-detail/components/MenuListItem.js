@@ -45,7 +45,7 @@ const DishTitle = styled(Text).attrs({
   margin-top: ${({ theme }) => theme.metrics.getWidthFromDP('0.5%')}px;
   color: ${({ theme }) => theme.colors.darkText};
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4.5%')}px;
-  font-family: CircularStd-Medium;
+  font-family: Roboto-Medium;
 `;
 
 type Props = {

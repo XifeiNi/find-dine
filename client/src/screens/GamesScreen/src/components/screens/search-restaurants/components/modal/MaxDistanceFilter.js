@@ -14,7 +14,7 @@ const CurrentDistanceText = styled(Text)`
   color: ${({ theme }) => theme.colors.darkText};
   text-align: center;
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('6%')}px;
-  font-family: CircularStd-Black;
+  font-family: Roboto-Regular;
 `;
 
 const CurrentDistanceWrapper = styled(View)`
@@ -31,7 +31,7 @@ const DistanceBoundsWrapper = styled(View)`
 const DistanceBoundsText = styled(Text)`
   color: ${({ theme }) => theme.colors.darkText};
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4.5%')}px;
-  font-family: CircularStd-Bold;
+  font-family: Roboto-Regular;
   text-align: center;
 `;
 

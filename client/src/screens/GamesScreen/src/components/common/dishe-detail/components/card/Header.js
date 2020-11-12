@@ -34,7 +34,7 @@ const DishTitle = styled(Text).attrs({
     const percentage = Platform.OS === 'android' ? '6.5%' : '6%';
     return theme.metrics.getWidthFromDP(percentage);
   }};
-  font-family: CircularStd-Black;
+  font-family: Roboto-Regular;
 `;
 
 type Props = {

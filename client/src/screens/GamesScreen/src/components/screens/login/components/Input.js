@@ -37,7 +37,7 @@ const CustomInput = styled(TextInput).attrs(({ placeholder, type, theme }) => ({
 }))`
   width: 90%;
   height: 100%;
-  font-family: CircularStd-Book;
+  font-family: Roboto-Regular;
   color: ${({ theme }) => theme.colors.defaultWhite};
 `;
 

@@ -15,7 +15,7 @@ const Wrapper = styled(View)`
 const Reviews = styled(Text)`
   margin-left: ${({ theme }) => theme.metrics.extraSmallSize}px;
   color: ${({ theme, textColor }) => theme.colors[textColor]};
-  font-family: CircularStd-Book;
+  font-family: Roboto-Medium;
   font-size: ${({ theme, isSmall }) => {
     const percentage = isSmall ? '3.5%' : '4%';
     return theme.metrics.getWidthFromDP(percentage);

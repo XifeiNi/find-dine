@@ -29,7 +29,7 @@ const ReviewerName = styled(Text).attrs({
 })`
   color: ${({ theme }) => theme.colors.darkText};
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('3.8%')}px;
-  font-family: CircularStd-Bold;
+  font-family: Roboto-Medium;
 `;
 
 const ProfileAvatarWrapper = styled(View)`
@@ -60,7 +60,7 @@ const ReviewText = styled(Text).attrs({
   }}px;
   color: ${({ theme }) => theme.colors.subText};
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('3.8%')}px;
-  font-family: CircularStd-Book;
+  font-family: Roboto-Regular;
 `;
 
 const TopContetWrapper = styled(View)`

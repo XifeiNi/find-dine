@@ -32,7 +32,7 @@ const SeeText = styled(Text)`
     const percentage = Platform.OS === 'android' ? '4%' : '3.8%';
     return theme.metrics.getWidthFromDP(percentage);
   }};
-  font-family: CircularStd-Black;
+  font-family: Roboto-Regular;
 `;
 
 type Props = {

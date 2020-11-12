@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 export const DefaultText = styled(Text)`
   color: ${({ theme, color }) => color || theme.colors.defaultWhite};
-  font-family: CircularStd-Black;
+  font-family: Roboto-Regular;
   font-size: ${({ theme }) => theme.metrics.largeSize}px;
 `;
 

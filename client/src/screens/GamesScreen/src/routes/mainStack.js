@@ -57,12 +57,6 @@ const ApplicationTabs = createMaterialTopTabNavigator(
         tabBarIcon: getTabIcon('map'),
       },
     },
-    [ROUTE_NAMES.PROFILE]: {
-      screen: ProfileRoutes,
-      navigationOptions: {
-        tabBarIcon: getTabIcon('account'),
-      },
-    },
     [ROUTE_NAMES.SETTINGS]: {
       screen: Settings,
       navigationOptions: {
@@ -72,7 +66,7 @@ const ApplicationTabs = createMaterialTopTabNavigator(
   },
   {
     initialRouteName: ROUTE_NAMES.HOME,
-    tabBarPosition: 'bottom',
+    tabBarPosition: 'top',
     optimizationsEnabled: true,
     animationEnabled: true,
     swipeEnabled: false,
@@ -81,9 +75,9 @@ const ApplicationTabs = createMaterialTopTabNavigator(
       showLabel: false,
       showIcon: true,
       style: {
-        paddingBottom: isEqualsOrLargestThanIphoneX() ? 30 : 0,
+        paddingBottom: isEqualsOrLargestThanIphoneX() ? 0 : 0,
         backgroundColor: appStyles.colors.white,
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: { width: 0, height: 2},
         shadowOpacity: 0.3,
         shadowRadius: 10,
       },

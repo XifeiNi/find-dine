@@ -15,7 +15,7 @@ const Wrapper = styled(View)`
 const RestaurantName = styled(Text)`
   color: ${({ theme }) => theme.colors.darkText};
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('5.5%')}px;
-  font-family: CircularStd-Bold;
+  font-family: Roboto-Regular;
   text-align: center;
 `;
 

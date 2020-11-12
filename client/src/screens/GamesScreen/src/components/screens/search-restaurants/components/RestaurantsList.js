@@ -21,7 +21,7 @@ const NumberRestaurantsFound = styled(Text)`
   padding-left: ${({ theme }) => theme.metrics.extraSmallSize}px;
   color: ${({ theme }) => theme.colors.darkText};
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('5.5%')}px;
-  font-family: CircularStd-Bold;
+  font-family: Roboto-Regular;
 `;
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);

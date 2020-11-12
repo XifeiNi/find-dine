@@ -1,5 +1,5 @@
 export default {
-  primaryColor: '#DE3C4B',
+  primaryColor: '#4688F1',
   dark: '#303030',
   darkText: 'rgba(0, 0, 0, 0.8)',
   intermediateDarkLayer: 'rgba(0, 0, 0, 0.65)',

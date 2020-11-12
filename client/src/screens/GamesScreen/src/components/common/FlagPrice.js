@@ -16,7 +16,7 @@ const Price = styled(Text)`
   margin: ${({ theme }) => `${theme.metrics.extraSmallSize}px ${theme.metrics.smallSize}px`};
   color: ${({ theme }) => theme.colors.defaultWhite};
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('3.5%')}px;
-  font-family: CircularStd-Black;
+  font-family: Roboto-Regular;
 `;
 
 type Props = {

@@ -54,7 +54,7 @@ const Name = styled(Text)`
   color: ${({ theme }) => theme.colors.defaultWhite};
   margin-bottom: ${({ theme }) => theme.metrics.extraSmallSize}px;
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('5%')}px;
-  font-family: CircularStd-Black;
+  font-family: Roboto-Regular;
 `;
 
 const AddressWrapper = styled(View)`
@@ -69,7 +69,7 @@ const Address = styled(Text)`
   color: ${({ theme }) => theme.colors.defaultWhite};
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4%')}px;
   margin-left: ${({ theme }) => theme.metrics.extraSmallSize}px;
-  font-family: CircularStd-Medium;
+  font-family: Roboto-Medium;
 `;
 
 const AddressIcon = styled(Icon).attrs({

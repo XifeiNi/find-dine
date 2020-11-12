@@ -4,10 +4,8 @@ import React, { Component, Fragment } from 'react';
 import { Platform, View } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MapView, { Marker, Callout } from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import styled from 'styled-components';
-
-import AndroidCallout from './AndroidCallout';
 
 const MapContainer = styled(MapView)`
   width: 100%;
@@ -99,7 +97,7 @@ class Map extends Component<Props, {}> {
         const iconName = id === 'user-location' ? 'account-location' : 'map-marker-radius';
 
         return (
-          <Marker
+          </*Marker
             ref={(markerRef) => {
               this._markersRefs[index] = markerRef;
             }}
@@ -110,22 +108,13 @@ class Map extends Component<Props, {}> {
             }}
             title={name}
             key={id}
-          >
+          */>
             <MarkerWrapper>
               <CustomMarker
                 name={iconName}
               />
-              {Platform.OS === 'android' && (
-                <Callout
-                  style={{ flex: 1, position: 'relative' }}
-                >
-                  <AndroidCallout
-                    restaurantName={name}
-                  />
-                </Callout>
-              )}
             </MarkerWrapper>
-          </Marker>
+          </>
         );
       })}
     </Fragment>

@@ -62,7 +62,7 @@ const DisheTitle = styled(Text).attrs({
   padding-bottom: ${({ theme }) => theme.metrics.extraSmallSize}px;
   color: ${({ theme }) => theme.colors.darkText};
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4%')}px;
-  font-family: CircularStd-Bold;
+  font-family: Roboto-Regular;
 `;
 
 const FlagPriceWrapper = styled(View)`

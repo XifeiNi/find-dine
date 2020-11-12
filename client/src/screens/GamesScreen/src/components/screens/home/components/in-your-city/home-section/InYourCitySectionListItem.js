@@ -42,13 +42,13 @@ const EventTitle = styled(Text)`
   color: ${({ theme }) => theme.colors.defaultWhite};
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4.5%')};
   padding-bottom: ${({ theme }) => theme.metrics.getWidthFromDP('1%')};
-  font-family: CircularStd-Black;
+  font-family: Roboto-Regular;
 `;
 
 const EventDescription = styled(Text)`
   color: ${({ theme }) => theme.colors.defaultWhite};
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4%')}px;
-  font-family: CircularStd-Medium;
+  font-family: Roboto-Regular;
   text-align: center;
 `;
 

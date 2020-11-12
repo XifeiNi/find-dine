@@ -49,7 +49,7 @@ const FilterText = styled(Text)`
   color: ${({ theme }) => theme.colors.darkText};
   text-align: center;
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('6.5%')}px;
-  font-family: CircularStd-Black;
+  font-family:  Roboto-Regular;
 `;
 
 const QuestionText = styled(Text)`
@@ -57,7 +57,7 @@ const QuestionText = styled(Text)`
   margin-left: ${({ theme }) => theme.metrics.extraLargeSize}px;
   color: ${({ theme }) => theme.colors.darkText};
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('5%')}px;
-  font-family: CircularStd-Medium;
+  font-family:  Roboto-Regular;
 `;
 
 const DishesTypesSectionContainer = styled(View)`
@@ -81,7 +81,7 @@ const ApplyButton = styled(TouchableOpacity)`
 const ApplyButtonText = styled(Text)`
   color: ${({ theme }) => theme.colors.defaultWhite};
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('5.5%')}px;
-  font-family: CircularStd-Black;
+  font-family: Roboto-Regular;
 `;
 
 type Props = {

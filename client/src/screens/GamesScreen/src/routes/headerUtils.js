@@ -96,7 +96,7 @@ export const setHiddenHeaderLayout = (navigation: Object): Object => {
 export const setDefaultHeaderLayout = (
   navigation: Object,
   title: string,
-  fontFamily: string = 'CircularStd-Medium',
+  fontFamily: string = 'Roboto-Medium',
   fontSize: ?number,
 ): Object => ({
   title,

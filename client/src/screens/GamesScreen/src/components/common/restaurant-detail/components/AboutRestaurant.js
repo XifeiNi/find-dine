@@ -25,7 +25,7 @@ const DescriptionText = styled(Text).attrs({
   margin-top: ${({ theme }) => theme.metrics.largeSize}px;
   color: ${({ theme }) => theme.colors.subText};
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4.5%')};
-  font-family: CircularStd-Book;
+  font-family: Roboto-Reguler;
 `;
 
 const DefaultText = styled(Text).attrs({
@@ -34,7 +34,7 @@ const DefaultText = styled(Text).attrs({
 })`
   color: ${({ theme }) => theme.colors.gray};
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4%')};
-  font-family: CircularStd-Book;
+  font-family: Roboto-Reguler;
 `;
 
 const SectionRow = styled(View)`
@@ -51,7 +51,7 @@ const RestaurantName = styled(Text).attrs({
   width: 75%;
   color: ${({ theme }) => theme.colors.darkText};
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('6%')};
-  font-family: CircularStd-Bold;
+  font-family: Roboto-Regular;
 `;
 
 const CustomIcon = styled(Icon).attrs(({ name }) => ({

@@ -33,7 +33,7 @@ const TopText = styled(Text)`
   margin-bottom: ${({ theme }) => theme.metrics.extraLargeSize}px;
   text-align: center;
   color: ${({ theme }) => theme.colors.darkText};
-  font-family: CircularStd-Black;
+  font-family: Roboto-Light;
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('8%')}px;
 `;
 
@@ -41,7 +41,7 @@ const BottomText = styled(Text)`
   margin-bottom: ${({ theme }) => theme.metrics.extraLargeSize}px;
   color: ${({ theme }) => theme.colors.darkText};
   text-align: center;
-  font-family: CircularStd-Bold;
+  font-family: Roboto-Thin;
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('5.5%')}px;
 `;
 
@@ -49,7 +49,7 @@ const MiddleText = styled(Text)`
   margin-bottom: ${({ theme }) => theme.metrics.extraLargeSize}px;
   color: ${({ theme }) => theme.colors.subText};
   text-align: center;
-  font-family: CircularStd-Medium;
+  font-family: Roboto-Medium;
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('6%')}px;
 `;
 

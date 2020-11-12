@@ -13,7 +13,7 @@ const IngredientsText = styled(Text).attrs({
   padding-bottom: ${({ theme }) => theme.metrics.mediumSize}px;
   color: ${({ theme }) => theme.colors.subText};
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4%')};
-  font-family: CircularStd-Book;
+  font-family: Roboto-Medium;
 `;
 
 type Props = {
