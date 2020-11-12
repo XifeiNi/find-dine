@@ -116,6 +116,33 @@ class User_Profile(db.Model):
     is_active = True
     is_anonymous = False
 
+    # return unicode id
+    def get_id(self):
+        return str(self.id).encode("utf-8").decode("utf-8")
+
+    def hash_password(self, password):
+        self.password_hash = pwd_context.encrypt(password)
+
+    def verify_password(self, password):
+        return pwd_context.verify(password, self.password_hash)
+
+    def generate_auth_token(self, expiration=600):
+        s = Serializer(app.config['SECRET_KEY'], expires_in=expiration)
+        return s.dumps({'id': self.id})
+
+    @staticmethod
+    def verify_auth_token(token):
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except SignatureExpired:
+            return None  # valid token, but expired
+        except BadSignature:
+            return None  # invalid token
+
+        user = User_Profile.query.get(data['id'])
+        return user
+
 class Business_Profile(db.Model):
     __tablename__ = 'business_profile'
 
@@ -156,29 +183,3 @@ class Deals(db.Model):
     date_created = db.Column(db.Date)
     business = db.relationship('Business_Profile')
 
-    # return unicode id
-    def get_id(self):
-        return str(self.id).encode("utf-8").decode("utf-8")
-
-    def hash_password(self, password):
-        self.password_hash = pwd_context.encrypt(password)
-
-    def verify_password(self, password):
-        return pwd_context.verify(password, self.password_hash)
-
-    def generate_auth_token(self, expiration=600):
-        s = Serializer(app.config['SECRET_KEY'], expires_in=expiration)
-        return s.dumps({'id': self.id})
-
-    @staticmethod
-    def verify_auth_token(token):
-        s = Serializer(app.config['SECRET_KEY'])
-        try:
-            data = s.loads(token)
-        except SignatureExpired:
-            return None    # valid token, but expired
-        except BadSignature:
-            return None    # invalid token
-
-        user = User_Profile.query.get(data['id'])
-        return user

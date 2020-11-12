@@ -410,4 +410,4 @@ def make_reservation(d_id):
 
 
 if __name__ == '__main__':
-    socketio.run(app, debug=False)
+    socketio.run(app, debug=True)
