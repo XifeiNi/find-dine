@@ -41,7 +41,7 @@ const DarkLayer = styled(View)`
 `;
 
 const Title = styled(Text)`
-  font-family: Modesta-Script;
+  font-family: 'Roboto-Light';
   color: ${({ theme }) => theme.colors.defaultWhite};
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('11.5%')}px;
 `;
