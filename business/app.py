@@ -53,15 +53,13 @@ def signup():
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
     if request.method == 'POST':
         data = request.form
         user_email = data['username']
         password = data['password']
         user = Business_Profile.query.filter_by(email=user_email).first()
         if user is not None and user.password == password:
-            login_user(user, remember=True)
+            login_user(user)
             return redirect(url_for('home'))
         else:
             return render_template('login.html', error="Incorrect username/password")
@@ -74,13 +72,15 @@ def home():
     business = Business_Profile.query.filter_by(id=current_user.id).first()
     deals_frontend = []
     for deal in business_deals:
+        deal_expiry = date.strftime(deal.date_expiry, '%d/%m/%Y')
+        deal_created = date.strftime(deal.date_created, '%d/%m/%Y')
         business_deal = {"deal_id": deal.id,
                         "business_name":business.name,
                         "deal_name": deal.deal_name,
                         "description": deal.description,
                         "discount":deal.discount_percentage,
-                        "expiry":deal.date_expiry,
-                        "created":deal.date_created}
+                        "expiry":deal_expiry,
+                        "created":deal_created}
         deals_frontend.append(business_deal)
 
     return render_template('homepage.html', deals_frontend=deals_frontend, business_name=business.name)
@@ -117,16 +117,71 @@ def create_deal():
         discount = data['percentage']
         expiry = data['expiry']
         created = data['created_date']
-        deal = Deal(business_name=current_user.id,
+        print (created)
+        created_datetime = datetime.strptime(created, '%Y-%m-%d')
+        created_date = created_datetime.date()
+        print (type(created_date))
+        expiry_datetime = datetime.strptime(expiry, '%Y-%m-%d')
+        expiry_date = expiry_datetime.date()
+        print (type(expiry_date))
+        deal = Deal(business_id=current_user.id,
                     deal_name=deal_name,
                     description=description,
                     discount_percentage=discount,
-                    date_expiry=expiry,
-                    date_created=created)
+                    date_expiry=expiry_date,
+                    date_created=created_date)
         db.session.add(deal)
         db.session.commit()
         return redirect(url_for('home'))
     return render_template('new_deal.html')
+@app.route('/edit_deal', methods=['EDIT', 'POST'])
+def edit_deal():
+    print("In edit deal function")
+    content = request.get_json()
+    deal_id = content.get('deal_id')
+    default_deal = Deal.query.filter_by(id=deal_id).first()
+    if request.method == 'POST':
+        data = request.form
+        deal_name = data['deal_name']
+        description = data['description']
+        discount = data['percentage']
+        expiry = data['expiry']
+        created = data['created_date']
+        print (created)
+        created_datetime = datetime.strptime(created, '%Y-%m-%d')
+        created_date = created_datetime.date()
+        print (type(created_date))
+        expiry_datetime = datetime.strptime(expiry, '%Y-%m-%d')
+        expiry_date = expiry_datetime.date()
+        print (type(expiry_date))
+        if default_deal.deal_name != deal_name:
+            new_deal_name = deal_name
+        else:
+            new_deal_name = default_deal.deal_name
+        if default_deal.description != description:
+            new_description = description
+        else:
+            new_description = default_deal.description
+        if default_deal.discount != discount:
+            new_discount = discount
+        else:
+            new_discount = default_deal.discount
+        if default_deal.date_expiry != expiry:
+            new_expiry = expiry
+        else:
+            new_expiry = default_deal.date_expiry
+        if default_deal.date_created != created_date:
+            new_created_date = created_date
+        else:
+            new_created_date = default_deal.date_created
+        default_deal.deal_name = new_deal_name
+        default_deal.description = new_description
+        default_deal.discount = new_discount
+        default_deal.date_expiry = new_expiry
+        default_deal.date_created = new_created_date
+        db.session.commit()
+        return  redirect(url_for('home'))
+    return render_template('edit_deal.html')
 
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():

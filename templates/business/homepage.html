@@ -20,7 +20,7 @@
                 <h3>Description: {{ item.description }}</h3>
                 <h3>Expiry Date: {{item.expiry}}</h3>
                 <h3>Created Date: {{item.created}}</h3>
-                <button class="btn btn-default" type="button" id = "{{item.deal_id}}_edit" onclick="edit_button({{item.deal_id}})">Edit</button>
+                <button class="btn btn-default" type="button" id = "{{item.deal_id}}_edit" onclick="edit_deal({{item.deal_id}})">Edit</button>
                 <button class="btn btn-default" type="button" id = "{{item.id}}_delete" onclick="delete_deal({{item.deal_id}})">Delete</button>
                 <p id="deal_delete_error"></p>
             <br></br>
@@ -61,7 +61,7 @@
     async function edit_deal(deal_id) {
         const data = {deal_id}
         console.log("In edit deal")
-        const response = await makeRequest(data, "/edit_deal", 'POST')
+        const response = await makeRequest(data, "/edit_deal", 'EDIT')
         if (response.message !== "Deal was successfully deleted") {
             document.getElementById('deal_delete_error').innerText = response.message
         }

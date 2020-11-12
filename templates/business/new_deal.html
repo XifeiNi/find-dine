@@ -14,7 +14,7 @@
 <!--    n_upcoming-->
 <!--    date_created
         date-->
-    <form id="signup_form"  method="POST" action="/">
+    <form id="create_deal"  method="POST" action="/deal">
         Deal Name:
         <label for="deal_name"></label><input name="deal_name" type="text" id="deal_name" placeholder="Enter Deal Name" required>
         <p id="deal_name_error"></p>
@@ -25,7 +25,7 @@
         <label for="percentage"></label><input type="number" placeholder="What is your discount...?" name="percentage" id="percentage" required>
         <p id="discount_error"></p>
         Expiry Date:
-        <label for="expiry"></label><input type="date" placeholder="When does it expire" name="expiry" id="expiry" required >
+        <label for="expiry"></label><input type="date" min="" placeholder="When does it expire" name="expiry" id="expiry" required >
         <p id="expiry_error"></p>
         Date Created:
         <label for="created_date"></label><input type="date" name="created_date" id="created_date" required >
@@ -37,6 +37,24 @@
 
 </body>
 <script>
+
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+     if(dd<10){
+            dd='0'+dd
+        }
+        if(mm<10){
+            mm='0'+mm
+        }
+
+    today = yyyy+'-'+mm+'-'+dd;
+    document.getElementById("expiry").setAttribute("min", today);
+    document.getElementById("created_date").setAttribute("min", today);
+
+
+
     function add_valid_info(){
         return true
     }
