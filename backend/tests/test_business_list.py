@@ -1,16 +1,16 @@
 import sys
 import os
 
-from server.models import Business_Profile, db, Deals
+from backend.server.models import Business_Profile, db, Deals
 
 sys.path.insert(0, os.path.abspath(os.getcwd() + '/../../'))
 
-from server.app import app
+from backend.server.app import app
 #from server.models import User_Profile, Right_Swipe, Messages, db
 from flask import Flask, render_template, session
 
 import unittest
-from Classes.recommendation_system import Recommendation_System
+from backend.Classes.recommendation_system import Recommendation_System
 from flask import session, Flask
 import datetime
 from datetime import date, datetime

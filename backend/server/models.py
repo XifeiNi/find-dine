@@ -116,46 +116,6 @@ class User_Profile(db.Model):
     is_active = True
     is_anonymous = False
 
-class Business_Profile(db.Model):
-    __tablename__ = 'business_profile'
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    email = db.Column(db.String)
-    # main_profile = db.Column(db)
-    description = db.Column(db.String)
-    address = db.Column(db.String)
-    # menu = db.Column
-    price_guide = db.Column(db.String)
-    category = db.Column(db.String)
-    # category=db.Column(db.Enum(Business_Category))
-    deals = db.relationship('Deals')
-
-class Meeting(db.Model):
-    __tablename__ = "meeting"
-
-    id = db.Column(db.Integer, primary_key=True)
-    deals_id = db.Column(db.Integer, db.ForeignKey('deals.id'))
-    match_id = db.Column(db.Integer, db.ForeignKey('match.id'))
-    date_meeting = db.Column(db.Date)
-    time_start = db.Column(db.String)
-    time_end = db.Column(db.String)
-    users = db.relationship("Match")
-    deals = db.relationship('Deals')
-
-class Deals(db.Model):
-    __tablename__ = 'deals'
-
-    id = db.Column(db.Integer, primary_key=True)
-    business_id = db.Column(db.Integer, db.ForeignKey('business_profile.id'))
-    deal_name = db.Column(db.String)
-    description = db.Column(db.String)
-    original_price = db.Column(db.Integer)
-    discount_percentage = db.Column(db.Integer)
-    date_expiry = db.Column(db.Date)
-    date_created = db.Column(db.Date)
-    business = db.relationship('Business_Profile')
-
     # return unicode id
     def get_id(self):
         return str(self.id).encode("utf-8").decode("utf-8")
@@ -176,9 +136,54 @@ class Deals(db.Model):
         try:
             data = s.loads(token)
         except SignatureExpired:
-            return None    # valid token, but expired
+            return None  # valid token, but expired
         except BadSignature:
-            return None    # invalid token
+            return None  # invalid token
 
         user = User_Profile.query.get(data['id'])
         return user
+class Meeting(db.Model):
+    __tablename__ = "meeting"
+
+    id = db.Column(db.Integer, primary_key=True)
+    deals_id = db.Column(db.Integer, db.ForeignKey('deals.id'))
+    match_id = db.Column(db.Integer, db.ForeignKey('match.id'))
+    date_meeting = db.Column(db.Date)
+    time_start = db.Column(db.String)
+    time_end = db.Column(db.String)
+    users = db.relationship("Match")
+    deals = db.relationship('Deals')
+
+###BUSINESS SIDE TABLES!#####
+
+class Business_Profile(UserMixin,db.Model):
+    __tablename__ = 'business_profile'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    email = db.Column(db.String, unique=True)
+    password = db.Column(db.String)
+    # main_profile = db.Column(db)
+    description = db.Column(db.String)
+    address = db.Column(db.String)
+    # menu = db.Column
+    price_guide = db.Column(db.String)
+    phone_number = db.Column(db.String)
+    category = db.Column(db.String)
+
+    deals = db.relationship('Deals')
+
+
+
+class Deals(db.Model):
+    __tablename__ = 'deals'
+
+    id = db.Column(db.Integer, primary_key=True)
+    business_id = db.Column(db.Integer, db.ForeignKey('business_profile.id'))
+    deal_name = db.Column(db.String)
+    description = db.Column(db.String)
+    # deal_image = db.Column(db.)
+    # original_price = db.Column(db.Integer)
+    discount_percentage = db.Column(db.Integer)
+    date_expiry = db.Column(db.Date)
+    date_created = db.Column(db.Date)

@@ -69,13 +69,12 @@ from flask import Flask, render_template, session, jsonify, request, redirect, u
 from flask_socketio import SocketIO, join_room
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import current_user, LoginManager, login_required, login_user, logout_user
-from backend.server.models import Conversation, Messages, User_Profile, Match, Right_Swipe, db
+from backend.server.models import Conversation, Messages, User_Profile, Match, Right_Swipe, Business_Profile, Deals, db
 from backend.Classes.recommendation_system import Recommendation_System, Right_Swipes
 from backend.Classes.message_system import Message_System
 from datetime import datetime, date
 
 
-from backend.server.models import *
 from backend.Classes.deals import Deals_system
 from backend.Classes.reservations import Reservation_system
 
@@ -224,7 +223,7 @@ def get_recommendations():
     origin = "Main Library, University of New South Wales, Sydney, Australia"
     recs_sys = Recommendation_System()
     # current_user_id = current_user.id
-    current_user_id = 1
+    current_user_id = current_user.id
     user = User_Profile.query.filter_by(id=current_user_id).first()
     user.location = origin
     db.session.commit()
@@ -258,6 +257,7 @@ def get_conversations():
     # return render_template('conversations.html', conversations=conversations)
 
 @app.route("/get_conversation_messages/<room_id>")
+# @login_required
 def get_conversation_messages(room_id):
     message_sys = Message_System()
     conversation, messages = message_sys.getMessages(room_id)
@@ -279,7 +279,7 @@ def messageReceived():
 @socketio.on('send_message')
 def handle_send_message(json):
     print('received my event: ' + str(json))
-    current_user_id = 3
+    current_user_id = current_user.id
     username = User_Profile.query.filter_by(username=json['user_name']).first()
     if username is None:
         socketio.emit('my response', json, callback="Something is wrong, Username cannot be found")
@@ -304,7 +304,7 @@ def handle_send_message(json):
 @socketio.on('join')
 def on_join(match_dict):
     right_swipes = Right_Swipes()
-    current_user_id = 3
+    current_user_id = current_user.id
     target_id = User_Profile.query.filter_by(username=match_dict['match_user_username']).first().id
     previous_swipe = right_swipes.right_swipes(match_dict, current_user_id, target_id)
     if previous_swipe == 1:
@@ -358,6 +358,7 @@ def business_list():
     return render_template('business_list.html', list=result)
 
 @app.route('/deals', methods=['GET'])
+# @login_required
 def deals_list():
     if request.method == 'GET':
         deals_sys = Deals_system()
@@ -367,6 +368,7 @@ def deals_list():
 
 
 @app.route('/reservation/<d_id>', methods=['POST'])
+# @login_required
 def make_reservation(d_id):
     if request.method == 'POST':
 
@@ -374,7 +376,7 @@ def make_reservation(d_id):
 
         if request.form['submit_button'] == 'reservation':
             deal_info = []
-            current_user_id = 6
+            current_user_id = current_user.id
 
             matched_users = reservations_sys.get_matched_users(current_user_id)
 
@@ -410,4 +412,4 @@ def make_reservation(d_id):
 
 
 if __name__ == '__main__':
-    socketio.run(app, debug=False)
+    socketio.run(app, debug=True)
