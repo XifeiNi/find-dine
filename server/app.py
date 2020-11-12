@@ -62,15 +62,14 @@
 # if __name__ == '__main__':
 #     socketio.run(app)
 
-from flask import Flask, render_template, session, jsonify
+from flask import Flask, render_template, session, jsonify, request, redirect, url_for, flash
 from flask_socketio import SocketIO, join_room
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import current_user
-from models import Conversation, Messages, User_Profile, Match, Right_Swipe, db
+from flask_login import current_user, LoginManager, login_required, login_user, logout_user
+from server.models import Conversation, Messages, User_Profile, Match, Right_Swipe, db
 from Classes.recommendation_system import Recommendation_System, Right_Swipes
 from Classes.message_system import Message_System
 from datetime import datetime, date
-
 
 # from flask import Flask
 # from flask_bootstrap import Bootstrap
@@ -104,8 +103,109 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test1.db'
 db.init_app(app)
 socketio = SocketIO(app)
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+# needed for login manager implementation. Gets user object from id
+@login_manager.user_loader
+def load_user(user_id):
+    return User_Profile.query.filter_by(id=user_id).first()
+
 with app.app_context():
     db.create_all()
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+
+    if request.method == 'POST':
+
+        req = request.form
+        print(req)
+
+        # get data from form
+        email = req['email']
+        username = req['username']
+        f_name = req['f_name']
+        l_name = req['l_name']
+        input_password = req['password']
+        input_password_repeat = req['password_repeat']
+        dob = req['dob']
+        min_target = req['min_target']
+        max_target = req['max_target']
+        gender = req['gender']
+        gender_preference = req['gender_preference']
+        bio = req['bio']
+
+        # do validation and error checking
+        if User_Profile.query.filter_by(email_address=email).first() is not None:
+            return render_template('auth/signup.html', error="An account with this email already exists")
+
+        if User_Profile.query.filter_by(username=username).first() is not None:
+            return render_template('auth/signup.html', error="Username already taken")
+
+        if input_password != input_password_repeat:
+            return render_template('auth/signup.html', error="Passwords don't match")
+
+        if min_target > max_target:
+            return render_template('auth/signup.html', error="Invalid match age targets")
+
+        dob_obj = datetime.strptime(dob, '%Y-%m-%d')
+        if datetime.today().year - dob_obj.year < 18:
+            return render_template('auth/signup.html', error="You must be over 18 to register on find&dine")
+
+        # create object and commit to db
+        new_user = User_Profile(f_name=f_name,
+                                l_name=l_name,
+                                email_address=email,
+                                username=username,
+                                password_hash=input_password,
+                                gender=gender,
+                                gender_preference=gender_preference,
+                                min_match_age=min_target,
+                                max_match_age=max_target,
+                                bio=bio,
+                                dob=dob_obj)
+
+        db.session.add(new_user)
+        db.session.commit()
+
+        # redirect to home page, user is logged in
+        login_user(new_user)
+        return redirect(url_for('get_recommendations'))
+
+    return render_template('auth/signup.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+
+    if request.method == 'POST':
+
+        req = request.form
+        print(req)
+
+        username = req['username']
+        password = req['password']
+
+        # validation
+        user = User_Profile.query.filter_by(username=username).first()
+        if user is None:
+            return render_template('auth/login.html', error="Invalid credentials")
+
+        if user.password_hash != password:
+            return render_template('auth/login.html', error="Invalid credentials")
+
+        # user is valid
+        login_user(user)
+        return redirect(url_for('get_recommendations'))
+
+    return render_template('auth/login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('get_recommendations'))
+
 
 
 # This is the first function, once called, it should return the match recommendations
@@ -191,7 +291,6 @@ def handle_send_message(json):
     db.session.add(message)
     db.session.commit()
     socketio.emit('my response', json, callback=messageReceived)
-
 
 #This function should be called when the user right-swipes on an individual
 @socketio.on('join')

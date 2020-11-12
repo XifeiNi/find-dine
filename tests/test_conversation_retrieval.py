@@ -2,8 +2,8 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath(os.getcwd() + '/../../'))
 
-from find_dine.server.app import app
-from find_dine.server.models import User_Profile, Right_Swipe, db
+from server.app import app
+from server.models import User_Profile, Right_Swipe, db
 from flask import Flask, render_template, session
 
 import unittest
