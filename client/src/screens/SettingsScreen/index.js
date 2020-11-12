@@ -1,37 +1,49 @@
 import React, { Component } from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text, Button, StyleSheet } from 'react-native';
 import { createStackNavigator,createAppContainer } from 'react-navigation';
 import ProfileScreen from './Profile';
 import PreferencesScreen from './Preferences';
-//import PreferencesScreen from './Preferences';
 
 
 const SettingsScreen = ({navigation}) => {
         return (
             <View>
-                <Text> Settings</Text>
-                <Text> Profile button </Text>
+                <Text style={styles.title}> Settings</Text>
                 <Button
-                  title="Edit Profile"
-                  onPress={()=>navigation.navigate('Prof')}
+                  title="Profile"
+                  style={styles.buttonStyle}
+                  onPress={()=>navigation.navigate('Profile')}
                   />
-                <Text> Preferences Button </Text>
                 <Button
-                  title="Edit Preferences"
-                  onPress={()=>navigation.navigate('Pref')}
+                  title="Preferences"
+                  onPress={()=>navigation.navigate('Preferences')}
                   />
-                <Text> Logout </Text>
+                <Button title="Logout" />
             </View>
         );
 }
 
-
+export const styles = StyleSheet.create({
+  title: {
+    fontSize: 60,
+    color: 'black',
+    fontWeight: 'bold'
+  },
+  buttonStyle: {
+    maxWidth: 30,
+    borderRadius: 5,
+    color: 'black',
+    backgroundColor: 'white',
+    borderWidth: 5,
+    borderStyle: 'solid'
+  }
+});
 
 const SettingsApp = createStackNavigator({
-    Prof: {
+    Profile: {
         screen: ProfileScreen
     },
-    Pref: {
+    Preferences: {
         screen: PreferencesScreen
     },
     Default: {
@@ -43,10 +55,5 @@ const SettingsApp = createStackNavigator({
 }
 
 );
-
-
-const SettingsDefaultScreen = () => {
-  return (<Text> Settings default screen </Text>);
-}
 
 export default createAppContainer(SettingsApp);

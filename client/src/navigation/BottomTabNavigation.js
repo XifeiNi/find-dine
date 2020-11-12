@@ -3,9 +3,10 @@ import { createBottomTabNavigator } from 'react-navigation';
 
 import { HomeTabNavigation } from './HomeTabNavigation';
 import CameraScreen from 'src/screens/CameraScreen';
-import PeopleScreen from 'src/screens/PeopleScreen';
+//import PeopleScreen from 'src/screens/PeopleScreen';
 import GamesScreen from 'src/screens/GamesScreen';
 import SettingsApp from 'src/screens/SettingsScreen';
+import SwipeScreen from 'src/screens/SwipeScreen';
 
 import TabIcon from 'src/components/TabIcon';
 import AppStyles from 'src/config/styles';
@@ -36,8 +37,8 @@ export const BottomTabNavigation = createBottomTabNavigator(
             }
         },
 
-        PeopleScreen: {
-            screen: PeopleScreen,
+        SwipeScreen: {
+            screen: SwipeScreen,
             navigationOptions: {
                 header: null,
                 tabBarIcon: PeopleTabIcon
