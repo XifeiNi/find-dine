@@ -39,8 +39,15 @@ class TestSettingUp(unittest.TestCase):
                          discount_percentage=30,
                          date_expiry=date(2022, 3, 5),
                          date_created=date(2020, 11, 2))
+            deal3=Deal(business_id=1,
+                       deal_name="Deal3",
+                       description="Deal3 with Business " + str(1),
+                       discount_percentage=34,
+                       date_expiry=date(2020, 11, 11),
+                       date_created=date.today())
             db.session.add(deal1)
             db.session.add(deal2)
+            db.session.add(deal3)
             db.session.commit()
     #
     # def test_setting_up_conversations(self):

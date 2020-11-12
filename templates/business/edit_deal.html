@@ -14,24 +14,24 @@
 <!--    n_upcoming-->
 <!--    date_created
         date-->
-    <form id="create_deal"  method="POST" action="/deal">
-        Deal Name:
-        <label for="deal_name"></label><input name="deal_name" type="text" id="deal_name" placeholder="Enter Deal Name" required>
+    <form id="edit_deal"  method="POST" action="/edit_deal">
+        New Deal Name:
+        <label for="deal_name"></label><input name="deal_name" type="text" id="deal_name" placeholder="Enter Deal Name">
         <p id="deal_name_error"></p>
-        Description:
-        <label for="description"></label><input type="text" name="description" id="description" placeholder="A description of the deal..." required>
+        New Description:
+        <label for="description"></label><input type="text" name="description" id="description" placeholder="A description of the deal...">
         <p id="description_error"></p>
-        Discount Percentage:
-        <label for="percentage"></label><input type="number" placeholder="What is your discount...?" name="percentage" id="percentage" required>
+        New Discount Percentage:
+        <label for="percentage"></label><input type="number" placeholder="What is your discount...?" name="percentage" id="percentage">
         <p id="discount_error"></p>
-        Expiry Date:
-        <label for="expiry"></label><input type="date" min="" placeholder="When does it expire" name="expiry" id="expiry" required >
+        New Expiry Date:
+        <label for="expiry"></label><input type="date" min="" placeholder="When does it expire" name="expiry" id="expiry" >
         <p id="expiry_error"></p>
-        Date Created:
-        <label for="created_date"></label><input type="date" name="created_date" id="created_date" required >
+        New Date Created:
+        <label for="created_date"></label><input type="date" name="created_date" id="created_date"  >
         <p id="created_error"></p>
         <button type="button" id="reset_add"><a href="new_deal.html">Reset</a></button>
-        <input type="submit" id="submit" value="Add Deal">
+        <input type="submit" id="submit" value="Edit Deal">
     </form>
 <!--    <button class="btn btn-default" type="button" id = "logout" onclick="redirect_logout()">Logout</button>-->
 
@@ -61,6 +61,9 @@
     function redirect_logout(){
         window.location.href="{{ url_for('logout') }}"
     }
-
+            var password = document.getElementById("password")
+      , confirm_password = document.getElementById("confirm_password");
 </script>
+
+</body>
 </html>

@@ -3,7 +3,9 @@
 <head>
     <title>Homepage</title>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+<!--    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">-->
+<!--    <script src="{{ url_for('static', filename='requests.js')}}"></script>-->
+
 </head>
 <body>
     <h1>WELCOME {{business_name}}! Your Deals!</h1>
@@ -12,15 +14,17 @@
 
     <div id="deals">
         {% for item in deals_frontend %}
-            <h2>Deal Name: {{ item.deal_name }}</h2>
-            <h3>Discount: {{ item.discount }}</h3>
-            <h3>Description: {{ item.description }}</h3>
-            <h3>Expiry Date: {{item.expiry}}</h3>
-            <h3>Created Date: {{item.created}}</h3>
-            <button class="btn btn-default" type="button" id = "{{item.deal_id}}_edit" onclick="edit_button({{item.deal_id}})">Logout</button>
-            <button class="btn btn-default" type="button" id = "{{item.deal_id}}_delete" onclick="delete_button({{item.deal_id}})">Delete</button>
-
-        <br></br>
+        <div id="{{item.deal_id}}">
+                <h2>Deal Name: {{ item.deal_name }}</h2>
+                <h3>Discount: {{ item.discount }}</h3>
+                <h3>Description: {{ item.description }}</h3>
+                <h3>Expiry Date: {{item.expiry}}</h3>
+                <h3>Created Date: {{item.created}}</h3>
+                <button class="btn btn-default" type="button" id = "{{item.deal_id}}_edit" onclick="edit_deal({{item.deal_id}})">Edit</button>
+                <button class="btn btn-default" type="button" id = "{{item.id}}_delete" onclick="delete_deal({{item.deal_id}})">Delete</button>
+                <p id="deal_delete_error"></p>
+            <br></br>
+         </div>
         {% endfor %}
         <!--{{list}} -->
 <!--                business_deal = {"business_name":business.name,-->
@@ -39,10 +43,55 @@
     function redirect_logout(){
         window.location.href="{{ url_for('logout') }}"
     }
-    function edit_button(deal_id){
+    async function delete_deal(deal_id) {
         const data = {deal_id}
-        const response = await makeRequest
+        console.log("In delete deal")
+        const response = await makeRequest(data, "/delete_deal", 'POST')
+        if (response.message !== "Deal was successfully deleted") {
+            document.getElementById('deal_delete_error').innerText = response.message
+        }
+        else {
+            console.log("Submittedid Request");
+            // document.getElementById('deal_delete_error').innerText = "Successfully Deleted"
+            document.getElementById(deal_id).innerText = ""
 
+        }
     }
+    // Need to fix the edit deals
+    async function edit_deal(deal_id) {
+        const data = {deal_id}
+        console.log("In edit deal")
+        const response = await makeRequest(data, "/edit_deal", 'EDIT')
+        if (response.message !== "Deal was successfully deleted") {
+            document.getElementById('deal_delete_error').innerText = response.message
+        }
+        else {
+            console.log("Submittedid Request");
+            // document.getElementById('deal_delete_error').innerText = "Successfully Deleted"
+            document.getElementById(deal_id).innerText = ""
+
+        }
+    }
+    async function makeRequest (data, endpoint, type) {
+        console.log('works')
+        const url = `${window.location.origin}${endpoint}`;
+        const body = JSON.stringify(data);
+        const method = type;
+        const headers = { 'content-type': 'application/json' };
+        let response, status;
+        try {
+            if (type === 'POST')
+                response = await fetch(url, {method, headers, body});
+            else
+                response = await fetch(url, {method});
+            status = response.status;
+            response = await response.json();
+        } catch (e) {
+            return { message: e.message };
+        }
+        if (status !== 200)
+            return { message: `Error Status: ${status}` };
+        return response;
+}
 </script>
 </html>
