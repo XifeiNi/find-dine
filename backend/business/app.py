@@ -140,6 +140,7 @@ def create_deal():
         return redirect(url_for('home'))
     return render_template('new_deal.html')
 @app.route('/edit_deal', methods=['EDIT', 'POST'])
+@login_required
 def edit_deal():
     print("In edit deal function")
     content = request.get_json()
@@ -203,6 +204,7 @@ def forgot_password():
             return render_template('forgot_password.html', error="Username does not exist! Please signup!")
     return render_template('forgot_password.html')
 @app.route("/get_reservations")
+@login_required
 def get_reservations():
     current_user_id = current_user.id
     business_name = Business_Profile.query.filter_by(id = current_user_id).first()
