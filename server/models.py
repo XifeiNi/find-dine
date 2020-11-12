@@ -1,9 +1,12 @@
+
 import flask_loginmanager
+
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, date
 from passlib.apps import custom_app_context as pwd_context
 from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
+
 import enum
 from flask import current_app
 from flask_login import UserMixin
@@ -80,7 +83,6 @@ class Gender(enum.Enum):
     female = 2
     other = 3
 
-
 class Gender_Preference(enum.Enum):
     male = 1
     female = 2
@@ -91,7 +93,7 @@ class User_Profile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     f_name = db.Column(db.String(20))
     l_name = db.Column(db.String(20))
-    email_address = db.Column(db.String(50), unique=True)
+    email_address = db.Colomn(db.String(50), unique=True)
     username = db.Column(db.String(20), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     gender = db.Column(db.Enum(Gender))
@@ -102,13 +104,12 @@ class User_Profile(db.Model):
     bio = db.Column(db.String(150))
     location = db.Column(db.String)
     # main_profile_pic = db.Image()??
-    dob = db.Column(db.Date)  # change this later
-
     right_swipes = db.relationship('Right_Swipe')
     conversations = db.relationship('Conversation')
     messages = db.relationship("Messages")
     users = db.relationship("Match")
-
+    # main_profile_pic = db.Image()??
+    dob = db.Column(db.Date) #change this later
 
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
@@ -126,8 +127,9 @@ class User_Profile(db.Model):
         try:
             data = s.loads(token)
         except SignatureExpired:
-            return None  # valid token, but expired
+            return None    # valid token, but expired
         except BadSignature:
-            return None  # invalid token
+            return None    # invalid token
+
         user = User_Profile.query.get(data['id'])
         return user

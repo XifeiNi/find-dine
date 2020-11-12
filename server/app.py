@@ -71,6 +71,7 @@ from Classes.recommendation_system import Recommendation_System, Right_Swipes
 from Classes.message_system import Message_System
 from datetime import datetime, date
 
+
 # from flask import Flask
 # from flask_bootstrap import Bootstrap
 # from flask_sqlalchemy import SQLAlchemy
@@ -105,6 +106,7 @@ socketio = SocketIO(app)
 
 with app.app_context():
     db.create_all()
+
 
 # This is the first function, once called, it should return the match recommendations
 @app.route('/')
@@ -189,6 +191,7 @@ def handle_send_message(json):
     db.session.add(message)
     db.session.commit()
     socketio.emit('my response', json, callback=messageReceived)
+
 
 #This function should be called when the user right-swipes on an individual
 @socketio.on('join')
