@@ -2,12 +2,12 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath(os.getcwd() + '/../../'))
 
-from find_dine.business.app import app
-from find_dine.business.models import Business_Profile, Deal, db
+from backend.business.app import app
+from backend.server.models import Business_Profile, Deals, db
 from flask import Flask, render_template, session
 
 import unittest
-from Classes.recommendation_system import Recommendation_System
+from backend.Classes.recommendation_system import Recommendation_System
 from flask import session, Flask
 import datetime
 from datetime import date, datetime
@@ -27,19 +27,19 @@ class TestSettingUp(unittest.TestCase):
                                      category="casual")
             db.session.add(test1)
             db.session.commit()
-            deal1=Deal(business_id=1,
+            deal1=Deals(business_id=1,
                        deal_name="Deal1",
                        description="Deal1 with Business " + str(1),
                        discount_percentage=10,
                        date_expiry=date(2021, 1, 1),
                        date_created=date.today())
-            deal2 = Deal(business_id=1,
+            deal2 = Deals(business_id=1,
                          deal_name="Deal2",
                          description="Deal2 with Business " + str(1),
                          discount_percentage=30,
                          date_expiry=date(2022, 3, 5),
                          date_created=date(2020, 11, 2))
-            deal3=Deal(business_id=1,
+            deal3=Deals(business_id=1,
                        deal_name="Deal3",
                        description="Deal3 with Business " + str(1),
                        discount_percentage=34,

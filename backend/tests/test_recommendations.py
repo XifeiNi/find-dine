@@ -1,7 +1,6 @@
 import sys
 import os
 
-import server
 
 sys.path.insert(0, os.path.abspath(os.getcwd() + '/../../'))
 

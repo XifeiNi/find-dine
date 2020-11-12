@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, url_for, redirect, Response
 from flask_socketio import SocketIO, join_room
 import json
 from flask_sqlalchemy import SQLAlchemy
-from backend.business.models import Business_Profile, Deal, db
+from backend.server.models import Business_Profile, Deals, db
 from flask_login import current_user, login_user, login_required, logout_user, LoginManager
 from datetime import datetime, date
 
@@ -15,12 +15,12 @@ def load_user(id):
 
 
 app.config['SECRET_KEY'] = 'business_side'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test1.db'
 db.init_app(app)
 socketio = SocketIO(app)
 
-with app.app_context():
-    db.create_all()
+# with app.app_context():
+#     db.create_all()
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -68,12 +68,12 @@ def login():
 @app.route('/home')
 @login_required
 def home():
-    all_deals = Deal.query.all()
+    all_deals = Deals.query.all()
     for deal in all_deals:
         if deal.date_expiry < date.today():
             db.session.delete(deal)
             db.session.commit()
-    business_deals = Deal.query.filter_by(business_id=current_user.id).all()
+    business_deals = Deals.query.filter_by(business_id=current_user.id).all()
     business = Business_Profile.query.filter_by(id=current_user.id).first()
     deals_frontend = []
     for deal in business_deals:
@@ -99,7 +99,7 @@ def delete_deal():
     print ("*************************")
     id = int(deal_id)
     print (id)
-    deal = Deal.query.filter_by(id=id).first()
+    deal = Deals.query.filter_by(id=id).first()
     if deal is None:
         response_content = {
             'message': "Deal Not Found! Something is wrong"
@@ -129,7 +129,7 @@ def create_deal():
         expiry_datetime = datetime.strptime(expiry, '%Y-%m-%d')
         expiry_date = expiry_datetime.date()
         print (type(expiry_date))
-        deal = Deal(business_id=current_user.id,
+        deal = Deals(business_id=current_user.id,
                     deal_name=deal_name,
                     description=description,
                     discount_percentage=discount,
@@ -144,7 +144,7 @@ def edit_deal():
     print("In edit deal function")
     content = request.get_json()
     deal_id = content.get('deal_id')
-    default_deal = Deal.query.filter_by(id=deal_id).first()
+    default_deal = Deals.query.filter_by(id=deal_id).first()
     if request.method == 'POST':
         data = request.form
         deal_name = data['deal_name']
