@@ -148,7 +148,6 @@ class TestRecommendationSystem(unittest.TestCase):
         #     db.session.add(swipe2)
         #     db.session.commit()
 
-
             recommendations = rec_sys.getRecommendations(origin)
 
             # self.assertTrue(len(recommendations) >= 1)

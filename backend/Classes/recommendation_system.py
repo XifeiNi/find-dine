@@ -1,10 +1,12 @@
 import sys
 import os
+
 sys.path.insert(0, os.path.abspath(os.getcwd() + '/../../'))
 
-from flask_login import current_user
+from flask_login import current_user # is this a different object than the one from app.py??
 from .google_maps import Google_Maps
 from backend.server.models import User_Profile, Right_Swipe, Match, Conversation, db
+from backend.server import app
 # from ..server.models import User_Profile
 from flask import Flask, render_template, session
 import datetime

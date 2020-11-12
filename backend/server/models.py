@@ -142,6 +142,7 @@ class User_Profile(db.Model):
 
         user = User_Profile.query.get(data['id'])
         return user
+
 class Meeting(db.Model):
     __tablename__ = "meeting"
 

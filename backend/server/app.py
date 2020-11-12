@@ -63,6 +63,9 @@
 #     socketio.run(app)
 import sys
 import os
+
+from werkzeug.urls import url_parse
+
 sys.path.insert(0, os.path.abspath(os.getcwd() + '/../../'))
 
 from flask import Flask, render_template, session, jsonify, request, redirect, url_for, flash
@@ -196,6 +199,7 @@ def login():
         # validation
         user = User_Profile.query.filter_by(username=username).first()
         if user is None:
+            print("this one")
             return render_template('auth/login.html', error="Invalid credentials")
 
         if user.password_hash != password:
@@ -203,7 +207,13 @@ def login():
 
         # user is valid
         login_user(user)
-        return redirect(url_for('get_recommendations'))
+        print(current_user.id)
+        # current_user.is_authenticated = True
+
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('get_recommendations')
+        return redirect(next_page)
 
     return render_template('auth/login.html')
 
@@ -217,6 +227,7 @@ def logout():
 
 # This is the first function, once called, it should return the match recommendations
 @app.route('/')
+@login_required
 def get_recommendations():
 # def sessions(origin):
 
@@ -239,6 +250,7 @@ def get_recommendations():
     # return render_template('index.html', recommendations=recommendations)
 
 @app.route("/get_conversations")
+@login_required
 def get_conversations():
 
     message_sys = Message_System()
@@ -257,6 +269,7 @@ def get_conversations():
     # return render_template('conversations.html', conversations=conversations)
 
 @app.route("/get_conversation_messages/<room_id>")
+@login_required
 # @login_required
 def get_conversation_messages(room_id):
     message_sys = Message_System()
@@ -349,6 +362,7 @@ def on_join(match_dict):
     # socketio.emit("join_response", error_code)
 
 @app.route('/businesses', methods=['GET'])
+@login_required
 def business_list():
     if request.method == 'GET':
         deals_sys = Deals_system()
@@ -358,6 +372,7 @@ def business_list():
     return render_template('business_list.html', list=result)
 
 @app.route('/deals', methods=['GET'])
+@login_required
 # @login_required
 def deals_list():
     if request.method == 'GET':
@@ -368,6 +383,7 @@ def deals_list():
 
 
 @app.route('/reservation/<d_id>', methods=['POST'])
+@login_required
 # @login_required
 def make_reservation(d_id):
     if request.method == 'POST':
@@ -410,6 +426,8 @@ def make_reservation(d_id):
 
         #return render_template('reservations.html')
 
+def get_current_user():
+    return current_user
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)
