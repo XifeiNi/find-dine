@@ -33,7 +33,7 @@ const ModalStack = createStackNavigator(
             screen: SearchStack,
             navigationOptions: ({ navigation }) => ({
                 gesturesEnabled: false,
-                header: null
+                header: <SearchHeader navigation={navigation} />
             })
         },
         CameraScreen: {
