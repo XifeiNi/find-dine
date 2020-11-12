@@ -57,9 +57,11 @@ class Meeting(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     deals_id = db.Column(db.Integer, db.ForeignKey('deals.id'))
     match_id = db.Column(db.Integer, db.ForeignKey('match.id'))
+    date_meeting = db.Column(db.Date)
     time_start = db.Column(db.String)
     time_end = db.Column(db.String)
-
+    users = db.relationship("Match")
+    deals = db.relationship('Deals')
 
 class Deals(db.Model):
     __tablename__ = 'deals'
@@ -72,9 +74,6 @@ class Deals(db.Model):
     discount_percentage = db.Column(db.Integer)
     date_expiry = db.Column(db.Date)
     date_created = db.Column(db.Date)
-
-
-# company = relationship("Company", foreign_keys=[company_id])
 
 class Match(db.Model):
     __tablename__ = 'match'
@@ -158,103 +157,6 @@ class User_Profile(db.Model):
     conversations = db.relationship('Conversation')
     messages = db.relationship("Messages")
     users = db.relationship("Match")
-
-
-
-def deals_info(business_id):
-    return
-
-
-def get_matched_users(user_id):
-    all_matches = Match.query.filter(or_(Match.first_swiper == user_id, Match.second_swiper == user_id)).all()
-    # print(all_matches)
-    matched_users = []
-
-    ''' right_swipe_1 = Right_Swipe(time=datetime.now(),
-                swiper_id=user_id,
-                target_id=1,
-                became_match=False)
-
-    right_swipe_2 = Right_Swipe(time=datetime.now(),
-                swiper_id=1,
-                target_id=user_id,
-                became_match=True)
-
-    db.session.add(right_swipe_1)
-    db.session.add(right_swipe_2)
-    db.session.commit()
-
-    room_id = str(right_swipe_1.swiper_id) + "+" + str(right_swipe_1.target_id)
-
-    conversation = Conversation(room=room_id,
-                                username_one=right_swipe_1.swiper_id,
-                                username_two=right_swipe_1.target_id)
-    db.session.add(conversation)
-    db.session.commit()
-
-    match = Match(distance=12,
-                  created=datetime.now(),
-                  first_swiper=right_swipe_1.target_id,
-                  second_swiper=right_swipe_1.swiper_id,
-                  conversation_id=room_id)
-    db.session.add(match)
-    db.session.commit()'''
-
-    # print(all_matches)
-    # if (all_matches.len)
-    for match in all_matches:
-
-        if match.first_swiper == user_id:
-            user = User_Profile.query.filter_by(id=match.second_swiper).first()
-            name = user.f_name + " " + user.l_name
-            matched_users.append({
-                "user_id": user.id,
-                "match_id": match.id,
-                "user_name": name
-            })
-
-        if match.second_swiper == user_id:
-            user = User_Profile.query.filter_by(id=match.first_swiper).first()
-            name = user.f_name + " " + user.l_name
-            matched_users.append({
-                "id": user.id,
-                "match_id": match.id,
-                "user_name": name
-            })
-
-    return matched_users
-
-
-def generate_meeting_id():
-    num = (Meeting.query.order_by(Meeting.id.desc()).first())
-    if num is None:
-        return 1
-    else:
-        new_id = num.id + 1
-
-
-def add_meeting(deal_id, match_id, start_t, end_t):
-    meeting_id = generate_meeting_id()
-    result = []
-    meeting = Meeting(
-        id=meeting_id,
-        deals_id=deal_id,
-        match_id=match_id,
-        time_start=str(start_t),
-        time_end=str(end_t)
-    )
-    print(meeting.time_start)
-    db.session.add(meeting)
-    db.session.commit()
-    result.append({
-        "id": meeting_id,
-        "deals_id": deal_id,
-        "match_id": match_id,
-        "time_start": start_t,
-        "time_end": end_t,
-    })
-    #json_result = json.dumps(meeting.to_dict())
-    return result
 
 
 # class Location (db.Model): #Invitation System

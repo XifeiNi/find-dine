@@ -8,7 +8,7 @@
     <h1>Reservation</h1>
     {% for x in deal %}
     <h3> Making reservation for deal '{{ x.deal_name }}' at '{{ x.business_name }}'</h3>
-
+    <h2>This deal expires on {{ x.deal_expiry}} </h2>
     <form id="reservation_form" action=/reservation/{{ x.deal_id }} method="POST">
         <br/>
     <label for="matched_user" >Reservation with Match:</label>
@@ -17,14 +17,21 @@
             <option value={{item.match_id}}>{{ item.user_name }}</option>
             {% endfor %}
           </select>
-    <br/><br/>
-    <label for="start_time">Choose a start time for your reservation:</label>
 
+    <br/><br/>
+
+     <label for="date_of_meeting">Choose a start time for your reservation:</label>
+        <small>Please pick a date from today onwards</small>
+        <input type="date" id="date_of_meeting" name="date_of_meeting" value=""
+        min="2020-11-09" max="2030-12-31"  required>
+
+    <br/><br/>
+
+    <label for="start_time">Choose a start time for your reservation:</label>
         <input type="time" id="start_time" name="start_time" min="09:00" max="21:00" required>
-        <small>Business hours are 9am to 9pm</small>
+        <small>Please pick a date from today onwards</small>
     <br/><br/>
     <label for="end_time">Choose an end time for your reservation:</label>
-
         <input type="time" id="end_time" name="end_time" min="09:00" max="21:00" required>
         <small>Business hours are 9am to 9pm</small>
     <br/><br/>
@@ -32,4 +39,5 @@
     </form>
     {% endfor %}
 </body>
+
 </html>

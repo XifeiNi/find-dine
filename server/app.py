@@ -68,6 +68,7 @@ from flask_sqlalchemy import SQLAlchemy
 from models import *  # Conversation, Messages, db
 from datetime import datetime, date
 from Classes.deals import Deals_system
+from Classes.reservations import Reservation_system
 
 # from flask import Flask
 # from flask_bootstrap import Bootstrap
@@ -94,7 +95,8 @@ from Classes.deals import Deals_system
 #     db.init_app(app)
 #     login_manager.init_app(app)
 #     jsglue.init_app(app)
-#from server.models import all_businesses_list, Deals, all_deals_list, get_matched_users, add_meeting
+# from server.models import all_businesses_list, Deals, all_deals_list, get_matched_users, add_meeting
+from server.models import Deals, Business_Profile
 
 app = Flask(__name__, template_folder='../templates')
 app.config['SECRET_KEY'] = 'user_side#'
@@ -150,7 +152,7 @@ def business_list():
         deals_sys = Deals_system()
         result = deals_sys.all_businesses_list()
 
-    #return jsonify(result)
+    # return jsonify(result)
     return render_template('business_list.html', list=result)
 
 
@@ -164,36 +166,38 @@ def deals_info(b_id):
     return()'''
 
 
-
 @app.route('/deals', methods=['GET'])
 def deals_list():
     if request.method == 'GET':
-
         deals_sys = Deals_system()
         result = deals_sys.all_deals_list()
-        return jsonify(result)
-        #return render_template('deals.html', list=result)
+        # return jsonify(result)
+        return render_template('deals.html', list=result)
 
-'''
+
 @app.route('/reservation/<d_id>', methods=['POST'])
 def make_reservation(d_id):
     if request.method == 'POST':
 
         print('Got here- POST request')
+        reservations_sys = Reservation_system()
 
         if request.form['submit_button'] == 'reservation':
             deal_info = []
             current_user_id = 6
-            matched_users = get_matched_users(current_user_id)
+
+            matched_users = reservations_sys.get_matched_users(current_user_id)
 
             deal = Deals.query.filter_by(id=d_id).first()
 
-            if (deal.date_expiry < date.today()):
-                print("Yes it checked validity")
+            # if (deal.date_expiry < date.today()):
+            # print("Yes it checked validity")
+
             business = Business_Profile.query.filter_by(id=deal.business_id).first()
             deal_info.append({
                 "deal_id": deal.id,
                 "deal_name": deal.deal_name,
+                "deal_expiry": deal.date_expiry,
                 "business_name": business.name,
                 "business_address": business.address
             })
@@ -202,15 +206,24 @@ def make_reservation(d_id):
         if request.form['submit_button'] == 'finalise_reservation':
             # print('Got here pt 2')
             match_id = request.form.get('matched_user')
+            date_of_meeting = request.form.get('date_of_meeting')
             start_time = request.form.get('start_time')
             end_time = request.form.get('end_time')
-            # print(match_id, start_time, end_time)
-            result = add_meeting(d_id, match_id, start_time, end_time)
-            # return jsonify(result)
+
+            date_time_obj = datetime.strptime(date_of_meeting, '%Y-%m-%d')
+            print(date_time_obj.date())
+            check = reservations_sys.check_date(d_id, date_time_obj.date())
+
+            if not check:
+                message = "You either tried to book for an expired deal or booked a date before today, please go back an try again. "
+                return message
+            result = reservations_sys.add_meeting(d_id, match_id, date_time_obj.date(), start_time, end_time)
+            #return jsonify(result)
             return render_template('res_done.html')
 
-        return render_template('reservations.html', deal=deal_info)
+        #return render_template('reservations.html')
 
-'''
+
+
 if __name__ == '__main__':
     socketio.run(app, debug=False)
