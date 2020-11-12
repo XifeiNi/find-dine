@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { View, Image, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { Button } from 'react-native-paper';
-import { LoginButton, AccessToken } from 'react-native-fbsdk';
 
 import styles from './styles';
 import logoWithText from '../../assets/images/find_dine.png';
@@ -26,7 +25,7 @@ export default class SplashScreen extends Component {
         const { navigation } = this.props;
         navigation.navigate('MainScreen');
     };
-
+/*
     initUser = token => {
         fetch(
             'https://graph.facebook.com/v2.5/me?fields=email,name,friends&access_token=' +
@@ -50,7 +49,7 @@ export default class SplashScreen extends Component {
                 reject('ERROR GETTING DATA FROM FACEBOOK');
             });
     };
-
+*/
     render() {
         var logoWithTextUri = Image.resolveAssetSource(logoWithText).uri;
         return (

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { createStackNavigator,createAppContainer } from 'react-navigation';
 import SplashScreen from 'src/screens/SplashScreen';
 import ChatScreen from 'src/screens/ChatScreen';
