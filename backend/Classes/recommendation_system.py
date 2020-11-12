@@ -22,7 +22,7 @@ class Recommendation_System:
         self.Google_Maps_Api = Google_Maps(GOOGLE_MAPS_API_KEY)
     def getRecommendations(self, user_location):
         #current_user_id = current_user.id
-        current_user_id = 3
+        current_user_id = current_user.id
         # user = User_Profile()
         # all_users = User_Profile.query.all()
         # cur_user = User_Profile.query.filter_by(id=current_user_id).first()
@@ -108,7 +108,7 @@ class Recommendation_System:
         return sorted_distances
 
     def right_swipe_matches(self, user_location, current_user_id):
-        #current_user_id = current_user.id
+        # current_user_id = current_user.id
         user = User_Profile()
         all_right_swipes = Right_Swipe.query.filter_by(target_id=current_user_id).all()
         cur_user = User_Profile.query.filter_by(id=current_user_id).first()

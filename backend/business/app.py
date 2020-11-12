@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, url_for, redirect, Response
 from flask_socketio import SocketIO, join_room
 import json
 from flask_sqlalchemy import SQLAlchemy
-from backend.server.models import Business_Profile, Deals, db
+from backend.server.models import Business_Profile, Deals, Meeting, Match, User_Profile, db
 from flask_login import current_user, login_user, login_required, logout_user, LoginManager
 from datetime import datetime, date
 
@@ -202,6 +202,33 @@ def forgot_password():
         else:
             return render_template('forgot_password.html', error="Username does not exist! Please signup!")
     return render_template('forgot_password.html')
+@app.route("/get_reservations")
+def get_reservations():
+    current_user_id = current_user.id
+    all_deals = Deals.query.filter_by(business_id=current_user_id).all()
+    all_reservations = []
+    for deal in all_deals:
+        all_meetings = Meeting.query.filter_by(deal_id=deal.id).all()
+        for meeting in all_meetings:
+            # deals_id = db.Column(db.Integer, db.ForeignKey('deals.id'))
+            # match_id = db.Column(db.Integer, db.ForeignKey('match.id'))
+            # date_meeting = db.Column(db.Date)
+            # time_start = db.Column(db.String)
+            # time_end = db.Column(db.String)
+
+            username_one_id = Match.query.filter_by(id=meeting.id).first().first_swiper
+            username_two_id = Match.query.filter_by(id=meeting.id).first().second_swiper
+            username_one = User_Profile.query.filter_by(id=username_one_id).first().f_name + " " + User_Profile.query.filter_by(id=username_one_id).first().l_name
+            username_two = User_Profile.query.filter_by(id=username_two_id).first().f_name + " " + User_Profile.query.filter_by(id=username_two_id).first().l_name
+            date = meeting.date_meeting
+
+            meeting_info = {"username": "Date between " + username_one + " and " + username_two,
+                            "date": date,
+                            "start_time": meeting.time_start,
+                            "end_time": meeting.time_end,
+                            "deal": deal.deal_name}
+            all_reservations.append(meeting_info)
+    return render_template("get_reservations.html", all_reservations=all_reservations)
 
 @app.route("/logout")
 @login_required
