@@ -67,6 +67,7 @@ from flask_socketio import SocketIO, join_room
 from flask_sqlalchemy import SQLAlchemy
 from models import *  # Conversation, Messages, db
 from datetime import datetime, date
+from Classes.deals import Deals_system
 
 # from flask import Flask
 # from flask_bootstrap import Bootstrap
@@ -93,7 +94,7 @@ from datetime import datetime, date
 #     db.init_app(app)
 #     login_manager.init_app(app)
 #     jsglue.init_app(app)
-from server.models import all_businesses_list, Deals, all_deals_list, get_matched_users, add_meeting
+#from server.models import all_businesses_list, Deals, all_deals_list, get_matched_users, add_meeting
 
 app = Flask(__name__, template_folder='../templates')
 app.config['SECRET_KEY'] = 'user_side#'
@@ -146,25 +147,11 @@ def on_join():
 @app.route('/businesses', methods=['GET'])
 def business_list():
     if request.method == 'GET':
-        result = all_businesses_list()
-        for item in result:
-            # instance = db.session.query(Business_Profile).filter_by(id=item["id"]).first() is not None
-            instance = db.session.query(Business_Profile).filter_by(id=item["id"]).first()
-            if not instance:
-                print(item["id"], item["name"])
-                business = Business_Profile(id=int(item["id"]),
-                                            name=item["name"],
-                                            email=item["email"],
-                                            description=item["description"],
-                                            address=item["address"],
-                                            price_guide=item["price_guide"],
-                                            category=item["category"])
-                db.session.add(business)
-                db.session.commit()
-        list_of_buinesses = db.session.query(Business_Profile).all()
+        deals_sys = Deals_system()
+        result = deals_sys.all_businesses_list()
 
-    # return jsonify(all_businesses_list())
-    return render_template('business_list.html', list=list_of_buinesses)
+    #return jsonify(result)
+    return render_template('business_list.html', list=result)
 
 
 '''@app.route('/businesses/<b_id>', methods=['GET'])
@@ -174,36 +161,20 @@ def deals_info(b_id):
     #deals_info = db.session.query(Deals).filter_by(business_id=b_id)
     #print(deals_info)
     #return jsonify(deals_info)
-    return()
-'''
+    return()'''
 
-@app.route('/deals', methods=['GET', ])
+
+
+@app.route('/deals', methods=['GET'])
 def deals_list():
-
     if request.method == 'GET':
 
-        result = all_deals_list()
+        deals_sys = Deals_system()
+        result = deals_sys.all_deals_list()
+        return jsonify(result)
+        #return render_template('deals.html', list=result)
 
-        for item in result:
-            instance = db.session.query(Deals).filter_by(id=item["id"]).first()
-            if not instance:
-                # print(item["id"], item["deal_name"])
-                date_c = datetime.strptime(item["date_created"], '%Y-%m-%d')
-                date_e = datetime.strptime(item["date_expiry"], '%Y-%m-%d')
-                deals = Deals(id=int(item["id"]),
-                              business_id=item["business_id"],
-                              deal_name=item["deal_name"],
-                              description=item["description"],
-                              discount_percentage=item["discount_percentage"],
-                              date_created=date_c,
-                              date_expiry=date_e)
-                db.session.add(deals)
-                db.session.commit()
-            # else:
-            # print(item["id"], item["description"])
-    # return jsonify(all_deals_list())
-        return render_template('deals.html', list=result)
-
+'''
 @app.route('/reservation/<d_id>', methods=['POST'])
 def make_reservation(d_id):
     if request.method == 'POST':
@@ -216,6 +187,9 @@ def make_reservation(d_id):
             matched_users = get_matched_users(current_user_id)
 
             deal = Deals.query.filter_by(id=d_id).first()
+
+            if (deal.date_expiry < date.today()):
+                print("Yes it checked validity")
             business = Business_Profile.query.filter_by(id=deal.business_id).first()
             deal_info.append({
                 "deal_id": deal.id,
@@ -226,16 +200,17 @@ def make_reservation(d_id):
             return render_template('reservations.html', deal=deal_info, matches=matched_users)
 
         if request.form['submit_button'] == 'finalise_reservation':
-            #print('Got here pt 2')
+            # print('Got here pt 2')
             match_id = request.form.get('matched_user')
             start_time = request.form.get('start_time')
             end_time = request.form.get('end_time')
-            #print(match_id, start_time, end_time)
+            # print(match_id, start_time, end_time)
             result = add_meeting(d_id, match_id, start_time, end_time)
-            #return jsonify(result)
+            # return jsonify(result)
             return render_template('res_done.html')
 
         return render_template('reservations.html', deal=deal_info)
 
+'''
 if __name__ == '__main__':
     socketio.run(app, debug=False)

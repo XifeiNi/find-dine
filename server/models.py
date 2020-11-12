@@ -160,46 +160,6 @@ class User_Profile(db.Model):
     users = db.relationship("Match")
 
 
-def all_businesses_list():
-    import csv
-    with open('Business_Profile.csv', newline='') as csvfile:
-        businesses_list = csv.reader(csvfile, delimiter='\n', quotechar='|')
-        result = []
-        for row in businesses_list:
-            item: List[str] = row[0].split(',')
-            result.append({
-                "id": int(item[0]),
-                "name": item[1],
-                "email": item[2],
-                "description": item[3],
-                "address": item[4],
-                "price_guide": item[5],
-                "category": item[6]
-            })
-
-    return result
-
-
-def all_deals_list():
-    import csv
-    with open('Deal.csv', newline='') as csvfile:
-        deals_list = csv.reader(csvfile, delimiter='\n', quotechar='|')
-        result = []
-        for row in deals_list:
-            item: List[str] = row[0].split(',')
-            result.append({
-                "id": int(item[0]),
-                "business_id": item[1],
-                "deal_name": item[2],
-                "description": item[3],
-                "discount_percentage": item[4],
-                "date_created": item[5],
-                "date_expiry": item[6]
-                # "date_created": datetime.date.strptime(item[6], "%d %b %Y")
-            })
-
-    return result
-
 
 def deals_info(business_id):
     return
