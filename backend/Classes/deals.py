@@ -51,3 +51,20 @@ class Deals_system:
 
         return result
 
+    def deals_for_business(self, b_id):
+
+        deals_list = Deals.query.filter_by(business_id=b_id).all()
+        result = []
+
+        for record in deals_list:
+            result.append({
+                "id": int(record.id),
+                "business_id": record.business_id,
+                "deal_name": record.deal_name,
+                "description": record.description,
+                "discount_percentage": record.discount_percentage,
+                "date_created": record.date_created,
+                "date_expiry": record.date_expiry
+            })
+
+        return result

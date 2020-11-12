@@ -14,6 +14,11 @@
         <h3>Email:{{ item.email }}</h3>
         <h3>Category:{{ item.category }}</h3>
 
+        <form action=/businesses/{{ item.id }} method="GET">
+        <button name="submit_button" value="reservation">View deals we have!</button>
+        </form>
+
+
 
     <br></br>
     {% endfor %}

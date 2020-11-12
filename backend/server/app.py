@@ -365,6 +365,14 @@ def deals_list():
         # return jsonify(result)
         return render_template('deals.html', list=result)
 
+@app.route('/businesses/<b_id>', methods=['GET'])
+def deals_filtered(b_id):
+    if request.method == 'GET':
+        deals_sys = Deals_system()
+        result = deals_sys.deals_for_business(b_id)
+
+        return jsonify(result)
+
 
 @app.route('/reservation/<d_id>', methods=['POST'])
 def make_reservation(d_id):
