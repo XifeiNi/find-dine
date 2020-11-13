@@ -3,7 +3,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.getcwd() + '/../../'))
 
 from backend.business.app import app
-from backend.server.models import Business_Profile, Deals, db
+from backend.server.models import Business_Profile, Deals, Meeting, db
 from flask import Flask, render_template, session
 
 import unittest
@@ -49,6 +49,7 @@ class TestSettingUp(unittest.TestCase):
             db.session.add(deal2)
             db.session.add(deal3)
             db.session.commit()
+
     #
     # def test_setting_up_conversations(self):
     #

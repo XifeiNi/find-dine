@@ -226,11 +226,11 @@ def forgot_password():
 @login_required
 def get_reservations():
     current_user_id = current_user.id
-    business_name = Business_Profile.query.filter_by(id = current_user_id).first()
+    business_name = Business_Profile.query.filter_by(id = current_user_id).first().name
     all_deals = Deals.query.filter_by(business_id=current_user_id).all()
     all_reservations = []
     for deal in all_deals:
-        all_meetings = Meeting.query.filter_by(deal_id=deal.id).all()
+        all_meetings = Meeting.query.filter_by(deals_id=deal.id).all()
         for meeting in all_meetings:
             # deals_id = db.Column(db.Integer, db.ForeignKey('deals.id'))
             # match_id = db.Column(db.Integer, db.ForeignKey('match.id'))
