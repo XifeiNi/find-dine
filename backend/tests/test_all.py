@@ -150,8 +150,10 @@ class TestProgram():
             # event.user_id = owner.id
             print("########################")
             print("Username: ", recommendation['match_user_username'])
+            print("Name: ", recommendation['match_name'])
+            print("Age: ", recommendation['match_age'])
+            print("Bio: ", recommendation['bio'])
             print("Distance: ", recommendation['distance'])
-
 
     def right_swipe(self):
         curr_user = current_user.get_cu()
@@ -321,6 +323,7 @@ class TestProgram():
                 print("Username: ", conversation['conversation_username'])
                 print("***********************")
                 for message in messages:
+                    print("---------------------------------------")
                     print("Message Sender: ", message['message_username'])
                     print("Message: ", message['message'])
                     print("Time: ", message['time_sent'])
