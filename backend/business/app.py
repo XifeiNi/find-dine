@@ -19,8 +19,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test1.db'
 db.init_app(app)
 socketio = SocketIO(app)
 
-# with app.app_context():
-#     db.create_all()
+with app.app_context():
+    db.create_all()
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -139,55 +139,74 @@ def create_deal():
         db.session.commit()
         return redirect(url_for('home'))
     return render_template('new_deal.html')
-@app.route('/edit_deal', methods=['EDIT', 'POST'])
+
+@app.route('/edit_deal')
+@login_required
+def edit_deal_id():
+    print("In edit deal function (GET)")
+    deal_id = request.args.get('deal_id')
+    return render_template('edit_deal.html', deal_id=deal_id)
+
+
+@app.route('/edit_deal', methods=['POST'])
 @login_required
 def edit_deal():
-    print("In edit deal function")
-    content = request.get_json()
-    deal_id = content.get('deal_id')
+    print("In edit deal function (POST)")
+    data = request.form
+    deal_name = data['deal_name']
+    description = data['description']
+    discount = data['percentage']
+    expiry = data['expiry']
+    created = data['created_date']
+    deal_id = data['deal_id']
     default_deal = Deals.query.filter_by(id=deal_id).first()
-    if request.method == 'POST':
-        data = request.form
-        deal_name = data['deal_name']
-        description = data['description']
-        discount = data['percentage']
-        expiry = data['expiry']
-        created = data['created_date']
-        print (created)
-        created_datetime = datetime.strptime(created, '%Y-%m-%d')
-        created_date = created_datetime.date()
-        print (type(created_date))
-        expiry_datetime = datetime.strptime(expiry, '%Y-%m-%d')
-        expiry_date = expiry_datetime.date()
-        print (type(expiry_date))
-        if default_deal.deal_name != deal_name:
-            new_deal_name = deal_name
-        else:
-            new_deal_name = default_deal.deal_name
-        if default_deal.description != description:
-            new_description = description
-        else:
-            new_description = default_deal.description
-        if default_deal.discount != discount:
-            new_discount = discount
-        else:
-            new_discount = default_deal.discount
-        if default_deal.date_expiry != expiry:
-            new_expiry = expiry
-        else:
-            new_expiry = default_deal.date_expiry
-        if default_deal.date_created != created_date:
-            new_created_date = created_date
-        else:
-            new_created_date = default_deal.date_created
-        default_deal.deal_name = new_deal_name
-        default_deal.description = new_description
-        default_deal.discount = new_discount
-        default_deal.date_expiry = new_expiry
-        default_deal.date_created = new_created_date
-        db.session.commit()
-        return  redirect(url_for('home'))
-    return render_template('edit_deal.html')
+
+    # if default_deal.deal_name != deal_name:
+    if deal_name != "":
+        new_deal_name = deal_name
+    else:
+        new_deal_name = default_deal.deal_name
+    # if default_deal.description != description:
+    if description != "":
+        new_description = description
+    else:
+        new_description = default_deal.description
+    # if default_deal.discount_percentage != discount:
+    if discount != "":
+        new_discount = discount
+    else:
+        new_discount = default_deal.discount_percentage
+    # if default_deal.date_expiry != expiry:
+    if expiry != "":
+        unformated_expiry = expiry
+        expiry_datetime = datetime.strptime(unformated_expiry, '%Y-%m-%d')
+        new_expiry = expiry_datetime.date()
+    else:
+        unformated_expiry = default_deal.date_expiry
+        new_expiry = unformated_expiry
+    # if default_deal.date_created != created:
+    if created != "":
+        unformated_created = created
+        created_datetime = datetime.strptime(unformated_created, '%Y-%m-%d')
+        new_created_date = created_datetime.date()
+    else:
+        unformated_created = default_deal.date_created
+        new_created_date = unformated_created
+    # print(created)
+    # print (unformated_created)
+    # created_datetime = datetime.strptime(unformated_created, '%Y-%m-%d')
+    # new_created_date = created_datetime.date()
+    # print(type(new_created_date))
+    # expiry_datetime = datetime.strptime(unformated_expiry, '%Y-%m-%d')
+    # new_expiry = expiry_datetime.date()
+    # print(type(expiry_date))
+    default_deal.deal_name = new_deal_name
+    default_deal.description = new_description
+    default_deal.discount_percentage = new_discount
+    default_deal.date_expiry = new_expiry
+    default_deal.date_created = new_created_date
+    db.session.commit()
+    return  redirect(url_for('home'))
 
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():

@@ -15,6 +15,7 @@
 <!--    date_created
         date-->
     <form id="edit_deal"  method="POST" action="/edit_deal">
+        <input name="deal_id" id="deal_id" type="hidden" value = "{{ deal_id }}">
         New Deal Name:
         <label for="deal_name"></label><input name="deal_name" type="text" id="deal_name" placeholder="Enter Deal Name">
         <p id="deal_name_error"></p>

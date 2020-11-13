@@ -25,7 +25,7 @@
                 <button class="btn btn-default" type="button" id = "{{item.deal_id}}_edit" onclick="edit_deal({{item.deal_id}})">Edit</button>
                 <button class="btn btn-default" type="button" id = "{{item.id}}_delete" onclick="delete_deal({{item.deal_id}})">Delete</button>
                 <p id="deal_delete_error"></p>
-            <br></br>
+            <br><br>
          </div>
         {% endfor %}
         <!--{{list}} -->
@@ -46,7 +46,7 @@
         window.location.href="{{ url_for('logout') }}"
     }
     function redirect_reservations(){
-        window.location.href={{ url_for('get_reservations' }}
+        window.location.href="{{ url_for('get_reservations') }}"
     }
     async function delete_deal(deal_id) {
         const data = {deal_id}
@@ -58,7 +58,7 @@
         else {
             console.log("Submittedid Request");
             // document.getElementById('deal_delete_error').innerText = "Successfully Deleted"
-            document.getElementById(deal_id).innerText = ""
+            document.getElementById(deal_id).innerText = "";
 
         }
     }
@@ -66,26 +66,28 @@
     async function edit_deal(deal_id) {
         const data = {deal_id}
         console.log("In edit deal")
-        const response = await makeRequest(data, "/edit_deal", 'EDIT')
-        if (response.message !== "Deal was successfully deleted") {
-            document.getElementById('deal_delete_error').innerText = response.message
-        }
-        else {
-            console.log("Submittedid Request");
-            // document.getElementById('deal_delete_error').innerText = "Successfully Deleted"
-            document.getElementById(deal_id).innerText = ""
-
-        }
+        {#const response = await makeRequest(data, "/edit_deal", 'PUT')#}
+        window.location.href="{{ url_for('edit_deal') }}?deal_id=" + deal_id
+        {#if (response.message !== "Deal was successfully deleted") {#}
+        {#    document.getElementById('deal_delete_error').innerText = response.message#}
+        {#}#}
+        {#else {#}
+        {#    console.log("Submittedid Request");#}
+        {#    // document.getElementById('deal_delete_error').innerText = "Successfully Deleted"#}
+        {#    document.getElementById(deal_id).innerText = "";#}
+        {##}
+        {#}#}
     }
     async function makeRequest (data, endpoint, type) {
         console.log('works')
         const url = `${window.location.origin}${endpoint}`;
         const body = JSON.stringify(data);
+        console.log('data', data)
         const method = type;
         const headers = { 'content-type': 'application/json' };
         let response, status;
         try {
-            if (type === 'POST')
+            if (type === 'POST' ||type === 'PUT')
                 response = await fetch(url, {method, headers, body});
             else
                 response = await fetch(url, {method});
@@ -94,6 +96,7 @@
         } catch (e) {
             return { message: e.message };
         }
+        console.log('response', response)
         if (status !== 200)
             return { message: `Error Status: ${status}` };
         return response;
