@@ -64,11 +64,13 @@
 import sys
 import os
 
+import flask
 from werkzeug.urls import url_parse
 
 sys.path.insert(0, os.path.abspath(os.getcwd() + '/../../'))
 
 from flask import Flask, render_template, session, jsonify, request, redirect, url_for, flash
+from urllib.parse import urlparse, urljoin
 from flask_socketio import SocketIO, join_room
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import current_user, LoginManager, login_required, login_user, logout_user
@@ -76,7 +78,6 @@ from backend.server.models import Conversation, Messages, User_Profile, Match, R
 from backend.Classes.recommendation_system import Recommendation_System, Right_Swipes
 from backend.Classes.message_system import Message_System
 from datetime import datetime, date
-
 
 from backend.Classes.deals import Deals_system
 from backend.Classes.reservations import Reservation_system
@@ -115,18 +116,21 @@ socketio = SocketIO(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.login_view = 'login'
+
 
 # needed for login manager implementation. Gets user object from id
 @login_manager.user_loader
 def load_user(user_id):
     return User_Profile.query.filter_by(id=user_id).first()
 
+
 with app.app_context():
     db.create_all()
 
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-
     if request.method == 'POST':
 
         req = request.form
@@ -185,9 +189,9 @@ def signup():
 
     return render_template('auth/signup.html')
 
-@app.route('/', methods=['GET', 'POST'])
-def login():
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
     if request.method == 'POST':
 
         req = request.form
@@ -199,36 +203,68 @@ def login():
         # validation
         user = User_Profile.query.filter_by(username=username).first()
         if user is None:
-            print("this one")
             return render_template('auth/login.html', error="Invalid credentials")
 
         if user.password_hash != password:
             return render_template('auth/login.html', error="Invalid credentials")
 
         # user is valid
-        login_user(user)
-        print(current_user.id)
-        # current_user.is_authenticated = True
+        login_user(user, remember=True)
+        next = flask.request.args.get('next')
+        if not is_safe_url(next):
+            return flask.abort(400)
 
-        next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('recommendations')
-        return redirect(next_page)
+        return flask.redirect(next or flask.url_for('get_recommendations'))
 
     return render_template('auth/login.html')
+
+
+def is_safe_url(target):
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url, target))
+    return test_url.scheme in ('http', 'https') and \
+           ref_url.netloc == test_url.netloc
+
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('recommendations'))
+    return redirect(url_for('login'))
+
+@app.route('/profile')
+@login_required
+def profile():
+    response = {'f_name': current_user.f_name, 'l_name': current_user.l_name,
+                'email_address': current_user.email_address, 'username': current_user.username,
+                'gender': str(current_user.gender), 'gender_preference': str(current_user.gender_preference),
+                'max_match_distance': current_user.max_match_distance, 'min_match_age': current_user.min_match_age,
+                'max_match_age': current_user.max_match_age, 'bio': current_user.bio}
+
+    return jsonify(response)
+
+@app.route('/profile/match_preferences', methods=['GET', 'POST'])
+@login_required
+def match_preferences():
+
+    if request.method == 'POST':
+        req = request.form
+        current_user.gender_preference = req['gender_preference']
+        current_user.min_match_age = req['min_match_age']
+        current_user.max_match_age = req['max_match_age']
+        current_user.max_match_distance = req['max_match_distance']
+
+    response = {'gender_preference': str(current_user.gender_preference), 'min_match_age': current_user.min_match_age,
+                'max_match_age': current_user.max_match_age, 'max_match_distance': current_user.max_match_distance}
+
+    return jsonify(response)
 
 
 # This is the first function, once called, it should return the match recommendations
 @app.route('/recommendations')
 @login_required
 def get_recommendations():
-# def sessions(origin):
+    # def sessions(origin):
 
     origin = "Main Library, University of New South Wales, Sydney, Australia"
     recs_sys = Recommendation_System()
@@ -237,7 +273,7 @@ def get_recommendations():
     user = User_Profile.query.filter_by(id=current_user_id).first()
     user.location = origin
     db.session.commit()
-    recommendations = recs_sys.getRecommendations(origin)
+    recommendations = recs_sys.getRecommendations(origin, current_user_id)
     print(len(recommendations))
     # To print during pytest, uncomment False Assertion
     for recommendation in recommendations:
@@ -248,12 +284,12 @@ def get_recommendations():
     return jsonify(recommendations)
     # return render_template('index.html', recommendations=recommendations)
 
+
 @app.route("/get_conversations")
 @login_required
 def get_conversations():
-
     message_sys = Message_System()
-    conversations = message_sys.getConversations()
+    conversations = message_sys.getConversations(current_user.id)
     for conversation in conversations:
         print("########################")
         # print("First Name: ", recommendation.f_name)
@@ -266,6 +302,7 @@ def get_conversations():
         print("Time: ", conversation['time'])
     return jsonify(conversations)
     # return render_template('conversations.html', conversations=conversations)
+
 
 @app.route("/get_conversation_messages/<room_id>")
 @login_required
@@ -283,8 +320,10 @@ def get_conversation_messages(room_id):
     return jsonify({'conversation': conversation, 'messages': messages})
     # return render_template('messages.html', conversation=conversation, messages=messages)
 
+
 def messageReceived():
     print('message was received!!!')
+
 
 # This message should be called when the user is trying to send a message, to an existing
 # conversation
@@ -297,9 +336,11 @@ def handle_send_message(json):
         socketio.emit('my response', json, callback="Something is wrong, Username cannot be found")
         exit(100)
 
-    conversation = Conversation.query.filter_by(username_one=username.id).filter_by(username_two=current_user_id).first()
+    conversation = Conversation.query.filter_by(username_one=username.id).filter_by(
+        username_two=current_user_id).first()
     if conversation is None:
-        conversation = Conversation.query.filter_by(username_two=username.id).filter_by(username_one=current_user_id).first()
+        conversation = Conversation.query.filter_by(username_two=username.id).filter_by(
+            username_one=current_user_id).first()
     if conversation is None:
         socketio.emit('my response', json, callback="Something is wrong, Conversation Room cannot be found")
         exit(200)
@@ -312,7 +353,8 @@ def handle_send_message(json):
     db.session.commit()
     socketio.emit('my response', json, callback=messageReceived)
 
-#This function should be called when the user right-swipes on an individual
+
+# This function should be called when the user right-swipes on an individual
 @socketio.on('join')
 def on_join(match_dict):
     right_swipes = Right_Swipes()
@@ -329,7 +371,7 @@ def on_join(match_dict):
         room_id = str(target_id) + "+" + str(current_user_id)
         conversation = Conversation(room=room_id,
                                     username_one=target_id,
-                                       username_two=current_user_id)
+                                    username_two=current_user_id)
         db.session.add(conversation)
         db.session.commit()
         match = Match(distance=match_dict['distance'],
@@ -360,11 +402,11 @@ def on_join(match_dict):
     return code
     # socketio.emit("join_response", error_code)
 
+
 @app.route('/businesses', methods=['GET', 'POST'])
 def business_list():
     deals_sys = Deals_system()
     if request.method == 'GET':
-
         result = deals_sys.all_businesses_list()
 
         # return jsonify(result)
@@ -382,6 +424,7 @@ def business_list():
             result = deals_sys.sort_category(business_category)
             return jsonify(result)
 
+
 @app.route('/deals', methods=['GET'])
 # @login_required
 def deals_list():
@@ -392,7 +435,6 @@ def deals_list():
         return render_template('deals.html', list=result)
 
 
-
 @app.route('/businesses/<b_id>', methods=['POST'])
 def deals_filtered(b_id):
     if request.method == 'POST':
@@ -401,6 +443,7 @@ def deals_filtered(b_id):
 
         return jsonify(result)
 
+
 @app.route('/deals/exp_sort', methods=['POST'])
 def sort_by_expiry():
     if request.method == 'POST':
@@ -408,6 +451,7 @@ def sort_by_expiry():
         result = deals_sys.sort_expiry()
 
         return jsonify(result)
+
 
 @app.route('/reservation/<d_id>', methods=['POST'])
 # @login_required
@@ -447,14 +491,15 @@ def make_reservation(d_id):
                 message = "You either tried to book for an expired deal or booked a date before today, please go back an try again. "
                 return message
             result = reservations_sys.add_meeting(d_id, match_id, date_time_obj.date(), start_time, end_time)
-            #return jsonify(result)
+            # return jsonify(result)
             return render_template('res_done.html')
 
-        #return render_template('reservations.html')
+        # return render_template('reservations.html')
 
 
 def get_current_user():
     return current_user
+
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)
