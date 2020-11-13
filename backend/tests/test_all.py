@@ -285,6 +285,33 @@ class TestProgram():
         while True:
             try:
                 username_input = input("Who would you like to message?: ")
+                target_user = User_Profile.query.filter_by(username=username_input).first()
+                if target_user is None:
+                    print("We couldn't find a user with that username, please check the username and try again")
+                    return
+                username_one = User_Profile.query.filter_by(id=current_user_id).first().id
+                username_two = target_user.id
+                if (Conversation.query.filter_by(username_one=username_one).filter_by(
+                        username_two=username_two).first()) is not None:
+                    room_id = Conversation.query.filter_by(username_one=username_one).filter_by(
+                        username_two=username_two).first().room
+                elif (Conversation.query.filter_by(username_two=username_one).filter_by(
+                        username_one=username_two).first()) is not None:
+                    room_id = Conversation.query.filter_by(username_two=username_one).filter_by(
+                        username_one=username_two).first().room
+                else:
+                    print(
+                        "Conversation with " + username_input + " does not exist in our system. Are you sure, its the right username?")
+                    return
+                message_sys = Message_System()
+                conversation, messages = message_sys.getMessages(room_id, current_user_id)
+                print("########################")
+                print("Username: ", conversation['conversation_username'])
+                print("***********************")
+                for message in messages:
+                    print("Message Sender: ", message['message_username'])
+                    print("Message: ", message['message'])
+                    print("Time: ", message['time_sent'])
             except KeyboardInterrupt:
                 print() # newline
                 break
