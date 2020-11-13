@@ -10,19 +10,19 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   containerMessage: {
-    flex: 1,
     alignItems: "center",
-    justifyContent: "flex-start",
+    flex: 1,
     flexDirection: "row",
+    justifyContent: "flex-start",
     paddingHorizontal: 10,
     width: DIMENSION_WIDTH - 100,
   },
   avatar: {
     borderRadius: 30,
-    width: 60,
     height: 60,
     marginRight: 20,
     marginVertical: 15,
+    width: 60,
   },
   message: {
     color: GRAY,
