@@ -1,0 +1,31 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'Messenger' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for Messenger
+
+  target 'Messenger-tvOSTests' do
+    inherit! :search_paths
+    # Pods for testing
+    pod 'react-native-maps', :path => '../node_modules/react-native-maps'
+
+  end
+
+  target 'MessengerTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
+
+target 'Messenger-tvOS' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for Messenger-tvOS
+
+
+end

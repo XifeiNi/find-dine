@@ -5,17 +5,17 @@ const styles = StyleSheet.create({
     item: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        paddingHorizontal: 16,
         paddingVertical: 8,
-        paddingHorizontal: 16
     },
     nameView: {
         flex: 1,
+        justifyContent: 'center',
         paddingHorizontal: 8,
-        justifyContent: 'center'
     },
     head: {
-        fontSize: 16,
         color: AppStyles.colors.black,
+        fontSize: 16,
         textAlign: 'left'
     },
     sub: {
@@ -23,23 +23,23 @@ const styles = StyleSheet.create({
         paddingTop: 4
     },
     icon: {
-        paddingHorizontal: 12,
+        alignItems: 'center',
         justifyContent: 'center',
-        alignItems: 'center'
+        paddingHorizontal: 12,
     },
     hView: {
         backgroundColor: AppStyles.colors.lightWhite
     },
     header: {
+        color: AppStyles.colors.grey,
         fontSize: 14,
         fontWeight: 'bold',
-        color: AppStyles.colors.grey,
+        paddingHorizontal: 16,
         paddingVertical: 12,
-        paddingHorizontal: 16
     },
     groupView: {
-        flexDirection: 'row',
         alignItems: 'center',
+        flexDirection: 'row',
         paddingVertical: 12
     },
     grpIcn: {

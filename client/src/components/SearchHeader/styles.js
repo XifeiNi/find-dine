@@ -3,47 +3,53 @@ import AppStyles from 'src/config/styles';
 import { isIphoneX } from 'src/lib/isIphoneX';
 
 const styles = StyleSheet.create({
-    container: {
-        height: isIphoneX() ? 100 : null,
-        backgroundColor: AppStyles.colors.black,
-        justifyContent: 'flex-end',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: AppStyles.colors.separator
+    search: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        height: 50
     },
-    elevatedContainer: {
-        height: isIphoneX() ? 100 : null,
+
+    container: {
         backgroundColor: AppStyles.colors.black,
-        justifyContent: 'flex-end',
-        borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: AppStyles.colors.separator,
-        elevation: 4
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        height: isIphoneX() ? 100 : null,
+        justifyContent: 'flex-end'
     },
 
     searchbar: {
         backgroundColor: AppStyles.colors.white,
         elevation: 0
     },
+
+    elevatedContainer: {
+        backgroundColor: AppStyles.colors.black,
+        borderBottomColor: AppStyles.colors.separator,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        elevation: 4,
+        height: isIphoneX() ? 100 : null,
+        justifyContent: 'flex-end'
+    },
+
     toolbar: {
         backgroundColor: AppStyles.colors.white
     },
-    search: {
-        flexDirection: 'row',
-        height: 50,
-        alignItems: 'center'
-    },
+
     input: {
-        width: '90%',
+        fontFamily: AppStyles.fonts.FONT_REGULAR,
+        fontSize: 16,
         height: 40,
         paddingHorizontal: 10,
-        fontSize: 16,
-        fontFamily: AppStyles.fonts.FONT_REGULAR
+        width: '90%'
     },
+
     btn: {
-        width: '75%',
         height: 40,
         justifyContent: 'center',
-        paddingHorizontal: 16
+        paddingHorizontal: 16,
+        width: '75%'
     },
+
     btnText: {
         fontSize: 16,
         fontFamily: AppStyles.fonts.FONT_REGULAR,
