@@ -27,10 +27,17 @@ socketio = SocketIO(app)
 
 with app.app_context():
     db.create_all()
+    db.session.expire_on_commit = False
 
 
 class CurrentUser:
     cu = None
+
+    def set_cu(self, curr):
+        self.cu = curr
+
+    def get_cu(self):
+        return self.cu
 
 
 current_user = CurrentUser()
@@ -98,7 +105,7 @@ def signup(request):
 
     # redirect to home page, user is logged in
     new_user.is_authenticated = True
-    current_user.cu = new_user
+    current_user.set_cu(new_user)
 
     print("new user created successfully!")
     return
@@ -122,7 +129,7 @@ def login(request):
 
     # user is valid
     user.is_authenticated = True
-    current_user.cu = user
+    current_user.set_cu(user)
     print("successfully logged in!")
 
     return
@@ -130,11 +137,12 @@ def login(request):
 
 def logout():
     current_user.is_authenticated = False
-    current_user.cu = None
+    current_user.set_cu(None)
 
     print("successfully logged out!")
 
     return
+
 
 if __name__ == '__main__':
     pass
