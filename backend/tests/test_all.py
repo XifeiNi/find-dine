@@ -3,11 +3,14 @@ import os
 import unittest
 from datetime import date, datetime
 
+
+
 sys.path.insert(0, os.path.abspath(os.getcwd() + '/../../'))
 
 from backend.Classes.recommendation_system import Recommendation_System, Right_Swipes
 from backend.Classes.message_system import Message_System
 from backend.server.models import User_Profile, db, Right_Swipe, Messages, Conversation, Match
+from backend.Classes.deals import Deals_system
 
 from backend.server.simulation import app, signup, login, current_user, logout, view_blocked, view_blockable, block, \
     view_profile, update_gender_preference, update_min_match_age, update_max_match_age, update_max_match_distance, \
@@ -335,7 +338,7 @@ class TestProgram():
                     print("Message: ", message['message'])
                     print("Time: ", message['time_sent'])
                     
-        def get_businesses(self):
+
 
         #curr_user = current_user.get_cu()
         #if curr_user is None:

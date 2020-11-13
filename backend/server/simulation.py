@@ -318,7 +318,10 @@ def block(target_username):
     if match is None:
         match = Match.query.filter_by(second_swiper=other_user_id).first()
 
+    # remove conversation
     match.blocked_by = cu.id
+    conv = Conversation.query.filter_by(room=match.conversation_id).first()
+    db.session.delete(conv)
     db.session.commit()
     print("successfully blocked user")
     return
