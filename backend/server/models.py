@@ -112,9 +112,12 @@ class User_Profile(db.Model):
     dob = db.Column(db.Date)
 
     # flask login manager requirements
-    is_authenticated = False
+    is_authenticated = True
     is_active = True
     is_anonymous = False
+
+    def is_authenticated(self):
+        return True
 
     # return unicode id
     def get_id(self):
