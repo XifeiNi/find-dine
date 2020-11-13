@@ -360,18 +360,29 @@ def on_join(match_dict):
     return code
     # socketio.emit("join_response", error_code)
 
-@app.route('/businesses', methods=['GET'])
-@login_required
+@app.route('/businesses', methods=['GET', 'POST'])
 def business_list():
+    deals_sys = Deals_system()
     if request.method == 'GET':
-        deals_sys = Deals_system()
+
         result = deals_sys.all_businesses_list()
 
-    # return jsonify(result)
-    return render_template('business_list.html', list=result)
+        # return jsonify(result)
+        return render_template('business_list.html', list=result)
+    if request.method == 'POST':
+
+        if request.form['submit_button'] == 'search_name':
+            business_name = request.form['b_name']
+            result = deals_sys.find_business_profile(business_name)
+            return jsonify(result)
+
+        if request.form['submit_button'] == 'search_category':
+            business_category = request.form['category']
+            print(business_category)
+            result = deals_sys.sort_category(business_category)
+            return jsonify(result)
 
 @app.route('/deals', methods=['GET'])
-@login_required
 # @login_required
 def deals_list():
     if request.method == 'GET':
@@ -381,8 +392,24 @@ def deals_list():
         return render_template('deals.html', list=result)
 
 
+
+@app.route('/businesses/<b_id>', methods=['POST'])
+def deals_filtered(b_id):
+    if request.method == 'POST':
+        deals_sys = Deals_system()
+        result = deals_sys.deals_for_business(b_id)
+
+        return jsonify(result)
+
+@app.route('/deals/exp_sort', methods=['POST'])
+def sort_by_expiry():
+    if request.method == 'POST':
+        deals_sys = Deals_system()
+        result = deals_sys.sort_expiry()
+
+        return jsonify(result)
+
 @app.route('/reservation/<d_id>', methods=['POST'])
-@login_required
 # @login_required
 def make_reservation(d_id):
     if request.method == 'POST':
@@ -424,6 +451,7 @@ def make_reservation(d_id):
             return render_template('res_done.html')
 
         #return render_template('reservations.html')
+
 
 def get_current_user():
     return current_user

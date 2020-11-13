@@ -5,6 +5,11 @@
     <title>Title</title>
 </head>
 <body>
+     <form action=/deals/exp_sort method="POST">
+        <button name="submit_button" value="filter_expiry">Filter by Expiry Date</button>
+    </form>
+
+
     {% for item in list %}
         <h2>Deal Name:{{ item.name }}</h2>
         <h3>Description:{{ item.description }}</h3>
@@ -18,6 +23,9 @@
 
     <br></br>
     {% endfor %}
+
+
+
     <!--{{list}} -->
 </body>
 </html>
