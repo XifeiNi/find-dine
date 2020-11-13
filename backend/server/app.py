@@ -243,6 +243,22 @@ def profile():
 
     return jsonify(response)
 
+@app.route('/profile/match_preferences', methods=['GET', 'POST'])
+@login_required
+def match_preferences():
+
+    if request.method == 'POST':
+        req = request.form
+        current_user.gender_preference = req['gender_preference']
+        current_user.min_match_age = req['min_match_age']
+        current_user.max_match_age = req['max_match_age']
+        current_user.max_match_distance = req['max_match_distance']
+
+    response = {'gender_preference': str(current_user.gender_preference), 'min_match_age': current_user.min_match_age,
+                'max_match_age': current_user.max_match_age, 'max_match_distance': current_user.max_match_distance}
+
+    return jsonify(response)
+
 
 # This is the first function, once called, it should return the match recommendations
 @app.route('/recommendations')
