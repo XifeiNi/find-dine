@@ -164,9 +164,9 @@ class TestProgram():
             # event.user_id = owner.id
             print("########################")
             print("Username: ", recommendation['match_user_username'])
-            print("Name: ", recommendation['match_name'])
-            print("Age: ", recommendation['match_age'])
-            print("Bio: ", recommendation['bio'])
+            # print("Name: ", recommendation['match_name'])
+            # print("Age: ", recommendation['match_age'])
+            # print("Bio: ", recommendation['bio'])
             print("Distance: ", recommendation['distance'])
 
     def right_swipe(self):
@@ -504,7 +504,7 @@ class TestProgram():
         print("########################")
 
         x = 1
-        for record in result:
+        for record in matches:
             print(record)
             x = x + 1
         print("########################")
