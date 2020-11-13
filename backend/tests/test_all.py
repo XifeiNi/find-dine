@@ -22,7 +22,7 @@ class TestProgram():
             print("Testing authentication:")
             command = ""
             while True:
-                command = input("commands: signup, signup dummy, login, logout, recommendations, swipe_right, make_reservation, exit: ")
+                command = input("commands: signup, signup dummy, login, logout, recommendations, swipe_right, my_conversations, exit: ")
                 if command == "exit":
                     break
 
@@ -66,6 +66,8 @@ class TestProgram():
                     self.recommendations()
                 if command == "swipe_right":
                     self.right_swipe()
+                if command == "my_conversations":
+                    self.get_conversations()
 
     def recommendations(self):
         # origin = "Main Library, University of New South Wales, Sydney, Australia"
@@ -181,9 +183,6 @@ class TestProgram():
             print("Username: ", conversation['username'])
             print("Last_Message: ", conversation['last_message'])
             print("Time: ", conversation['time'])
-
-    def get_Reservations
-
 
 
 
