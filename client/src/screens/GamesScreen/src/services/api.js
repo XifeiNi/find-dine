@@ -1,5 +1,7 @@
 import axios from 'axios';
 
-import api from '../store/ducks/resturants.json'
+const api = axios.create({
+  baseURL: 'http:// localhost:5000',
+});
 
 export default api;
