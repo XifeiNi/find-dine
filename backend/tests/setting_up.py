@@ -3,7 +3,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.getcwd() + '/../../'))
 
 from backend.server.app import app
-from backend.server.models import User_Profile, Right_Swipe, Messages, db
+from backend.server.models import User_Profile, Right_Swipe, Messages, Match, Conversation, db
 from flask import Flask, render_template, session
 
 import unittest
@@ -141,9 +141,53 @@ class TestSettingUp(unittest.TestCase):
             swipe3= Right_Swipe(time=datetime.now(),
                                 swiper_id=6,
                                 target_id=3)
+            swipe4 = Right_Swipe(time=datetime.now(),
+                                 swiper_id=2,
+                                 target_id=3,
+                                 became_match=True)
+            swipe5 = Right_Swipe(time=datetime.now(),
+                                 swiper_id=1,
+                                 target_id=3,
+                                 became_match=True)
+            swipe6 = Right_Swipe(time=datetime.now(),
+                                 swiper_id=3,
+                                 target_id=2,
+                                 became_match=True)
+            swipe7 = Right_Swipe(time=datetime.now(),
+                                 swiper_id=3,
+                                 target_id=1,
+                                 became_match=True)
             db.session.add(swipe1)
             db.session.add(swipe2)
             db.session.add(swipe3)
+            db.session.add(swipe4)
+            db.session.add(swipe5)
+            db.session.add(swipe6)
+            db.session.add(swipe7)
+            db.session.commit()
+            match1 = Match(distance=12,
+                          created=datetime.now(),
+                          first_swiper=3,
+                          second_swiper=1,
+                          conversation_id="3+1")
+            match2 = Match(distance=10,
+                          created=datetime.now(),
+                          first_swiper=3,
+                          second_swiper=2,
+                          conversation_id="3+2")
+            db.session.add(match1)
+            db.session.add(match2)
+            db.session.commit()
+
+            conversation1 = Conversation(room="3+1",
+                                        username_one=3,
+                                        username_two=1)
+            conversation2 = Conversation(room="3+2",
+                                        username_one=3,
+                                        username_two=2)
+            db.session.add(conversation1)
+            db.session.add(conversation2)
+
             db.session.commit()
 
     def test_setting_up_conversations(self):
