@@ -150,7 +150,18 @@ def login(request):
     return
 
 
+# substitute for @login_required
+def must_log_in():
+    if current_user.get_cu() is None:
+        print("you must be logged in to access this page")
+        return True
+    return False
+
+
 def logout():
+    if must_log_in():
+        return
+
     current_user.is_authenticated = False
     current_user.set_cu(None)
 
@@ -160,6 +171,8 @@ def logout():
 
 
 def view_profile():
+    if must_log_in():
+        return
     cu = current_user.get_cu()
     response = {'f_name': cu.f_name, 'l_name': cu.l_name,
                 'email_address': cu.email_address, 'username': cu.username,
@@ -187,6 +200,7 @@ def update_gender_preference(preference):
 
     return
 
+
 def update_min_match_age(age):
     cu = current_user.get_cu()
     age = int(age)
@@ -203,6 +217,7 @@ def update_min_match_age(age):
     db.session.commit()
     return
 
+
 def update_max_match_age(age):
     cu = current_user.get_cu()
     age = int(age)
@@ -217,6 +232,7 @@ def update_max_match_age(age):
     print("successfully updated max match age")
     return
 
+
 def update_max_match_distance(dist):
     cu = current_user.get_cu()
     dist = int(dist)
@@ -227,6 +243,7 @@ def update_max_match_distance(dist):
     db.session.commit()
     print("successfully updated max match distance")
     return
+
 
 def update_bio(new):
     if len(new) > 150:
@@ -239,6 +256,8 @@ def update_bio(new):
 
 
 def view_blocked():
+    if must_log_in():
+        return
     current_user_id = current_user.get_cu().id
     conversations = message_sys.getConversations(current_user_id)
     blocked_usernames = []
@@ -261,6 +280,8 @@ def view_blocked():
 
 
 def view_blockable():
+    if must_log_in():
+        return
     current_user_id = current_user.get_cu().id
     conversations = message_sys.getConversations(current_user_id)
     blockable = []
