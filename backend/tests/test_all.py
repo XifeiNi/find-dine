@@ -8,79 +8,93 @@ sys.path.insert(0, os.path.abspath(os.getcwd() + '/../../'))
 from backend.Classes.recommendation_system import Recommendation_System, Right_Swipes
 from backend.Classes.message_system import Message_System
 from backend.server.models import User_Profile, db, Right_Swipe, Messages, Conversation, Match
-from backend.server.simulation import app, signup, login, current_user, logout
+from backend.server.simulation import app, signup, login, current_user, logout, view_blocked, view_blockable, \
+    view_profile, update_gender_preference, update_min_match_age, update_max_match_age, update_max_match_distance, \
+    update_bio
 
 
 class TestSignup(unittest.TestCase):
-    def command_centre(self):
-        with app.app_context():
-            print("Testing authentication:")
-            command = ""
-            while True:
-                command = input("commands: signup, signup dummy, login, logout, recommendations, exit: ")
-                if command == "exit":
-                    break
+    with app.app_context():
+        print("Testing authentication:")
+        command = ""
+        while True:
+            command = input("commands: signup, signup dummy, login, logout, view blocked, view blockable, profile, exit: ")
+            if command == "exit":
+                break
 
-                if command == "get user":
-                    print(current_user.get_cu())
-                    continue
+            if command == "get user":
+                print(current_user.get_cu())
+                continue
 
-                if command == "signup":
-                    request = {'email': input("enter email: "), 'username': input("enter username: "),
-                               'f_name': input("enter first name: "), 'l_name': input("enter last name: "),
-                               'password': input("enter password: "), 'password_repeat': input("confirm password: "),
-                               'dob': input("enter DOB (YYYY-MM-DD): "), 'min_target': input("enter min matching age: "),
-                               'max_target': input("enter max matching age: "),
-                               'gender': input("enter gender (male, female, other): "),
-                               'gender_preference': input("enter gender preference (male, female, everyone): "),
-                               'bio': input("enter bio: "), 'location': input("enter matching location: "),
-                               'max_match_distance': input("enter max match distance: ")}
+            if command == "signup":
+                request = {'email': input("enter email: "), 'username': input("enter username: "),
+                           'f_name': input("enter first name: "), 'l_name': input("enter last name: "),
+                           'password': input("enter password: "), 'password_repeat': input("confirm password: "),
+                           'dob': input("enter DOB (YYYY-MM-DD): "), 'min_target': input("enter min matching age: "),
+                           'max_target': input("enter max matching age: "),
+                           'gender': input("enter gender (male, female, other): "),
+                           'gender_preference': input("enter gender preference (male, female, everyone): "),
+                           'bio': input("enter bio: "), 'location': input("enter matching location: "),
+                           'max_match_distance': input("enter max match distance: ")}
 
-                    signup(request)
-                    continue
+                signup(request)
+                continue
 
-                if command == "signup dummy":
-                    request = {'email': 'sascha.graham@gmail.com', 'username': 'sascha', 'f_name': 'sascha',
-                               'l_name': 'graham', 'password': 'awd', 'password_repeat': 'awd', 'dob': '1999-11-02',
-                               'min_target': '16', 'max_target': '22', 'gender': 'male', 'gender_preference': 'everyone',
-                               'bio': 'awd', 'location': '23 Cameron Ave Artarmon', 'max_match_distance': '200'}
+            if command == "signup dummy":
+                request = {'email': 'sascha.graham@gmail.com', 'username': 'sascha', 'f_name': 'sascha',
+                           'l_name': 'graham', 'password': 'awd', 'password_repeat': 'awd', 'dob': '1999-11-02',
+                           'min_target': '16', 'max_target': '22', 'gender': 'male', 'gender_preference': 'everyone',
+                           'bio': 'awd', 'location': '23 Cameron Ave Artarmon', 'max_match_distance': '200'}
 
-                    signup(request)
-                    continue
+                signup(request)
+                continue
 
-                if command == "login":
-                    request = {'username': input("enter username: "), 'password': input("enter password: ")}
+            if command == "login":
+                request = {'username': input("enter username: "), 'password': input("enter password: ")}
 
-                    login(request)
-                    continue
+                login(request)
+                continue
 
-                if command == "logout":
-                    logout()
-                    continue
-                if command == "recommendations":
-                    self.recommendations()
-    def recommendations(self):
-        # origin = "Main Library, University of New South Wales, Sydney, Australia"
-        origin = input("Your current locaton please: ")
-        recs_sys = Recommendation_System()
-        # current_user_id = current_user.id
-        # current_user_id = current_user.id
-        curr_user = current_user.get_cu()
-        if curr_user is None:
-            print ("Something is wrong. Someone must be logged in")
-            exit(101)
-        current_user_id = curr_user.id
-        user = User_Profile.query.filter_by(id=current_user_id).first()
-        user.location = origin
-        db.session.commit()
-        recommendations = recs_sys.getRecommendations(origin, current_user_id)
-        print(len(recommendations))
-        # To print during pytest, uncomment False Assertion
-        for recommendation in recommendations:
-            # event.user_id = owner.id
-            print("########################")
-            print("Username: ", recommendation['match_user_username'])
-            print("Distance: ", recommendation['distance'])
+            if command == "logout":
+                logout()
+                continue
+
+            if command == "view blocked":
+                print("blocked users: ")
+                print(view_blocked())
+                continue
+
+            if command == "view blockable":
+                print("blockable users: ")
+                print(view_blockable())
+                continue
+
+            if command == "profile":
+                print("profile:\n\n")
+                print(view_profile())
+                profile_command = input("commands: edit match preferences (1), edit bio(2), exit profile (3): ")
+                if profile_command == "1":
+                    edit = input("gender preference (1), min match age (2), max match age (3), max match distance (4): ")
+                    if edit == "1":
+                        pref = input("new gender preference (male, female, everyone): ")
+                        update_gender_preference(pref)
+                    if edit == "2":
+                        age = input("new min match age: ")
+                        update_min_match_age(age)
+                    if edit == "3":
+                        age = input("new max match age: ")
+                        update_max_match_age(age)
+                    if edit == "4":
+                        dist = input("new max match distance: ")
+                        update_max_match_distance(dist)
+                if profile_command == "2":
+                    bio = input("new bio (150 chars): ")
+                    update_bio(bio)
+                if profile_command == "3":
+                    pass
+
+
+
 
 class TestAll(unittest.TestCase):
 
