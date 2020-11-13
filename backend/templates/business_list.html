@@ -5,6 +5,26 @@
     <title>Businesses Available</title>
 </head>
 <body>
+
+    <h3>Search for businesses</h3>
+    <form method="POST">
+        <label>Business name</label>
+        <input name="b_name">
+        <!--<button name="submit_button" value="search_name" type="submit"> -->
+        <button name="submit_button" value="search_name">Search by name</button>
+    </form>
+
+    Search by category
+    <form method="POST">
+        <label>Business Category</label>
+        <select name="category" width="100px">
+        <option value="fine">Fine Dining</option>
+        <option value="casual">Casual Dining</option>
+    </select>
+        <button name="submit_button" value="search_category">Search by category</button>
+         <!--<input type="submit" value="search_category">-->
+    </form>
+
     {% for item in list %}
         <h2>Business Name:{{ item.name }}</h2>
         <h3>Description:{{ item.description }}</h3>
@@ -14,9 +34,14 @@
         <h3>Email:{{ item.email }}</h3>
         <h3>Category:{{ item.category }}</h3>
 
+        <form action=/businesses/{{ item.id }} method="POST">
+        <button name="submit_button" value="b_deals">View deals we have!</button>
+        </form>
 
     <br></br>
     {% endfor %}
+
+
     <!--{{list}} -->
 </body>
 </html>
