@@ -26,7 +26,7 @@ class TestSettingUp(unittest.TestCase):
                                      phone_number="0411111111",
                                      category="casual")
             test2 = Business_Profile(name="Bang's",
-                                     email="test1@corporation.com",
+                                     email="test2@corporation.com",
                                      password="test2@corporation.com",
                                      description="Lots of different meat options, dozens of pasta options and a mix of all of this in our fast-food dishes.",
                                      price_guide = "low",
@@ -34,11 +34,11 @@ class TestSettingUp(unittest.TestCase):
                                      category = "casual")
             test3 = Business_Profile(name="LeGusto",
                                      email="test3@corporation.com",
-                                     password="test2@corporation.com",
+                                     password="test3@corporation.com",
                                      description="Surrounded by the best of the Italian cuisine, we can make you just fall in love with our pasta.",
                                      price_guide="low",
                                      phone_number="0411111111",
-                                     category="casual")
+                                     category="fine")
             db.session.add(test1)
             db.session.add(test2)
             db.session.add(test3)
@@ -61,9 +61,23 @@ class TestSettingUp(unittest.TestCase):
                        discount_percentage=34,
                        date_expiry=date(2020, 11, 11),
                        date_created=date.today())
+            deal4=Deals(business_id=2,
+                          deal_name="Deal4",
+                          description="Deal4 with Business " + str(1),
+                          discount_percentage=35,
+                          date_expiry=date(2021, 11, 11),
+                          date_created=date.today())
+            deal5=Deals(business_id=2,
+                          deal_name="Deal5",
+                          description="Deal5 with Business " + str(1),
+                          discount_percentage=20,
+                          date_expiry=date(2021, 11, 10),
+                          date_created=date.today())
             db.session.add(deal1)
             db.session.add(deal2)
             db.session.add(deal3)
+            db.session.add(deal4)
+            db.session.add(deal5)
             db.session.commit()
 
     #
