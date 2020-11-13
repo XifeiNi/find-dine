@@ -17,18 +17,11 @@ from datetime import date, datetime
 
 class TestRecommendationSystem(unittest.TestCase):
 
-    def test_recommend_matches(self):
+    def test_recommend_matches(self, origin):
         rec_sys = Recommendation_System()
 
 
 
-        origin = "Main Library, University of New South Wales, Sydney, Australia"
-        loc2 = "Colombo House, University of New South Wales, Sydney, Australia"
-        loc3 = "Keith Burrows Theatre, Univeristy of New South Wales, Sydney, Australia"
-        loc4="Library building Level 11, Library Walk, Kensington NSW 2052"
-        loc5 = "Law Building, Union Rd, Kensington NSW 2035"
-        loc6 = "7 Water St, Lidcombe NSW 2141"
-        loc7 = "12 Smallwood Ave, Homebush NSW 2140"
         with app.app_context():
         # radius = 500
         # day_of_week = 2
