@@ -1,43 +1,31 @@
 // @flow
 
-import React, { Component, Fragment } from 'react';
-import {
-  StatusBar, FlatList, Animated, View,
-} from 'react-native';
+import React, { Component, Fragment } from "react";
+import { StatusBar, FlatList, Animated, View } from "react-native";
 
-import { withNavigation } from 'react-navigation';
-import styled from 'styled-components';
+import { withNavigation } from "react-navigation";
+import styled from "styled-components";
 
-import FloatinActionButton from '../../common/FloatingActionButton';//~/components/common/FloatingActionButto
-import { Alert, TYPES } from '../../common/alert';
-import CustomTab from '../../common/CustomTab';
-import Loading from '../../common/Loading';
+import FloatinActionButton from "../../common/FloatingActionButton"; //~/components/common/FloatingActionButto
+import { Alert, TYPES } from "../../common/alert";
+import Loading from "../../common/Loading";
 
-import AboutRestaurant from './components/AboutRestaurant';
-import MenuListItem from './components/MenuListItem';
-import Header from './components/Header';
+import AboutRestaurant from "./components/AboutRestaurant";
+import Header from "./components/Header";
 
-import CONSTANTS from '../../../utils/CONSTANTS';
-import appStyles from '../../../styles';
+import CONSTANTS from "../../../utils/CONSTANTS";
 
-import ResturantsData from '../../../store/ducks/resturants.json';
-
+import ResturantsData from "../../../store/ducks/resturants.json";
 
 const Container = styled(View)`
   flex: 1;
-`;
-
-const Menu = styled(View)`
-  flex: 1;
-  padding-bottom: ${({ theme }) => theme.metrics.smallSize}px;
-  background-color: ${({ theme }) => theme.colors.white};
 `;
 
 const FloatingActionButtonWrapper = styled(View)`
   width: 100%;
   align-items: flex-end;
   position: absolute;
-  margin-top: ${({ theme }) => theme.metrics.getHeightFromDP('25%') - 28}px;
+  margin-top: ${({ theme }) => theme.metrics.getHeightFromDP("25%") - 28}px;
   padding-right: ${({ theme }) => theme.metrics.largeSize}px;
 `;
 
@@ -103,7 +91,7 @@ class RestaurantDetail extends Component<Props, State> {
         {
           indexMenuSelected: indexSelected,
         },
-        () => animationAppearCombo.start(),
+        () => animationAppearCombo.start()
       );
     });
   };
@@ -117,12 +105,9 @@ class RestaurantDetail extends Component<Props, State> {
 
   renderHeaderSection = (
     imageURL: string,
-    thumbnailImageURL: string,
+    thumbnailImageURL: string
   ): Object => (
-    <Header
-      thumbnailImageURL={thumbnailImageURL}
-      imageURL={imageURL}
-    />
+    <Header thumbnailImageURL={thumbnailImageURL} imageURL={imageURL} />
   );
 
   renderAboutRestaurantSection = (restaurantInfo: Object) => (
@@ -133,21 +118,19 @@ class RestaurantDetail extends Component<Props, State> {
   );
 
   renderFloatingActionButton = (restaurant: Object, userLocation: Object) => {
-    const {
-      distance, location, isOpen, name,
-    } = restaurant;
+    const { distance, location, isOpen, name } = restaurant;
 
     const { navigation } = this.props;
 
     const mapParams = {
       restaurantLocation: {
-        id: 'restaurant_location',
+        id: "restaurant_location",
         latitude: location.coordinates[0],
         longitude: location.coordinates[1],
       },
       userLocation: {
         ...userLocation,
-        id: 'user_location',
+        id: "user_location",
       },
       status: isOpen,
       distance,
@@ -156,10 +139,11 @@ class RestaurantDetail extends Component<Props, State> {
     return (
       <FloatingActionButtonWrapper>
         <FloatinActionButton
-          action={() => navigation.navigate(CONSTANTS.ROUTE_RESTAURANT_ADDRESS_MAP, {
-            [CONSTANTS.NAVIGATION_PARAM_USER_LOCATION]: mapParams,
-            [CONSTANTS.NAVIGATION_PARAM_RESTAURANT_NAME]: name,
-          })
+          action={() =>
+            navigation.navigate(CONSTANTS.ROUTE_RESTAURANT_ADDRESS_MAP, {
+              [CONSTANTS.NAVIGATION_PARAM_USER_LOCATION]: mapParams,
+              [CONSTANTS.NAVIGATION_PARAM_RESTAURANT_NAME]: name,
+            })
           }
           name="map-outline"
           color="primaryColor"
@@ -168,95 +152,28 @@ class RestaurantDetail extends Component<Props, State> {
     );
   };
 
-  renderMenuSection = (menu: Array<Object>): Object => {
-    const { indexMenuSelected } = this.state;
-
-    const tabMenu = menu.map(item => ({
-      title: item.type,
-      id: item.type,
-    }));
-
-    const menuData = menu.map(item => item.dishes);
-
-    return (
-      <Menu>
-        <CustomTab
-          onChangeMenuIndex={this.onChangeMenuIndex}
-          contentWidth={appStyles.metrics.width}
-          data={tabMenu}
-          theme="gray"
-        />
-        <AnimatedFlatList
-          style={{
-            transform: [
-              {
-                translateX: this._animatedFlatlistPosition.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0, 1],
-                }),
-              },
-            ],
-            marginLeft: this._animatedFlatlistPosition._value,
-            paddingVertical: appStyles.metrics.smallSize,
-            opacity: this._animatedFlatlistOpacity,
-          }}
-          ref={(ref) => {
-            this._dishesListRef = ref;
-          }}
-          renderItem={({ item }) => (
-            <MenuListItem
-              description={item.description}
-              imageURL={item.imageURL}
-              reviews={item.reviews}
-              title={item.title}
-              price={item.price}
-              stars={item.stars}
-              type={item.type}
-              id={item.id}
-            />
-          )}
-          showsHorizontalScrollIndicator={false}
-          data={menuData[indexMenuSelected]}
-          onLayout={(event: Object): void => {
-            const { width } = event.nativeEvent.layout;
-            this._dishesListWidth = width;
-          }}
-          keyExtractor={item => item.id}
-          horizontal
-        />
-      </Menu>
-    );
-  };
-
   render() {
     const loading = false;
     const error = false;
     const data = ResturantsData[Math.floor(Math.random() * 35)];
     const userLocation = { ...CONSTANTS.FORTALEZA_CITY_LOCATION };
-    console.log(data);
     const shouldShowContent = !loading && !error;
 
     return (
       <Container>
         <StatusBar
           backgroundColor="transparent"
-          barStyle={error || loading ? 'dark-content' : 'light-content'}
+          barStyle={error || loading ? "dark-content" : "light-content"}
           translucent
           animated
         />
         {loading && <Loading />}
         {error && (
-          <Alert
-            type={TYPES.ERROR_SERVER_CONNECTION}
-            withExtraTopPadding
-          />
+          <Alert type={TYPES.ERROR_SERVER_CONNECTION} withExtraTopPadding />
         )}
         {shouldShowContent && (
           <Fragment>
-            {this.renderHeaderSection(
-              data.imageURL,
-              data.thumbnailImageURL,
-            )}
+            {this.renderHeaderSection(data.imageURL, data.thumbnailImageURL)}
             {this.renderAboutRestaurantSection(data)}
             {this.renderFloatingActionButton(data, userLocation)}
             {/* {this.renderMenuSection(data.menu)} */}
