@@ -1,15 +1,15 @@
 // @flow
 
-import { Platform, StatusBar } from 'react-native';
+import { Platform, StatusBar } from "react-native";
 
-import CONSTANTS from '../utils/CONSTANTS';
-import appStyles from '../styles';
+import CONSTANTS from "../utils/CONSTANTS";
+import appStyles from "../styles";
 
 const hiddenProps = {
   [CONSTANTS.NAVIGATION_PARAM_HEADER_HAS_DATA_STYLE]: {
     headerTransparent: true,
     headerStyle: {
-      backgroundColor: 'transparent',
+      backgroundColor: "transparent",
       borderBottomWidth: 0,
     },
   },
@@ -17,7 +17,7 @@ const hiddenProps = {
     headerTintColor: appStyles.colors.primaryColor,
     headerTransparent: true,
     headerStyle: {
-      backgroundColor: 'transparent',
+      backgroundColor: "transparent",
       borderBottomWidth: 0,
     },
   },
@@ -26,16 +26,16 @@ const hiddenProps = {
 export const handleHiddenHeaderStyle = (
   navigation: Object,
   loading: boolean,
-  error: boolean,
+  error: boolean
 ): void => {
   const hasLoadingHeaderStyleParam = navigation.getParam(
     CONSTANTS.NAVIGATION_PARAM_HEADER_LOADING_STYLE,
-    false,
+    false
   );
 
   const hasHasDataHeaderStyleParam = navigation.getParam(
     CONSTANTS.NAVIGATION_PARAM_HEADER_HAS_DATA_STYLE,
-    false,
+    false
   );
 
   if (!hasLoadingHeaderStyleParam && loading) {
@@ -60,7 +60,7 @@ const getHiddenProps = (navigation: Object): Object => {
     headerTintColor: appStyles.colors.primaryColor,
     headerTransparent: true,
     headerStyle: {
-      backgroundColor: 'transparent',
+      backgroundColor: "transparent",
       borderBottomWidth: 0,
     },
   };
@@ -96,8 +96,8 @@ export const setHiddenHeaderLayout = (navigation: Object): Object => {
 export const setDefaultHeaderLayout = (
   navigation: Object,
   title: string,
-  fontFamily: string = 'Roboto-Medium',
-  fontSize: ?number,
+  fontFamily: string = "Roboto-Medium",
+  fontSize: ?number
 ): Object => ({
   title,
   headerTitleStyle: {
@@ -115,7 +115,7 @@ export const setDefaultHeaderLayout = (
     android: {
       headerStyle: {
         backgroundColor: appStyles.colors.primaryColor,
-        elevation: title === 'Near You' ? 0 : 4,
+        elevation: title === "Near You" ? 0 : 4,
         marginTop: StatusBar.currentHeight,
       },
     },
