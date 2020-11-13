@@ -30,7 +30,7 @@ class TestProgram():
             command = ""
             while True:
                 command = input(
-                    "commands: signup, signup dummy, login, logout, view blocked, view blockable, profile, exit: ")
+                    "commands: signup, signup dummy, login, logout, view blocked, view blockable, profile, recommendations, swipe_right, my_conversations, view conversation, exit: ")
                 if command == "exit":
                     break
 
@@ -114,6 +114,8 @@ class TestProgram():
                     self.right_swipe()
                 if command == "my_conversations":
                     self.get_conversations()
+                if command == "view conversation":
+                    self.get_conversation_messages()
 
 
     def recommendations(self):
@@ -238,12 +240,21 @@ class TestProgram():
             print("Something is wrong. Someone must be logged in, please login first")
             return
         current_user_id = curr_user.id
-        target_username = print("Who would you like to chat with?: ")
+        target_username = input("Who would you like to chat with?: ")
         target_user = User_Profile.query.filter_by(username=target_username).first()
         if target_user is None:
             print ("We couldn't find a user with that username, please check the username and try again")
             return
-        conversation = Conversation.query.filter_by(username)
+        username_one = User_Profile.query.filter_by(id=current_user_id).first().id
+        username_two = target_user.id
+        if (Conversation.query.filter_by(username_one=username_one).filter_by(username_two=username_two).first()) is not None:
+            room_id=Conversation.query.filter_by(username_one=username_one).filter_by(username_two=username_two).first().room
+        elif (Conversation.query.filter_by(username_two=username_one).filter_by(username_one=username_two).first()) is not None:
+            room_id=Conversation.query.filter_by(username_two=username_one).filter_by(username_one=username_two).first().room
+        else:
+            print("Conversation with " + target_username + " does not exist in our system. Are you sure, its the right username?")
+            return
+
 
         message_sys = Message_System()
         conversation, messages = message_sys.getMessages(room_id, current_user_id)
