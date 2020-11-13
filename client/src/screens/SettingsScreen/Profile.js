@@ -13,6 +13,15 @@ export default class ProfileScreen extends Component {
     buttonDisabled: true
   }
 
+
+  mockFetch = () => {
+
+  }
+
+  mockPost = () => {
+    
+  }
+
    saveChanges = () => {
      // postBio();
     this.setState({buttonDisabled: true})

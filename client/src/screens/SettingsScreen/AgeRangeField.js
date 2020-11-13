@@ -3,11 +3,6 @@ import { View, Text, Button, TextInput, Image, Picker} from 'react-native';
 
 export default class AgeRangeField extends Component {
 
-  state = {
-    minAge: 18,
-    maxAge: 99
-  }
-
   ages = () => {
     var age = 18
     var list = []
@@ -18,18 +13,13 @@ export default class AgeRangeField extends Component {
     return list
   }
 
+
   onMinValueChange = (value) => {
-    if (value > this.state.maxAge) {
-      this.setState({maxAge: value})
-    }
-    this.setState({minAge: value})
+      this.props.onMinChange(value)
   }
 
   onMaxValueChange = (value) => {
-    if (value < this.state.minAge) {
-      this.setState({minAge: value})
-    }
-    this.setState({maxAge: value})
+    this.props.onMaxChange(value)
   }
 
   render() {
@@ -37,17 +27,17 @@ export default class AgeRangeField extends Component {
         <View>
         <Text> Minimum Age </Text>
         <Picker onValueChange={(value, position) => this.onMinValueChange(value)}
-                selectedValue={this.state.minAge}>
+                selectedValue={'' + this.props.minAge}>
         {this.ages().map((index) => (
-          <Picker.Item label={''+index} value={''+index}
+          <Picker.Item label={'' + index} value={'' + index}
         />
         ))}
         </Picker>
         <Text> Maximum Age </Text>
         <Picker onValueChange={(value, position) => this.onMaxValueChange(value)}
-                selectedValue={this.state.maxAge}>
+                selectedValue={'' + this.props.maxAge}>
         {this.ages().map((index) => (
-          <Picker.Item label={''+index} value={''+index} />
+          <Picker.Item label={'' + index} value={'' + index} />
         ))}
         </Picker>
         </View>
