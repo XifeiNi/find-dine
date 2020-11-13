@@ -1,4 +1,5 @@
 import Immutable from 'seamless-immutable';
+import fake from './resturants.json'
 
 export const Types = {
   GET_REQUEST: 'home/GET_REQUEST',
@@ -19,11 +20,12 @@ export const Creators = {
 
   getHomeSuccess: data => ({
     type: Types.GET_SUCCESS,
-    payload: { data },
+    payload: { fake },
   }),
 
   getHomeFailure: () => ({
     type: Types.GET_FAILURE,
+    payload: { fake },
   }),
 };
 
@@ -32,21 +34,22 @@ const home = (state = initialState, action) => {
     case Types.GET_REQUEST:
       return {
         ...state,
+        data: fake,
         loading: true,
       };
 
     case Types.GET_SUCCESS:
       return {
         ...state,
-        data: action.payload.data,
+        data: fake,
         loading: false,
       };
 
     case Types.GET_FAILURE:
       return {
         ...state,
+        data: fake,
         loading: false,
-        error: true,
       };
 
     default:

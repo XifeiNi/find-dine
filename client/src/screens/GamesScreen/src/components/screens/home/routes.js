@@ -32,7 +32,7 @@ const RootStack = createStackNavigator(
       screen: Home,
       navigationOptions: ({ navigation }) => setDefaultHeaderLayout(
         navigation,
-        'Bon Appetit!',
+        'Dine with Your Date!',
         'Roboto-Light',
         27,
       ),

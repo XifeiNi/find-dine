@@ -25,7 +25,23 @@ class TestSettingUp(unittest.TestCase):
                                      price_guide="low",
                                      phone_number="0411111111",
                                      category="casual")
+            test2 = Business_Profile(name="Bang's",
+                                     email="test1@corporation.com",
+                                     password="test2@corporation.com",
+                                     description="Lots of different meat options, dozens of pasta options and a mix of all of this in our fast-food dishes.",
+                                     price_guide = "low",
+                                     phone_number = "0411111111",
+                                     category = "casual")
+            test3 = Business_Profile(name="LeGusto",
+                                     email="test3@corporation.com",
+                                     password="test2@corporation.com",
+                                     description="Surrounded by the best of the Italian cuisine, we can make you just fall in love with our pasta.",
+                                     price_guide="low",
+                                     phone_number="0411111111",
+                                     category="casual")
             db.session.add(test1)
+            db.session.add(test2)
+            db.session.add(test3)
             db.session.commit()
             deal1=Deals(business_id=1,
                        deal_name="Deal1",
