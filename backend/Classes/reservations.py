@@ -19,7 +19,7 @@ class Reservation_system:
         matched_users = []
         all_matches = Match.query.filter(or_(Match.first_swiper == user_id, Match.second_swiper == user_id)).all()
 
-        if all_matches.count() == 0:
+        if len(all_matches) == 0:
             return matched_users
 
         for match in all_matches:
