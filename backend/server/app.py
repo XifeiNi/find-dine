@@ -246,7 +246,7 @@ def get_recommendations():
     user = User_Profile.query.filter_by(id=current_user_id).first()
     user.location = origin
     db.session.commit()
-    recommendations = recs_sys.getRecommendations(origin)
+    recommendations = recs_sys.getRecommendations(origin, current_user_id)
     print(len(recommendations))
     # To print during pytest, uncomment False Assertion
     for recommendation in recommendations:
@@ -262,7 +262,7 @@ def get_recommendations():
 @login_required
 def get_conversations():
     message_sys = Message_System()
-    conversations = message_sys.getConversations()
+    conversations = message_sys.getConversations(current_user.id)
     for conversation in conversations:
         print("########################")
         # print("First Name: ", recommendation.f_name)
