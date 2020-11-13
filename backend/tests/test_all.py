@@ -3,11 +3,14 @@ import os
 import unittest
 from datetime import date, datetime
 
+
+
 sys.path.insert(0, os.path.abspath(os.getcwd() + '/../../'))
 
 from backend.Classes.recommendation_system import Recommendation_System, Right_Swipes
 from backend.Classes.message_system import Message_System
 from backend.server.models import User_Profile, db, Right_Swipe, Messages, Conversation, Match
+from backend.Classes.deals import Deals_system
 
 from backend.server.simulation import app, signup, login, current_user, logout, view_blocked, view_blockable, block, \
     view_profile, update_gender_preference, update_min_match_age, update_max_match_age, update_max_match_distance, \
@@ -32,7 +35,7 @@ class TestProgram():
                 command = input(
 
                     "commands: signup, signup dummy, login, logout, view blocked, block, profile, recommendations,"
-                    "swipe_right, my_conversations, view conversation, send_message, exit: ")
+                    "swipe_right, my_conversations, view conversation, send_message, business, exit: ")
 
                 if command == "exit":
                     break
@@ -124,7 +127,9 @@ class TestProgram():
                     self.get_conversation_messages()
                 if command == "send_message":
                     self.send_message()
-
+                    
+                if command == "business":
+                    self.get_businesses()
 
     def recommendations(self):
         # origin = "Main Library, University of New South Wales, Sydney, Australia"
@@ -359,7 +364,94 @@ class TestProgram():
                     print("Message Sender: ", message['message_username'])
                     print("Message: ", message['message'])
                     print("Time: ", message['time_sent'])
-    #
+                    
+
+
+        #curr_user = current_user.get_cu()
+        #if curr_user is None:
+            #print("Something is wrong. Someone must be logged in, please login first")
+            #return
+        #current_user_id = curr_user.id
+
+        while True:
+            command = input(
+                "commands: businesses list, search business, all deals, business deals, exit: ")
+            if command == "exit":
+                break
+
+            if command == "businesses list":
+                self.view_businesses()
+
+            if command == "search business":
+                self.serch_businesses()
+
+            if command == "all deals":
+                self.view_deals()
+
+            if command == "business deals":
+                self.deals_for_business()
+
+    def view_businesses(self):
+        print("Current Businesses that have registered with us include\n")
+        deals_sys = Deals_system()
+        result = deals_sys.all_businesses_list()
+
+        x = 0;
+
+        for record in result:
+            print("Business Record", x)
+            print(record)
+            x = x + 1
+
+    def serch_businesses(self):
+
+        # 3 Cases to test -> one with 2 matches, one match and no matches
+        print("Search Functionality")
+        print("########################")
+        search = input("Search by name: ")
+        deals_sys = Deals_system()
+        result = deals_sys.find_business_profile(search)
+
+        if not result:
+            print("No businesses matching this name.")
+        else:
+            print("Matched business profile\s:")
+            for record in result:
+                print(record)
+
+    def deals_for_business(self):
+        print("Find deals specific to a business")
+        print("########################")
+
+        deals_sys = Deals_system()
+        b_no: int = len(deals_sys.all_businesses_list())
+        ask_1 = 'Pick a business id from 0 to'
+        ask_2 = ': '
+        ask = '{} {:} {}'.format(ask_1, b_no, ask_2)
+        id = input(ask)
+        result = deals_sys.deals_for_business(int(id))
+
+        x = 0;
+
+        for record in result:
+            print("Deal", x)
+            print(record)
+            x = x + 1
+
+    def view_deals(self):
+        print("All deals currently available")
+        print("########################")
+        deals_sys = Deals_system()
+        result = deals_sys.all_deals_list()
+
+        x = 0;
+
+        for record in result:
+            print("Deal ", x)
+            print(record)
+            x = x + 1
+                    
+ #
 # class TestAll(unittest.TestCase):
 #
 #     def test_all(self):

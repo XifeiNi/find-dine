@@ -53,7 +53,7 @@ class Deals_system:
 
     def deals_for_business(self, b_id):
 
-        deals_list = Deals.query.filter_by(business_id=b_id).all()
+        deals_list = Deals.query.filter_by(business_id=int(b_id)).all()
         result = []
 
         for record in deals_list:
