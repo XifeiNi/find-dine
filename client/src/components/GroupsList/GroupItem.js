@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 
 import Avatar from '../Avatar';
-import styles from './styles';
+import appStyles from './styles';
 import PropTypes from 'prop-types';
 
 export default class GroupItem extends Component {
@@ -13,17 +13,17 @@ export default class GroupItem extends Component {
     render() {
         const { item } = this.props;
         return (
-            <Card style={styles.card} onPress={this.onPress}>
-                <View style={styles.cardView}>
-                    <View style={styles.nameView}>
+            <Card style={appStyles.card} onPress={this.onPress}>
+                <View style={appStyles.cardView}>
+                    <View style={appStyles.nameView}>
                         <Avatar large isGroup />
-                        <Text style={styles.nameText}>{item.name}</Text>
-                        <Text style={styles.last}>
+                        <Text style={appStyles.nameText}>{item.name}</Text>
+                        <Text style={appStyles.last}>
                             Active {item.last_active}
                         </Text>
                     </View>
-                    <View style={styles.footer}>
-                        <Text numberOflines={2} style={styles.members}>
+                    <View style={appStyles.footer}>
+                        <Text numberOflines={2} style={appStyles.members}>
                             {item.members}
                         </Text>
                     </View>

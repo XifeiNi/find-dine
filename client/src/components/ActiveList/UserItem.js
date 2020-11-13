@@ -4,7 +4,7 @@ import { TouchableRipple, Text } from 'react-native-paper';
 import _ from 'lodash';
 import Avatar from '../Avatar';
 import Images from 'src/config/images';
-import styles from './styles';
+import AppStyles from './styles';
 import PropTypes from 'prop-types';
 
 export default class UserItem extends Component {
@@ -16,7 +16,7 @@ export default class UserItem extends Component {
     }
 
     onPress = () => {
-        alert('Clicked ');
+        alert('You waved! This function does not have backend support yet ');
     };
 
     render() {
@@ -26,16 +26,16 @@ export default class UserItem extends Component {
                 onPress={this.onPress}
                 rippleColor="rgba(0, 0, 0, .20)"
             >
-                <View style={styles.item}>
+                <View style={AppStyles.item}>
                     <Avatar uri={picture.thumbnail} enableDot />
-                    <Text style={styles.userName}>
+                    <Text style={AppStyles.userName}>
                         {name.first[0].toUpperCase() +
                             name.first.slice(1) +
                             ' ' +
                             name.last[0].toUpperCase() +
                             name.last.slice(1)}
                     </Text>
-                    <Image style={styles.wave} source={Images.profile.wave} />
+                    <Image style={AppStyles.wave} source={Images.profile.wave} />
                 </View>
             </TouchableRipple>
         );
