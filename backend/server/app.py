@@ -365,7 +365,7 @@ def handle_send_message(json):
         exit(200)
     room = conversation.room
     message = Messages(room=room,
-                       sender_username=username.id,
+                       sender_username=current_user_id,
                        time_sent=datetime.now(),
                        message=json['message'])
     db.session.add(message)
