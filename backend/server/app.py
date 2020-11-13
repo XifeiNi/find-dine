@@ -291,6 +291,9 @@ def get_recommendations():
         # event.user_id = owner.id
         print("########################")
         print("Username: ", recommendation['match_user_username'])
+        print ("Name: ", recommendation['match_name'])
+        print("Age: ", recommendation['match_age'])
+        print ("Bio: ", recommendation['bio'])
         print("Distance: ", recommendation['distance'])
     return jsonify(recommendations)
     # return render_template('index.html', recommendations=recommendations)
@@ -365,7 +368,7 @@ def handle_send_message(json):
         exit(200)
     room = conversation.room
     message = Messages(room=room,
-                       sender_username=username.id,
+                       sender_username=current_user_id,
                        time_sent=datetime.now(),
                        message=json['message'])
     db.session.add(message)

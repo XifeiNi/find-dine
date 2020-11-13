@@ -3,13 +3,16 @@ import os
 import unittest
 from datetime import date, datetime
 
+
+
 sys.path.insert(0, os.path.abspath(os.getcwd() + '/../../'))
 
 from backend.Classes.recommendation_system import Recommendation_System, Right_Swipes
 from backend.Classes.message_system import Message_System
 from backend.server.models import User_Profile, db, Right_Swipe, Messages, Conversation, Match
+from backend.Classes.deals import Deals_system
 
-from backend.server.simulation import app, signup, login, current_user, logout, view_blocked, view_blockable, \
+from backend.server.simulation import app, signup, login, current_user, logout, view_blocked, view_blockable, block, \
     view_profile, update_gender_preference, update_min_match_age, update_max_match_age, update_max_match_distance, \
     update_bio
 
@@ -30,7 +33,10 @@ class TestProgram():
             command = ""
             while True:
                 command = input(
-                    "commands: signup, signup dummy, login, logout, view blocked, view blockable, profile, recommendations, swipe_right, my_conversations, view conversation, exit: ")
+
+                    "commands: signup, signup dummy, login, logout, view blocked, block, profile, recommendations,"
+                    "swipe_right, my_conversations, view conversation, send_message, business, exit: ")
+
                 if command == "exit":
                     break
 
@@ -78,10 +84,13 @@ class TestProgram():
                     print(view_blocked())
                     continue
 
-                if command == "view blockable":
+                if command == "block":
                     print("blockable users: ")
                     print(view_blockable())
-                    continue
+                    target_user = input("select user, \\n to abort: ")
+                    if target_user == "":
+                        continue
+                    block(target_user)
 
                 if command == "profile":
                     print("profile:\n\n")
@@ -116,7 +125,11 @@ class TestProgram():
                     self.get_conversations()
                 if command == "view conversation":
                     self.get_conversation_messages()
-
+                if command == "send_message":
+                    self.send_message()
+                    
+                if command == "business":
+                    self.get_businesses()
 
     def recommendations(self):
         # origin = "Main Library, University of New South Wales, Sydney, Australia"
@@ -147,8 +160,10 @@ class TestProgram():
             # event.user_id = owner.id
             print("########################")
             print("Username: ", recommendation['match_user_username'])
+            print("Name: ", recommendation['match_name'])
+            print("Age: ", recommendation['match_age'])
+            print("Bio: ", recommendation['bio'])
             print("Distance: ", recommendation['distance'])
-
 
     def right_swipe(self):
         curr_user = current_user.get_cu()
@@ -240,7 +255,7 @@ class TestProgram():
             print("Something is wrong. Someone must be logged in, please login first")
             return
         current_user_id = curr_user.id
-        target_username = input("Who would you like to chat with?: ")
+        target_username = input("Which conversation would you like to view: ")
         target_user = User_Profile.query.filter_by(username=target_username).first()
         if target_user is None:
             print ("We couldn't find a user with that username, please check the username and try again")
@@ -265,7 +280,178 @@ class TestProgram():
             print("Message Sender: ", message['message_username'])
             print("Message: ", message['message'])
             print("Time: ", message['time_sent'])
-#
+
+    def send_message(self):
+        curr_user = current_user.get_cu()
+        if curr_user is None:
+            print("Something is wrong. Someone must be logged in, please login first")
+            return
+        current_user_id = curr_user.id
+        while True:
+            try:
+                username_input = input("Who would you like to message?: ")
+                target_user = User_Profile.query.filter_by(username=username_input).first()
+                if target_user is None:
+                    print("We couldn't find a user with that username, please check the username and try again")
+                    return
+                username_one = User_Profile.query.filter_by(id=current_user_id).first().id
+                username_two = target_user.id
+                if (Conversation.query.filter_by(username_one=username_one).filter_by(
+                        username_two=username_two).first()) is not None:
+                    room_id = Conversation.query.filter_by(username_one=username_one).filter_by(
+                        username_two=username_two).first().room
+                elif (Conversation.query.filter_by(username_two=username_one).filter_by(
+                        username_one=username_two).first()) is not None:
+                    room_id = Conversation.query.filter_by(username_two=username_one).filter_by(
+                        username_one=username_two).first().room
+                else:
+                    print(
+                        "Conversation with " + username_input + " does not exist in our system. Are you sure, its the right username?")
+                    return
+                message_sys = Message_System()
+                conversation, messages = message_sys.getMessages(room_id, current_user_id)
+                print("########################")
+                print("Username: ", conversation['conversation_username'])
+                print("***********************")
+                for message in messages:
+                    print("Message Sender: ", message['message_username'])
+                    print("Message: ", message['message'])
+                    print("Time: ", message['time_sent'])
+            except KeyboardInterrupt:
+                print() # newline
+                break
+            while True:
+                try:
+                    message_input = input("Message: ")
+                except KeyboardInterrupt:
+                    print() # newline
+                    break
+                json = {'user_name': username_input,
+                        'message': message_input}
+
+
+                username = User_Profile.query.filter_by(username=json['user_name']).first()
+                if username is None:
+                    # socketio.emit('my response', json, callback="Something is wrong, Username cannot be found")
+                    # exit(100)
+                    print("We couldn't find a user with that username, please check the username and try again")
+                    return
+
+                conversation = Conversation.query.filter_by(username_one=username.id).filter_by(
+                    username_two=current_user_id).first()
+                if conversation is None:
+                    conversation = Conversation.query.filter_by(username_two=username.id).filter_by(
+                        username_one=current_user_id).first()
+                if conversation is None:
+                    # socketio.emit('my response', json, callback="Something is wrong, Conversation Room cannot be found")
+                    # exit(200)
+                    print("Conversation with " + username_input + " does not exist in our system. Are you sure, its the right username?")
+                    return
+                room = conversation.room
+                message = Messages(room=room,
+                                   sender_username=current_user_id,
+                                   time_sent=datetime.now(),
+                                   message=json['message'])
+                db.session.add(message)
+                db.session.commit()
+                message_sys = Message_System()
+                conversation, messages = message_sys.getMessages(room, current_user_id)
+                print("########################")
+                print("Username: ", conversation['conversation_username'])
+                print("***********************")
+                for message in messages:
+                    print("---------------------------------------")
+                    print("Message Sender: ", message['message_username'])
+                    print("Message: ", message['message'])
+                    print("Time: ", message['time_sent'])
+                    
+
+
+        #curr_user = current_user.get_cu()
+        #if curr_user is None:
+            #print("Something is wrong. Someone must be logged in, please login first")
+            #return
+        #current_user_id = curr_user.id
+
+        while True:
+            command = input(
+                "commands: businesses list, search business, all deals, business deals, exit: ")
+            if command == "exit":
+                break
+
+            if command == "businesses list":
+                self.view_businesses()
+
+            if command == "search business":
+                self.serch_businesses()
+
+            if command == "all deals":
+                self.view_deals()
+
+            if command == "business deals":
+                self.deals_for_business()
+
+    def view_businesses(self):
+        print("Current Businesses that have registered with us include\n")
+        deals_sys = Deals_system()
+        result = deals_sys.all_businesses_list()
+
+        x = 0;
+
+        for record in result:
+            print("Business Record", x)
+            print(record)
+            x = x + 1
+
+    def serch_businesses(self):
+
+        # 3 Cases to test -> one with 2 matches, one match and no matches
+        print("Search Functionality")
+        print("########################")
+        search = input("Search by name: ")
+        deals_sys = Deals_system()
+        result = deals_sys.find_business_profile(search)
+
+        if not result:
+            print("No businesses matching this name.")
+        else:
+            print("Matched business profile\s:")
+            for record in result:
+                print(record)
+
+    def deals_for_business(self):
+        print("Find deals specific to a business")
+        print("########################")
+
+        deals_sys = Deals_system()
+        b_no: int = len(deals_sys.all_businesses_list())
+        ask_1 = 'Pick a business id from 0 to'
+        ask_2 = ': '
+        ask = '{} {:} {}'.format(ask_1, b_no, ask_2)
+        id = input(ask)
+        result = deals_sys.deals_for_business(int(id))
+
+        x = 0;
+
+        for record in result:
+            print("Deal", x)
+            print(record)
+            x = x + 1
+
+    def view_deals(self):
+        print("All deals currently available")
+        print("########################")
+        deals_sys = Deals_system()
+        result = deals_sys.all_deals_list()
+
+        x = 0;
+
+        for record in result:
+            print("Deal ", x)
+            print(record)
+            x = x + 1
+                    
+ #
 # class TestAll(unittest.TestCase):
 #
 #     def test_all(self):

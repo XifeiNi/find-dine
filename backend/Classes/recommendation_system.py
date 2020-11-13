@@ -142,7 +142,11 @@ class Recommendation_System:
                 continue
             distance = self.Google_Maps_Api.get_distance(user_location, potential_right.location, 'driving')
             if distance <= cur_user.max_match_distance:
+                name = potential_right.f_name + " " + potential_right.l_name
                 distance_append = {"match_user_username": potential_right.username,
+                                   "match_name": name,
+                                   "match_age": user_age,
+                                   "match_bio": potential_right.bio,
                                    "distance": distance}
                 distances.append(distance_append)
         sorted_distances = sorted(distances, key=lambda dict: dict['distance'])
