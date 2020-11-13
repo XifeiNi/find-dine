@@ -30,7 +30,10 @@ class TestProgram():
             command = ""
             while True:
                 command = input(
-                    "commands: signup, signup dummy, login, logout, view blocked, block, profile, exit: ")
+
+                    "commands: signup, signup dummy, login, logout, view blocked, block, profile, recommendations,"
+                    "swipe_right, my_conversations, view conversation, send_message, exit: ")
+
                 if command == "exit":
                     break
 
@@ -117,6 +120,10 @@ class TestProgram():
                     self.right_swipe()
                 if command == "my_conversations":
                     self.get_conversations()
+                if command == "view conversation":
+                    self.get_conversation_messages()
+                if command == "send_message":
+                    self.send_message()
 
 
     def recommendations(self):
@@ -241,12 +248,21 @@ class TestProgram():
             print("Something is wrong. Someone must be logged in, please login first")
             return
         current_user_id = curr_user.id
-        target_username = print("Who would you like to chat with?: ")
+        target_username = input("Which conversation would you like to view: ")
         target_user = User_Profile.query.filter_by(username=target_username).first()
         if target_user is None:
             print ("We couldn't find a user with that username, please check the username and try again")
             return
-        conversation = Conversation.query.filter_by(username)
+        username_one = User_Profile.query.filter_by(id=current_user_id).first().id
+        username_two = target_user.id
+        if (Conversation.query.filter_by(username_one=username_one).filter_by(username_two=username_two).first()) is not None:
+            room_id=Conversation.query.filter_by(username_one=username_one).filter_by(username_two=username_two).first().room
+        elif (Conversation.query.filter_by(username_two=username_one).filter_by(username_one=username_two).first()) is not None:
+            room_id=Conversation.query.filter_by(username_two=username_one).filter_by(username_one=username_two).first().room
+        else:
+            print("Conversation with " + target_username + " does not exist in our system. Are you sure, its the right username?")
+            return
+
 
         message_sys = Message_System()
         conversation, messages = message_sys.getMessages(room_id, current_user_id)
@@ -257,7 +273,63 @@ class TestProgram():
             print("Message Sender: ", message['message_username'])
             print("Message: ", message['message'])
             print("Time: ", message['time_sent'])
-#
+
+    def send_message(self):
+        curr_user = current_user.get_cu()
+        if curr_user is None:
+            print("Something is wrong. Someone must be logged in, please login first")
+            return
+        current_user_id = curr_user.id
+        while True:
+            try:
+                username_input = input("Who would you like to message?: ")
+            except KeyboardInterrupt:
+                print() # newline
+                break
+            while True:
+                try:
+                    message_input = input("Message: ")
+                except KeyboardInterrupt:
+                    print() # newline
+                    break
+                json = {'user_name': username_input,
+                        'message': message_input}
+
+
+                username = User_Profile.query.filter_by(username=json['user_name']).first()
+                if username is None:
+                    # socketio.emit('my response', json, callback="Something is wrong, Username cannot be found")
+                    # exit(100)
+                    print("We couldn't find a user with that username, please check the username and try again")
+                    return
+
+                conversation = Conversation.query.filter_by(username_one=username.id).filter_by(
+                    username_two=current_user_id).first()
+                if conversation is None:
+                    conversation = Conversation.query.filter_by(username_two=username.id).filter_by(
+                        username_one=current_user_id).first()
+                if conversation is None:
+                    # socketio.emit('my response', json, callback="Something is wrong, Conversation Room cannot be found")
+                    # exit(200)
+                    print("Conversation with " + username_input + " does not exist in our system. Are you sure, its the right username?")
+                    return
+                room = conversation.room
+                message = Messages(room=room,
+                                   sender_username=current_user_id,
+                                   time_sent=datetime.now(),
+                                   message=json['message'])
+                db.session.add(message)
+                db.session.commit()
+                message_sys = Message_System()
+                conversation, messages = message_sys.getMessages(room, current_user_id)
+                print("########################")
+                print("Username: ", conversation['conversation_username'])
+                print("***********************")
+                for message in messages:
+                    print("Message Sender: ", message['message_username'])
+                    print("Message: ", message['message'])
+                    print("Time: ", message['time_sent'])
+    #
 # class TestAll(unittest.TestCase):
 #
 #     def test_all(self):

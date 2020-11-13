@@ -1,37 +1,68 @@
 import React, { Component, useState} from 'react';
-import { View, Text, Button, TextInput } from 'react-native';
-import styles from './index';
-import Bio from './Bio';
+import { View, Text, Button, TextInput, Image, ScrollView } from 'react-native';
+import { styles } from './index';
+import BioField from './ProfileFields/BioField';
+import ImageField from './ProfileFields/ImageField';
 
 export default class ProfileScreen extends Component {
 
   state = {
-    bio: "",
+    bio: "Hello",
+    previousBio: "Hello",
     image: "",
-    hasBeenChanged: false
+    buttonDisabled: true
+  }
+
+
+  mockFetch = () => {
+
+  }
+
+  mockPost = () => {
+    
   }
 
    saveChanges = () => {
-  // postBio();
+     // postBio();
+    this.setState({buttonDisabled: true})
     this.props.navigation.pop();
   };
 
-  updateProfileState = (bio, image, hasBeenChanged) => {
-    if(hasBeenChanged) {
-      this.setState({hasBeenChanged: true});
+  updateProfileState = (bio) => {
+    this.setState({buttonDisabled: bio == this.state.previousBio})
+    if (bio.length <= 200) {
+      this.setState({bio: bio});
     }
   }
 
 
   render() {
-    return (<View>
+    return (<ScrollView>
               <Text style={styles.title}> Profile </Text>
-              <Text> Image (upload) </Text>
-              <Text> Bio (max 200 char.)</Text>
-              <Bio updateProfileState={this.updateProfileState}/>
-              <Button title="Save" disable={this.state.hasBeenChanged}
-                onPress={this.saveChanges}/>
-          </View>
+
+              <View style={[{maxWidth: 300, marginLeft: 20}]}>
+                <Text style={styles.smallText}> Bio </Text>
+                <BioField  updateProfileState={this.updateProfileState}
+                    value={this.state.bio}
+                />
+                <Text> {200 - this.state.bio.length} characters left </Text>
+                <Text style={styles.smallText}> Display Picture </Text>
+                <ImageField />
+                <Button title="Save"
+                        disabled={this.state.buttonDisabled}
+                        onPress={this.saveChanges}
+                        style={buttonStyle}
+                />
+              </View>
+
+          </ScrollView>
         );
     }
 }
+
+const buttonStyle = [
+  {
+    marginTop: 10,
+    borderRadius: 10
+  }
+];

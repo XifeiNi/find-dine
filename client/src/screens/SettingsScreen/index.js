@@ -9,16 +9,22 @@ const SettingsScreen = ({navigation}) => {
         return (
             <View>
                 <Text style={styles.title}> Settings</Text>
-                <Button
-                  title="Profile"
-                  style={styles.buttonStyle}
-                  onPress={()=>navigation.navigate('Profile')}
+                <View style={styles.buttonViewStyle}>
+                  <Button
+                    title="Profile"
+                    onPress={()=>navigation.navigate('Profile')}
                   />
-                <Button
-                  title="Preferences"
-                  onPress={()=>navigation.navigate('Preferences')}
+                </View>
+                <View style={styles.buttonViewStyle}>
+                  <Button
+                    style={styles.buttonStyle}
+                    title="Preferences"
+                    onPress={()=>navigation.navigate('Preferences')}
                   />
-                <Button title="Logout" />
+                </View>
+                <View style={styles.buttonViewStyle}>
+                  <Button title="Logout" />
+                </View>
             </View>
         );
 }
@@ -30,12 +36,16 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   buttonStyle: {
-    maxWidth: 30,
-    borderRadius: 5,
-    color: 'black',
-    backgroundColor: 'white',
-    borderWidth: 5,
-    borderStyle: 'solid'
+    borderRadius: 10
+  },
+  buttonViewStyle: {
+    width: 300,
+    marginTop: 20,
+    marginLeft: 20
+  },
+  smallText: {
+    fontSize: 30,
+    color: 'black'
   }
 });
 
