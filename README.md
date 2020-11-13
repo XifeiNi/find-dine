@@ -12,6 +12,7 @@ Yarn
 A development machine set up for React Native by following these instructions: https://facebook.github.io/react-native/docs/getting-started.html
 
 **Get Started**
+
 1.Run yarn or npm install to install dependencies
 
 2.Connect a mobile device to your development machine
