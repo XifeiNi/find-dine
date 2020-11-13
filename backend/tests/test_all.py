@@ -36,7 +36,7 @@ class TestProgram():
                 command = input(
 
                     "commands: signup, signup dummy, login, logout, view blocked, block, profile, recommendations,"
-                    "swipe_right, my_conversations, view conversation, send_message, business, exit: ")
+                    "swipe_right, my_conversations, view conversation, send_message, business, reservation,exit: ")
 
                 if command == "exit":
                     break
@@ -131,6 +131,9 @@ class TestProgram():
                     
                 if command == "business":
                     self.get_businesses()
+
+                if command == "reservation":
+                    self.make_reservation()
 
     def recommendations(self):
         # origin = "Main Library, University of New South Wales, Sydney, Australia"
