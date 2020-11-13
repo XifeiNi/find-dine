@@ -1,5 +1,5 @@
 import React, {Component, Fragment } from 'react';
-import { StatusBar, View, Text } from 'react-native';
+import { StatusBar } from 'react-native';
 
 import { ThemeProvider } from 'styled-components';
 import { Provider } from 'react-redux';
@@ -33,24 +33,3 @@ export default class GamesScreen extends Component {
     );
   }
 }
-/*
-export default class GamesScreen extends Component {
-  render() {
-      return (
-          <View>
-              <Text> GamesScreen </Text>
-          </View>
-      );
-  }
-}
-
- <ThemeProvider
-          theme={AppTheme}
-        >
-          <Provider
-            store={store}
-          >
-            <ApplicationNavigator />
-          </Provider>
-        </ThemeProvider>
-*/
