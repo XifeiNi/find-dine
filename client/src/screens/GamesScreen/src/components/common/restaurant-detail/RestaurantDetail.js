@@ -20,6 +20,9 @@ import Header from './components/Header';
 import CONSTANTS from '../../../utils/CONSTANTS';
 import appStyles from '../../../styles';
 
+import ResturantsData from '../../../store/ducks/resturants.json';
+
+
 const Container = styled(View)`
   flex: 1;
 `;
@@ -226,11 +229,12 @@ class RestaurantDetail extends Component<Props, State> {
   };
 
   render() {
-    const {
-      userLocation, loading, error, data,
-    } = this.props;
-
-    const shouldShowContent = !loading && !error && Object.keys(data).length === 2;
+    const loading = false;
+    const error = false;
+    const data = ResturantsData[Math.floor(Math.random() * 35)];
+    const userLocation = { ...CONSTANTS.FORTALEZA_CITY_LOCATION };
+    console.log(data);
+    const shouldShowContent = !loading && !error;
 
     return (
       <Container>
@@ -250,12 +254,12 @@ class RestaurantDetail extends Component<Props, State> {
         {shouldShowContent && (
           <Fragment>
             {this.renderHeaderSection(
-              data.restaurant.imageURL,
-              data.restaurant.thumbnailImageURL,
+              data.imageURL,
+              data.thumbnailImageURL,
             )}
-            {this.renderAboutRestaurantSection(data.restaurant)}
-            {this.renderFloatingActionButton(data.restaurant, userLocation)}
-            {this.renderMenuSection(data.menu)}
+            {this.renderAboutRestaurantSection(data)}
+            {this.renderFloatingActionButton(data, userLocation)}
+            {/* {this.renderMenuSection(data.menu)} */}
           </Fragment>
         )}
       </Container>

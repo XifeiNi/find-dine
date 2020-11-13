@@ -11,6 +11,7 @@ import { handleHiddenHeaderStyle } from '../../../routes/headerUtils';
 import CONSTANTS from '../../../utils/CONSTANTS';
 
 import RestaurantDetail from './RestaurantDetail';
+import ResturantsData from '../../../store/ducks/resturants.json';
 
 type Props = {
   requestRestaurantDetailRequest: Function,
@@ -28,7 +29,7 @@ class RestaurantDetailContainer extends Component<Props, State> {
     userLocation: { ...CONSTANTS.FORTALEZA_CITY_LOCATION },
   };
 
-  async componentDidMount() {
+  /* async componentDidMount() {
     await this.handleRecoverUserLocationFromStorage();
     await this.handleFetchRestaurantDetail();
   }
@@ -43,9 +44,9 @@ class RestaurantDetailContainer extends Component<Props, State> {
   componentWillUnmount() {
     const { resetState } = this.props;
 
-    resetState();
+    //resetState();
   }
-
+ 
   handleRecoverUserLocationFromStorage = async (): any => {
     const persistedUserLocation = await getItemFromStorage(
       CONSTANTS.USER_LOCATION,
@@ -67,16 +68,16 @@ class RestaurantDetailContainer extends Component<Props, State> {
 
     const id = navigation.getParam(CONSTANTS.NAVIGATION_PARAM_ID, '');
 
-    requestRestaurantDetailRequest(userLocation, id);
+    //requestRestaurantDetailRequest(userLocation, id);
   };
-
+ */
   render() {
     const { userLocation } = this.state;
-    const { restaurant } = this.props;
-
+    const restaurant  = ResturantsData[Math.floor(Math.random() * 35)];
+    console.log(userLocation);
     return <RestaurantDetail
-      userLocation={userLocation}
-      {...restaurant}
+      //userLocation={userLocation}
+      //{...restaurant}
     />;
   }
 }
