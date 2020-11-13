@@ -1,5 +1,7 @@
-import { Component } from 'react';
-import { Image, TextInput } from 'react-native';
+import React, { Component } from 'react';
+import { View, Image, TextInput } from 'react-native';
+import { SafeAreaView } from 'react-navigation';
+import { Button } from 'react-native-paper';
 
 import styles from './styles';
 import logoWithText from '../../assets/images/find_dine.png';
@@ -23,7 +25,7 @@ export default class SplashScreen extends Component {
         const { navigation } = this.props;
         navigation.navigate('MainScreen');
     };
-/
+    
     render() {
         var logoWithTextUri = Image.resolveAssetSource(logoWithText).uri;
         return (

@@ -3,6 +3,7 @@ import { View, Text, Button, StyleSheet } from 'react-native';
 import { createStackNavigator,createAppContainer } from 'react-navigation';
 import ProfileScreen from './Profile';
 import PreferencesScreen from './Preferences';
+import SplashScreen from '../SplashScreen';
 
 
 const SettingsScreen = ({navigation}) => {
@@ -23,7 +24,8 @@ const SettingsScreen = ({navigation}) => {
                   />
                 </View>
                 <View style={styles.buttonViewStyle}>
-                  <Button title="Logout" />
+                  <Button title="Logout" 
+                  onPress={()=>navigation.navigate('Splash')}/>
                 </View>
             </View>
         );
@@ -56,6 +58,10 @@ const SettingsApp = createStackNavigator({
     Preferences: {
         screen: PreferencesScreen
     },
+    Splash: {
+      screen: SplashScreen
+    },
+
     Default: {
         screen: SettingsScreen
     }
