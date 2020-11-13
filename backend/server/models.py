@@ -40,7 +40,7 @@ class Match(db.Model):
     first_swiper = db.Column(db.Integer, db.ForeignKey("user_profiles.id"))
     second_swiper = db.Column(db.Integer)
     conversation_id = db.Column(db.String, db.ForeignKey("conversations.room"))
-    blocked_by = db.Column(db.Integer)
+    blocked_by = db.Column(db.Integer, default=-1)
 
 class Right_Swipe(db.Model):
     __tablename__ = 'right_swipe'
