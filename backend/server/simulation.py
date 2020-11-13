@@ -135,3 +135,6 @@ def logout():
     print("successfully logged out!")
 
     return
+
+if __name__ == '__main__':
+    pass

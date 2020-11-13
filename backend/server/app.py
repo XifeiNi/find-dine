@@ -185,7 +185,7 @@ def signup():
 
     return render_template('auth/signup.html')
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
 
     if request.method == 'POST':
@@ -212,7 +212,7 @@ def login():
 
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('get_recommendations')
+            next_page = url_for('recommendations')
         return redirect(next_page)
 
     return render_template('auth/login.html')
@@ -221,12 +221,11 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('get_recommendations'))
-
+    return redirect(url_for('recommendations'))
 
 
 # This is the first function, once called, it should return the match recommendations
-@app.route('/')
+@app.route('/recommendations')
 @login_required
 def get_recommendations():
 # def sessions(origin):
