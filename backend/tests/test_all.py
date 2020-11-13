@@ -13,9 +13,6 @@ from backend.Classes.google_maps import Google_Maps
 
 GOOGLE_MAPS_API_KEY = "AIzaSyCqVpb4IWMDpYg2mGo-zv6l6XKIp_sESwo"
 
-
-
-
 class TestProgram():
 
     def __init__(self):
@@ -25,7 +22,7 @@ class TestProgram():
             print("Testing authentication:")
             command = ""
             while True:
-                command = input("commands: signup, signup dummy, login, logout, recommendations, swipe_right, exit: ")
+                command = input("commands: signup, signup dummy, login, logout, recommendations, swipe_right, my_conversations, exit: ")
                 if command == "exit":
                     break
 
@@ -69,6 +66,9 @@ class TestProgram():
                     self.recommendations()
                 if command == "swipe_right":
                     self.right_swipe()
+                if command == "my_conversations":
+                    self.get_conversations()
+
     def recommendations(self):
         # origin = "Main Library, University of New South Wales, Sydney, Australia"
         curr_user = current_user.get_cu()
@@ -78,6 +78,8 @@ class TestProgram():
         current_user_id = curr_user.id
         user = User_Profile.query.filter_by(id=current_user_id).first()
         origin = input("Your current locaton please: ")
+
+
         recs_sys = Recommendation_System()
         # current_user_id = current_user.id
         # current_user_id = current_user.id
@@ -161,6 +163,29 @@ class TestProgram():
                           "successful_error_code": -1}
             code = error_code
         return code
+
+    def get_conversations(self):
+        curr_user = current_user.get_cu()
+        if curr_user is None:
+            print("Something is wrong. Someone must be logged in, please login first")
+            return
+        current_user_id = curr_user.id
+
+        message_sys = Message_System()
+        conversations = message_sys.getConversations(current_user_id)
+        for conversation in conversations:
+            print("########################")
+            # print("First Name: ", recommendation.f_name)
+            # print ("Last Name: ", recommendation.l_name)
+            # print("addr: ", event.addr)
+            # print("start: ", event.start_time)
+            # print("end: ", event.end_time)
+            print("Username: ", conversation['username'])
+            print("Last_Message: ", conversation['last_message'])
+            print("Time: ", conversation['time'])
+
+
+
 #
 # class TestAll(unittest.TestCase):
 #
