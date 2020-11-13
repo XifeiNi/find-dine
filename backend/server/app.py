@@ -232,6 +232,17 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
+@app.route('/profile')
+@login_required
+def profile():
+    response = {'f_name': current_user.f_name, 'l_name': current_user.l_name,
+                'email_address': current_user.email_address, 'username': current_user.username,
+                'gender': str(current_user.gender), 'gender_preference': str(current_user.gender_preference),
+                'max_match_distance': current_user.max_match_distance, 'min_match_age': current_user.min_match_age,
+                'max_match_age': current_user.max_match_age, 'bio': current_user.bio}
+
+    return jsonify(response)
+
 
 # This is the first function, once called, it should return the match recommendations
 @app.route('/recommendations')
