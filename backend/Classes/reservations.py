@@ -16,9 +16,11 @@ from sqlalchemy import or_
 class Reservation_system:
 
     def get_matched_users(self,user_id):
-        all_matches = Match.query.filter(or_(Match.first_swiper == user_id, Match.second_swiper == user_id)).all()
-        # print(all_matches)
         matched_users = []
+        all_matches = Match.query.filter(or_(Match.first_swiper == user_id, Match.second_swiper == user_id)).all()
+
+        if all_matches.count() == 0:
+            return matched_users
 
         for match in all_matches:
 
