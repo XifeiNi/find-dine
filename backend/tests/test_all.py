@@ -11,6 +11,7 @@ from backend.Classes.recommendation_system import Recommendation_System, Right_S
 from backend.Classes.message_system import Message_System
 from backend.server.models import User_Profile, db, Right_Swipe, Messages, Conversation, Match
 from backend.Classes.deals import Deals_system
+from backend.Classes.reservations import Reservation_system
 
 from backend.server.simulation import app, signup, login, current_user, logout, view_blocked, view_blockable, block, \
     view_profile, update_gender_preference, update_min_match_age, update_max_match_age, update_max_match_distance, \
@@ -367,15 +368,17 @@ class TestProgram():
                     
 
 
-        #curr_user = current_user.get_cu()
-        #if curr_user is None:
-            #print("Something is wrong. Someone must be logged in, please login first")
-            #return
-        #current_user_id = curr_user.id
+    def get_businesses(self):
+
+        curr_user = current_user.get_cu()
+        if curr_user is None:
+            print("Something is wrong. Someone must be logged in, please login first")
+            return
+        current_user_id = curr_user.id
 
         while True:
             command = input(
-                "commands: businesses list, search business, all deals, business deals, exit: ")
+                "commands: businesses list, search business, search category, all deals, business deals, exit: ")
             if command == "exit":
                 break
 
@@ -384,6 +387,9 @@ class TestProgram():
 
             if command == "search business":
                 self.serch_businesses()
+
+            if command == "search category":
+                self.serch_category()
 
             if command == "all deals":
                 self.view_deals()
@@ -396,7 +402,7 @@ class TestProgram():
         deals_sys = Deals_system()
         result = deals_sys.all_businesses_list()
 
-        x = 0;
+        x = 1;
 
         for record in result:
             print("Business Record", x)
@@ -419,6 +425,30 @@ class TestProgram():
             for record in result:
                 print(record)
 
+    def serch_category(self):
+        print("Search business by category")
+        print("########################")
+
+        while True:
+            command = input(
+                "commands: fine, casual, exit: ")
+            if command == "exit":
+                break
+
+            if command == "fine":
+                deals_sys = Deals_system()
+                business_category = "fine"
+                result = deals_sys.sort_category(business_category)
+                print(result)
+                return
+
+            if command == "casual":
+                deals_sys = Deals_system()
+                business_category = "casual"
+                result = deals_sys.sort_category(business_category)
+                print(result)
+                return
+
     def deals_for_business(self):
         print("Find deals specific to a business")
         print("########################")
@@ -431,7 +461,7 @@ class TestProgram():
         id = input(ask)
         result = deals_sys.deals_for_business(int(id))
 
-        x = 0;
+        x = 1;
 
         for record in result:
             print("Deal", x)
@@ -444,12 +474,71 @@ class TestProgram():
         deals_sys = Deals_system()
         result = deals_sys.all_deals_list()
 
-        x = 0;
+        x = 1;
 
         for record in result:
             print("Deal ", x)
             print(record)
             x = x + 1
+
+    def make_reservation(self):
+        print("Reservation System")
+        print("########################")
+        curr_user = current_user.get_cu()
+        if curr_user is None:
+            print("Something is wrong. Someone must be logged in, please login first")
+            return
+        current_user_id = curr_user.id
+
+        reserv_sys = Reservation_system()
+
+        matches = reserv_sys.get_matched_users(current_user_id)
+
+        if not matches:
+            print("Sorry you dont have any matches to make reservations with")
+            return
+        print("Your current matches include: ")
+        print("########################")
+
+        x = 1
+        for record in result:
+            print(record)
+            x = x + 1
+        print("########################")
+        match_id = input("Please add the user id of the match you want to book for: ")
+        deals_sys = Deals_system()
+
+        print("Current deals available include: ")
+        print("########################")
+        deals_sys = Deals_system()
+        deals = deals_sys.all_deals_list()
+        if not deals:
+            print("Sorry no deals available at this time!")
+            return
+
+        x = 1;
+
+        for record in deals:
+            print("Deal ", x)
+            print(record)
+            x = x + 1
+
+        print("########################")
+        deal_id = input("Please add the deal id of the deal you want to book for: ")
+        print("########################")
+        start_time = input("Please specify reservation start time in format HH:MM: ")
+        end_time = input("Please specify reservation end time: in format HH:MM: ")
+        date_of_meeting = input("Please specify reservation date in format YYYY-MM-DD: ")
+        print("########################")
+        date_time_obj = datetime.strptime(date_of_meeting, '%Y-%m-%d')
+        check = reserv_sys.check_date(deal_id, date_time_obj.date())
+
+        if not check:
+            message = "You either tried to book for an expired deal or booked a date before today, please go back an try again. "
+            return message
+        result = reserv_sys.add_meeting(deal_id, match_id, date_time_obj.date(), start_time, end_time)
+        print("Meeting booked with the following information:")
+        print(result)
                     
  #
 # class TestAll(unittest.TestCase):
