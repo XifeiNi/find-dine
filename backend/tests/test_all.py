@@ -9,7 +9,7 @@ from backend.Classes.recommendation_system import Recommendation_System, Right_S
 from backend.Classes.message_system import Message_System
 from backend.server.models import User_Profile, db, Right_Swipe, Messages, Conversation, Match
 
-from backend.server.simulation import app, signup, login, current_user, logout, view_blocked, view_blockable, \
+from backend.server.simulation import app, signup, login, current_user, logout, view_blocked, view_blockable, block, \
     view_profile, update_gender_preference, update_min_match_age, update_max_match_age, update_max_match_distance, \
     update_bio
 
@@ -30,7 +30,7 @@ class TestProgram():
             command = ""
             while True:
                 command = input(
-                    "commands: signup, signup dummy, login, logout, view blocked, view blockable, profile, exit: ")
+                    "commands: signup, signup dummy, login, logout, view blocked, block, profile, exit: ")
                 if command == "exit":
                     break
 
@@ -78,10 +78,13 @@ class TestProgram():
                     print(view_blocked())
                     continue
 
-                if command == "view blockable":
+                if command == "block":
                     print("blockable users: ")
                     print(view_blockable())
-                    continue
+                    target_user = input("select user, \\n to abort: ")
+                    if target_user == "":
+                        continue
+                    block(target_user)
 
                 if command == "profile":
                     print("profile:\n\n")

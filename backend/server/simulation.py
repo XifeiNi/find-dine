@@ -263,7 +263,8 @@ def view_blocked():
     blocked_usernames = []
     for conversation in conversations:
 
-        other_user_id = User_Profile.query.filter_by(id=conversation['username']).id
+        f_name, l_name = str.split(conversation['username'], ' ', 2)
+        other_user_id = User_Profile.query.filter_by(f_name=f_name, l_name=l_name).first().id
 
         # find match object
         match = Match.query.filter_by(first_swiper=other_user_id).first()
@@ -272,9 +273,11 @@ def view_blocked():
 
         if match.blocked_by == current_user_id:
             if match.first_swiper != current_user_id:
-                blocked_usernames.append(match.first_swiper.username)
+                other_user = User_Profile.query.filter_by(id=match.first_swiper).first()
+                blocked_usernames.append(other_user.username)
             else:
-                blocked_usernames.append(match.second_swiper.username)
+                other_user = User_Profile.query.filter_by(id=match.second_swiper).first()
+                blocked_usernames.append(other_user.username)
 
     return blocked_usernames
 
@@ -285,23 +288,40 @@ def view_blockable():
     current_user_id = current_user.get_cu().id
     conversations = message_sys.getConversations(current_user_id)
     blockable = []
+
     for conversation in conversations:
-        other_user_id = User_Profile.query.filter_by(id=conversation['username']).id
+        f_name, l_name = str.split(conversation['username'], ' ', 2)
+        other_user_id = User_Profile.query.filter_by(f_name=f_name, l_name=l_name).first().id
 
-        ther_user_id = User_Profile.query.filter_by(id=conversation['username']).id
-
-        # find match object
+        # find match
         match = Match.query.filter_by(first_swiper=other_user_id).first()
         if match is None:
             match = Match.query.filter_by(second_swiper=other_user_id).first()
 
+        # skip if match already blocked
         if match.blocked_by is not None:
-            if match.first_swiper != current_user_id:
-                blockable.append(match.first_swiper.username)
-            else:
-                blockable.append(match.second_swiper.username)
+            continue
+
+        other_user = User_Profile.query.filter_by(id=other_user_id).first()
+        blockable.append(other_user.username)
 
     return blockable
+
+def block(target_username):
+    if must_log_in():
+        return
+    cu = current_user.get_cu()
+    other_user_id = User_Profile.query.filter_by(username=target_username).first().id
+
+    # find match object
+    match = Match.query.filter_by(first_swiper=other_user_id).first()
+    if match is None:
+        match = Match.query.filter_by(second_swiper=other_user_id).first()
+
+    match.blocked_by = cu.id
+    db.session.commit()
+    print("successfully blocked user")
+    return
 
 
 if __name__ == '__main__':
