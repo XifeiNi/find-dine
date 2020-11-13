@@ -1,11 +1,13 @@
+import enum
 import sys
 import os
 
-from flask import Flask
+from flask import Flask, jsonify
 from flask_login import LoginManager, login_user
 from flask_socketio import SocketIO
 
 sys.path.insert(0, os.path.abspath(os.getcwd() + '/../../'))
+from backend.Classes.message_system import Message_System
 from backend.server.models import Conversation, Messages, User_Profile, Match, Right_Swipe, Business_Profile, Deals, db
 from datetime import datetime, date
 
@@ -18,6 +20,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test1.db'
 db.init_app(app)
 socketio = SocketIO(app)
 
+message_sys = Message_System()
 # login_manager = LoginManager()
 # login_manager.init_app(app)
 
@@ -38,6 +41,18 @@ class CurrentUser:
 
     def get_cu(self):
         return self.cu
+
+
+class Gender(enum.Enum):
+    male = 1
+    female = 2
+    other = 3
+
+
+class Gender_Preference(enum.Enum):
+    male = 1
+    female = 2
+    everyone = 3
 
 
 current_user = CurrentUser()
@@ -142,6 +157,130 @@ def logout():
     print("successfully logged out!")
 
     return
+
+
+def view_profile():
+    cu = current_user.get_cu()
+    response = {'f_name': cu.f_name, 'l_name': cu.l_name,
+                'email_address': cu.email_address, 'username': cu.username,
+                'gender': str(cu.gender), 'gender_preference': str(cu.gender_preference),
+                'max_match_distance': cu.max_match_distance, 'min_match_age': cu.min_match_age,
+                'max_match_age': cu.max_match_age, 'bio': cu.bio}
+
+    return response
+
+
+def update_gender_preference(preference):
+    cu = current_user.get_cu()
+    if cu.gender_preference == preference:
+        print("update_gender_preference: preference already assigned")
+        return
+    else:
+        if preference == "male":
+            cu.gender_preference = Gender_Preference.male
+        if preference == "female":
+            cu.gender_preference = Gender_Preference.female
+        if preference == "everyone":
+            cu.gender_preference = Gender_Preference.everyone
+            db.session.commit()
+        print("successfully updated gender preference")
+
+    return
+
+def update_min_match_age(age):
+    cu = current_user.get_cu()
+    age = int(age)
+    print("age = ")
+    print(age)
+    if age < 16:
+        print("no users are under 16 years of age")
+        return
+    if age > cu.max_match_age:
+        print("min match age must be less than max match age")
+        return
+    cu.min_match_age = age
+    print("successfully updated min match age")
+    db.session.commit()
+    return
+
+def update_max_match_age(age):
+    cu = current_user.get_cu()
+    age = int(age)
+    if age > 150:
+        print("no-one is that old!")
+        return
+    if age > cu.max_match_age:
+        print("max match age must be greater than min match age")
+        return
+    cu.max_match_age = age
+    db.session.commit()
+    print("successfully updated max match age")
+    return
+
+def update_max_match_distance(dist):
+    cu = current_user.get_cu()
+    dist = int(dist)
+    if dist < 0:
+        print("distance must be positive")
+        return
+    cu.max_match_distance = dist
+    db.session.commit()
+    print("successfully updated max match distance")
+    return
+
+def update_bio(new):
+    if len(new) > 150:
+        print("bio must be less than 150 characters")
+        return
+    current_user.get_cu().bio = new
+    db.session.commit()
+    print("successfully updated bio")
+    return
+
+
+def view_blocked():
+    current_user_id = current_user.get_cu().id
+    conversations = message_sys.getConversations(current_user_id)
+    blocked_usernames = []
+    for conversation in conversations:
+
+        other_user_id = User_Profile.query.filter_by(id=conversation['username']).id
+
+        # find match object
+        match = Match.query.filter_by(first_swiper=other_user_id).first()
+        if match is None:
+            match = Match.query.filter_by(second_swiper=other_user_id).first()
+
+        if match.blocked_by == current_user_id:
+            if match.first_swiper != current_user_id:
+                blocked_usernames.append(match.first_swiper.username)
+            else:
+                blocked_usernames.append(match.second_swiper.username)
+
+    return blocked_usernames
+
+
+def view_blockable():
+    current_user_id = current_user.get_cu().id
+    conversations = message_sys.getConversations(current_user_id)
+    blockable = []
+    for conversation in conversations:
+        other_user_id = User_Profile.query.filter_by(id=conversation['username']).id
+
+        ther_user_id = User_Profile.query.filter_by(id=conversation['username']).id
+
+        # find match object
+        match = Match.query.filter_by(first_swiper=other_user_id).first()
+        if match is None:
+            match = Match.query.filter_by(second_swiper=other_user_id).first()
+
+        if match.blocked_by is not None:
+            if match.first_swiper != current_user_id:
+                blockable.append(match.first_swiper.username)
+            else:
+                blockable.append(match.second_swiper.username)
+
+    return blockable
 
 
 if __name__ == '__main__':
