@@ -16,6 +16,7 @@ class Message_System:
 
     def getConversations(self, current_user_id):
         #current_user_id = current_user.id
+        # current_user_id = current_user.id
         # user = User_Profile()
         # all_users = User_Profile.query.all()
         # cur_user = User_Profile.query.filter_by(id=current_user_id).first()
@@ -96,6 +97,7 @@ class Message_System:
         return sorted_conversations
 
     def getMessages(self, room_id, current_user_id):
+        # current_user_id = current_user.id
         conversation = Conversation.query.filter_by(room=room_id).first()
         if conversation is None:
             print ("Something is wrong, conversation doesnt seem to exist")
