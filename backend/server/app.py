@@ -232,6 +232,7 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
+
 @app.route('/profile')
 @login_required
 def profile():
@@ -243,10 +244,10 @@ def profile():
 
     return jsonify(response)
 
+
 @app.route('/profile/match_preferences', methods=['GET', 'POST'])
 @login_required
 def match_preferences():
-
     if request.method == 'POST':
         req = request.form
         current_user.gender_preference = req['gender_preference']
@@ -256,6 +257,16 @@ def match_preferences():
 
     response = {'gender_preference': str(current_user.gender_preference), 'min_match_age': current_user.min_match_age,
                 'max_match_age': current_user.max_match_age, 'max_match_distance': current_user.max_match_distance}
+
+    return jsonify(response)
+
+@app.route('/blocked_users', methods=['GET', 'POST'])
+@login_required
+def blocked_users():
+    if request.method == 'POST':
+        req = request.form
+
+    response = {}
 
     return jsonify(response)
 
@@ -285,11 +296,19 @@ def get_recommendations():
     # return render_template('index.html', recommendations=recommendations)
 
 
-@app.route("/get_conversations")
+@app.route("/get_conversations", methods=['GET', 'POST'])
 @login_required
 def get_conversations():
     message_sys = Message_System()
     conversations = message_sys.getConversations(current_user.id)
+
+    if request.method == 'POST':
+        block_target = User_Profile.query.filter_by(id=request.form['block']).first().id
+        match = Match.query.filter_by(first_swiper=block_target).first()
+        if match is None:
+            match = Match.query.filter_by(second_swiper=block_target).first()
+        match.blocked_by = current_user.id
+
     for conversation in conversations:
         print("########################")
         # print("First Name: ", recommendation.f_name)

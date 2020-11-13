@@ -34,12 +34,13 @@ from datetime import datetime, date
 class Match(db.Model):
     __tablename__ = 'match'
 
-    id=db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     distance = db.Column(db.Integer)
     created = db.Column(db.DateTime)
     first_swiper = db.Column(db.Integer, db.ForeignKey("user_profiles.id"))
     second_swiper = db.Column(db.Integer)
     conversation_id = db.Column(db.String, db.ForeignKey("conversations.room"))
+    blocked_by = db.Column(db.Integer)
 
 class Right_Swipe(db.Model):
     __tablename__ = 'right_swipe'
