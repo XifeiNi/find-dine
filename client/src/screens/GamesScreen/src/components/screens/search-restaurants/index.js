@@ -1,14 +1,14 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { Creators as SearchRestaurantsCreators } from '../../../store/ducks/search-restaurants';//~/store/ducks/search-restaurants
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { Creators as SearchRestaurantsCreators } from "../../../store/ducks/search-restaurants"; //~/store/ducks/search-restaurants
 
-import SearchRestaurants from './components';
-import { getItemFromStorage } from '../../../utils/AsyncStoarageManager';
-import CONSTANTS from '../../../utils/CONSTANTS';
+import SearchRestaurants from "./components";
+import { getItemFromStorage } from "../../../utils/AsyncStoarageManager";
+import CONSTANTS from "../../../utils/CONSTANTS";
 
 type Props = {
   requestSearchRestaurants: Function,
@@ -27,12 +27,13 @@ class SearchRestaurantsContainer extends Component<Props, State> {
   async componentDidMount() {
     const persistedUserLocation = await getItemFromStorage(
       CONSTANTS.USER_LOCATION,
-      [0, 0],
+      [0, 0]
     );
 
-    const userLocation = typeof persistedUserLocation === 'string'
-      ? JSON.parse(persistedUserLocation)
-      : persistedUserLocation;
+    const userLocation =
+      typeof persistedUserLocation === "string"
+        ? JSON.parse(persistedUserLocation)
+        : persistedUserLocation;
 
     this.setState({
       userLocation,
@@ -41,7 +42,7 @@ class SearchRestaurantsContainer extends Component<Props, State> {
 
   onSearchRestaurants = (
     dishesTypes: Array<string>,
-    maxDistance: number,
+    maxDistance: number
   ): void => {
     const { requestSearchRestaurants } = this.props;
     const { userLocation } = this.state;
@@ -61,13 +62,14 @@ class SearchRestaurantsContainer extends Component<Props, State> {
   }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators(SearchRestaurantsCreators, dispatch);
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(SearchRestaurantsCreators, dispatch);
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   searchRestaurants: state.searchRestaurants,
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(SearchRestaurantsContainer);

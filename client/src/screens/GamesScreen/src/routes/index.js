@@ -1,12 +1,8 @@
 import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 
-import OnboardingIntro from '../components/screens/onboarding-intro';
-import Login from '../components/screens/login';
 import MainStack from './mainStack';
 
 export const ROUTE_NAMES = {
-  //ONBOARDING_INTRO: 'ONBOARDING_INTRO',
-  //LOGIN: 'LOGIN',
   MAIN_STACK: 'MAIN_STACK',
 };
 

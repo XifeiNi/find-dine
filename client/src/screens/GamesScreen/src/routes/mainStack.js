@@ -9,8 +9,6 @@ import {
 } from 'react-navigation';
 
 import SearchRestaurantsRoutes from '../components/screens/search-restaurants/routes';
-import NearYouRoutes from '../components/screens/near-you/routes';
-import ProfileRoutes from '../components/screens/profile/routes';
 import Settings from '../components/screens/settings/routes';
 import HomeRoutes from '../components/screens/home/routes';
 
@@ -49,12 +47,6 @@ const ApplicationTabs = createMaterialTopTabNavigator(
       screen: SearchRestaurantsRoutes,
       navigationOptions: {
         tabBarIcon: getTabIcon('magnify'),
-      },
-    },
-    [ROUTE_NAMES.NEAR_YOU]: {
-      screen: NearYouRoutes,
-      navigationOptions: {
-        tabBarIcon: getTabIcon('map'),
       },
     },
     [ROUTE_NAMES.SETTINGS]: {
