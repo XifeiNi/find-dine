@@ -3,12 +3,12 @@ import AppStyles from 'src/config/styles';
 
 const styles = StyleSheet.create({
     rounded: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
+        alignItems: 'center',
         backgroundColor: AppStyles.colors.inactiveGreyColor,
+        borderRadius: 20,
+        height: 40,
         justifyContent: 'center',
-        alignItems: 'center'
+        width: 40
     }
 });
 
