@@ -49,8 +49,8 @@ export default class TabIcon extends Component {
 }
 TabIcon.propTypes = {
     name: PropTypes.string,
-    tintColor: PropTypes.string,
     style: PropTypes.object,
+    tintColor: PropTypes.string,
     type: PropTypes.string
 };
 TabIcon.defaultProps = {

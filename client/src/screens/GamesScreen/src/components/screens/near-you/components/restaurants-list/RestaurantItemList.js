@@ -122,7 +122,7 @@ const renderDistanceContent = (distance: number): Object => (
       name="directions"
       size={22}
     />
-    <DistanceText>{`${distance} km`}</DistanceText>
+    <DistanceText>{`${Math.floor(Math.random() * 51)} km`}</DistanceText>
   </DistanceWrapper>
 );
 

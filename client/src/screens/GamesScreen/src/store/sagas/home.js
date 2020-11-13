@@ -7,7 +7,8 @@ export function* homeRequest() {
   try {
     const response = yield call(api.get, '/home');
 
-    yield put(HomeActions.getHomeSuccess(response.data));
+    //yield put(HomeActions.getHomeSuccess(response.data));
+    yield put(HomeActions.getHomeFailure()); 
   } catch (err) {
     yield put(HomeActions.getHomeFailure());
   }

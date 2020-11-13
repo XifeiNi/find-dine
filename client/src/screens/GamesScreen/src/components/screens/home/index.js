@@ -1,5 +1,117 @@
 // @flow
+import React, { Component } from 'react';
+import { View, FlatList } from 'react-native';
 
+import styled from 'styled-components';
+import appStyles from '../../../styles';
+
+import RestaurantItemList from './../../screens/near-you/components/restaurants-list/RestaurantItemList';
+import ResturantData from '../../../store/ducks/resturants.json';
+
+const ListWrapper = styled(View)`
+  flex: 1;
+  position: absolute;
+`;
+
+type Props = {
+  turnOffMoveRestaurantList: Function,
+  shouldMoveRestaurantList: boolean,
+  indexRestaurantSelected: number,
+  restaurants: Array<Object>,
+  onSelectMarker: Function,
+};
+
+const ITEM_LIST_WIDTH = appStyles.metrics.width;
+
+class RestaurantList extends Component<Props, {}> {
+  _restaurantListRef = { };
+
+  componentDidUpdate() {
+    const {
+      turnOffMoveRestaurantList,
+      shouldMoveRestaurantList,
+      indexRestaurantSelected,
+    } = this.props;
+
+    if (shouldMoveRestaurantList) {
+      this.onChangeListIndex(indexRestaurantSelected);
+      turnOffMoveRestaurantList();
+    }
+  }
+
+  onChangeListIndex = (index: number): void => {
+    const { restaurants } = this.props;
+
+    if (index >= restaurants.length) {
+      return;
+    }
+
+    this._restaurantListRef.scrollToIndex({ animated: true, index });
+  };
+
+  onSelectMarker = (indexMarkerSelected: number): void => {
+    const { indexRestaurantSelected } = this.state;
+
+    if (indexRestaurantSelected === indexMarkerSelected) {
+      return;
+    }
+
+    /* this.setState({
+      indexRestaurantSelected: indexMarkerSelected,
+      shouldMoveRestaurantList: true,
+    }); */
+  };
+
+  onFlatlistMomentumScrollEnd = (event: Object): void => {
+    //const { onSelectMarker } = this.props;
+    const { contentOffset } = event.nativeEvent;
+
+    const isHorizontalSwipeMovement = contentOffset.x > 0;
+    const indexItemSelected = isHorizontalSwipeMovement
+      ? Math.ceil(contentOffset.x / appStyles.metrics.width)
+      : 0;
+
+    //this.onSelectMarker(indexItemSelected);
+  };
+
+  render() {
+    const restaurants  = ResturantData;
+    console.log(restaurants);
+
+    return (
+      <ListWrapper style={{flex: 1}}>
+        <FlatList
+          //onMomentumScrollEnd={event => this.onFlatlistMomentumScrollEnd(event)}
+          renderItem={({ item }) => (
+            <RestaurantItemList
+              description={item.description}
+              distance={item.distance}
+              isOpen={item.isOpen}
+              stars={item.stars}
+              name={item.name}
+              id={item.id}
+            />
+          )}
+           /* getItemLayout={(data, index) => ({
+            length: ITEM_LIST_LENGTH,
+            offset: ITEM_LIST_LENGTH * index,
+            index,
+          })}  */
+          showsVerticalScrollIndicator={true}
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={item => item["name"]}
+          initialNumToRender={50}
+          data={restaurants}
+          vertical
+        />
+      </ListWrapper>
+    );
+  }
+}
+
+export default RestaurantList;
+
+/*
 import React, { Component } from 'react';
 import { ScrollView, RefreshControl, View } from 'react-native';
 import styled from 'styled-components';
@@ -143,7 +255,7 @@ class Home extends Component<Props, State> {
         {error && <Alert
           type={TYPES.ERROR_SERVER_CONNECTION}
         />}
-        {!loading && !error && this.renderMainContent(data)}
+        {!loading  && this.renderMainContent(data)}
       </Container>
     );
   }
@@ -159,3 +271,4 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(Home);
+*/

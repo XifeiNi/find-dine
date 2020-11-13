@@ -39,6 +39,15 @@ class RestaurantList extends Component<Props, {}> {
     }
   }
 
+  onSelectMarker = (indexMarkerSelected: number): void => {
+    const { indexRestaurantSelected } = this.state;
+
+    if (indexRestaurantSelected === indexMarkerSelected) {
+      return;
+    }
+
+  };
+
   onChangeListIndex = (index: number): void => {
     const { restaurants } = this.props;
 
@@ -50,12 +59,12 @@ class RestaurantList extends Component<Props, {}> {
   };
 
   onFlatlistMomentumScrollEnd = (event: Object): void => {
-    const { onSelectMarker } = this.props;
+    //const { onSelectMarker } = this.props;
     const { contentOffset } = event.nativeEvent;
 
     const isHorizontalSwipeMovement = contentOffset.x > 0;
     const indexItemSelected = isHorizontalSwipeMovement
-      ? Math.ceil(contentOffset.x / appStyles.metrics.width)
+      ? Math.ceil(contentOffset.y / appStyles.metrics.length)
       : 0;
 
     onSelectMarker(indexItemSelected);
@@ -98,4 +107,4 @@ class RestaurantList extends Component<Props, {}> {
   }
 }
 
-export default RestaurantList;
+//export default RestaurantList;
