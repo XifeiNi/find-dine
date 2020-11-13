@@ -309,7 +309,7 @@ def get_conversations():
 # @login_required
 def get_conversation_messages(room_id):
     message_sys = Message_System()
-    conversation, messages = message_sys.getMessages(room_id)
+    conversation, messages = message_sys.getMessages(room_id, current_user.id)
     print("########################")
     print("Username: ", conversation['conversation_username'])
     print("***********************")

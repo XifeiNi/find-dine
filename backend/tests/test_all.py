@@ -184,8 +184,28 @@ class TestProgram():
             print("Last_Message: ", conversation['last_message'])
             print("Time: ", conversation['time'])
 
+    def get_conversation_messages(self):
+        curr_user = current_user.get_cu()
+        if curr_user is None:
+            print("Something is wrong. Someone must be logged in, please login first")
+            return
+        current_user_id = curr_user.id
+        target_username = print("Who would you like to chat with?: ")
+        target_user = User_Profile.query.filter_by(username=target_username).first()
+        if target_user is None:
+            print ("We couldn't find a user with that username, please check the username and try again")
+            return
+        conversation = Conversation.query.filter_by(username)
 
-
+        message_sys = Message_System()
+        conversation, messages = message_sys.getMessages(room_id, current_user_id)
+        print("########################")
+        print("Username: ", conversation['conversation_username'])
+        print("***********************")
+        for message in messages:
+            print("Message Sender: ", message['message_username'])
+            print("Message: ", message['message'])
+            print("Time: ", message['time_sent'])
 #
 # class TestAll(unittest.TestCase):
 #
